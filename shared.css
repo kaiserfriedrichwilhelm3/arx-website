@@ -90,8 +90,7 @@ body {
 }
 .nav-logo-img {
   height: 34px; width: auto;
-  color: var(--t1);
-  display: block;
+  display: block; flex-shrink: 0;
 }
 .nav-wordmark {
   font-family: var(--display);
