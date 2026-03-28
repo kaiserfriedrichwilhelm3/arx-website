@@ -1,0 +1,16 @@
+{
+  "name": "arx-systems-v2",
+  "version": "1.0.0",
+  "description": "ARX Systems v2 — AIVIS Medical + General Business Voice Solutions",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

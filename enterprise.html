@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARX Enterprise — Neural Solutions for Complex Operations</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+body { background:var(--void); }
+
+/* ---- HERO ---- */
+.ent-hero {
+  min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  padding:0 64px; position:relative; overflow:hidden;
+}
+.ent-hero-bg {
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 50% 60% at 80% 20%, #3B7BFF08 0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 20% 80%, #C8F13505 0%, transparent 50%),
+    var(--void);
+}
+/* Premium grid — fine lines */
+.ent-hero-grid {
+  position:absolute; inset:0; z-index:0; opacity:.02;
+  background-image:linear-gradient(var(--t1) 1px,transparent 1px),linear-gradient(90deg,var(--t1) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.ent-eyebrow {
+  font-family:var(--display); font-size:10px; font-weight:700;
+  letter-spacing:.24em; text-transform:uppercase;
+  color:var(--t3); margin-bottom:24px; display:flex; align-items:center; gap:10px;
+  opacity:0; animation:fadeUp .6s .1s forwards;
+}
+.ent-eyebrow::before { content:''; width:28px; height:1px; background:var(--t3); }
+.ent-hero h1 {
+  font-family:var(--display); font-size:clamp(50px,6.5vw,84px);
+  font-weight:800; line-height:1.03; margin-bottom:26px;
+  opacity:0; animation:fadeUp .8s .2s forwards;
+}
+.ent-hero p {
+  font-size:18px; font-weight:300; color:var(--t2); line-height:1.8;
+  max-width:540px; margin-bottom:44px;
+  opacity:0; animation:fadeUp .7s .35s forwards;
+}
+.ent-hero-actions { opacity:0; animation:fadeUp .7s .5s forwards; }
+
+/* Exclusive access bar */
+.access-bar {
+  margin-top:72px; padding:20px 28px;
+  background:linear-gradient(135deg,#111118,#0A0A10);
+  border:1px solid var(--border); border-radius:12px;
+  display:flex; align-items:center; justify-content:space-between;
+  opacity:0; animation:fadeUp .7s .7s forwards;
+}
+.access-bar-text { font-size:13px; color:var(--t3); }
+.access-bar-text strong { color:var(--t2); font-weight:500; display:block; margin-bottom:2px; }
+.access-bar-stat { text-align:right; }
+.access-bar-stat .num { font-family:var(--display); font-size:28px; font-weight:700; color:var(--t1); }
+.access-bar-stat .label { font-size:11px; color:var(--t3); }
+
+/* ---- WHAT WE BUILD ---- */
+.ent-build { padding:100px 64px; background:var(--ink); }
+.ent-build-inner { max-width:1200px; margin:0 auto; }
+.ent-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:56px; }
+.ent-card {
+  background:var(--smoke); border:1px solid var(--border);
+  border-radius:16px; padding:32px;
+  transition:border-color .25s, transform .3s;
+  position:relative; overflow:hidden;
+}
+.ent-card:hover { border-color:var(--border2); transform:translateY(-4px); }
+.ent-card-num { font-family:var(--display); font-size:48px; font-weight:800; color:var(--border); line-height:1; margin-bottom:16px; }
+.ent-card-title { font-family:var(--display); font-size:18px; font-weight:700; margin-bottom:12px; }
+.ent-card-desc { font-size:13px; color:var(--t2); line-height:1.75; }
+
+/* ---- PROCESS ---- */
+.ent-process { padding:100px 64px; background:var(--void); }
+.ent-process-inner { max-width:1000px; margin:0 auto; }
+.process-steps { display:flex; flex-direction:column; gap:0; margin-top:56px; }
+.ps { display:grid; grid-template-columns:80px 1fr; gap:32px; align-items:start; padding:32px 0; border-bottom:1px solid var(--border); }
+.ps:last-child { border-bottom:none; }
+.ps-num { font-family:var(--display); font-size:48px; font-weight:800; color:var(--border); line-height:1; }
+.ps-content { padding-top:8px; }
+.ps-title { font-family:var(--display); font-size:20px; font-weight:700; margin-bottom:10px; }
+.ps-desc { font-size:14px; color:var(--t2); line-height:1.75; max-width:580px; }
+
+/* ---- APPLICATION CTA ---- */
+.ent-apply { padding:100px 64px; background:var(--ash); text-align:center; position:relative; overflow:hidden; }
+.ent-apply::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse at 50% -20%, #3B7BFF0A 0%, transparent 60%),
+              radial-gradient(ellipse at 50% 120%, #C8F13508 0%, transparent 60%);
+}
+.ent-apply-inner { position:relative; max-width:680px; margin:0 auto; }
+.ent-apply h2 { font-family:var(--display); font-size:clamp(36px,5vw,58px); font-weight:700; line-height:1.08; margin-bottom:20px; }
+.ent-apply p { font-size:17px; font-weight:300; color:var(--t2); line-height:1.8; margin-bottom:44px; }
+/* Exclusivity signal */
+.ent-apply-note { font-size:12px; color:var(--t3); margin-top:18px; font-style:italic; }
+
+@media(max-width:960px) {
+  .ent-hero,.ent-build,.ent-process,.ent-apply { padding:72px 20px; }
+  .ent-grid { grid-template-columns:1fr; }
+  .ps { grid-template-columns:1fr; gap:8px; }
+  .ps-num { font-size:32px; }
+  .access-bar { flex-direction:column; gap:14px; text-align:center; }
+  .access-bar-stat { text-align:center; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html"><div class="nav-mark">AX</div><span class="nav-wordmark">ARX Systems</span></a>
+  <ul class="nav-links">
+    <li><a href="medical.html">Medical (AIVIS)</a></li>
+    <li><a href="business.html">Voice &amp; Business</a></li>
+    <li><a href="enterprise.html" class="active">Enterprise</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openModal()">Apply for Partnership</button>
+</nav>
+
+<!-- HERO -->
+<section class="ent-hero">
+  <div class="ent-hero-bg"></div>
+  <div class="ent-hero-grid"></div>
+  <div style="position:relative;z-index:1;max-width:820px;">
+    <div class="ent-eyebrow">ARX Systems &nbsp;&middot;&nbsp; Enterprise Division</div>
+    <h1>Neural Solutions<br>for Complex<br>Operations</h1>
+    <p>Bespoke AI automation, proprietary data training, and full-stack AI consulting for organizations that require more than a product — they require a partner.</p>
+    <div class="ent-hero-actions">
+      <button class="btn btn-med" style="font-size:16px;padding:15px 34px;" onclick="openModal()">Apply for Enterprise Partnership</button>
+    </div>
+    <div class="access-bar">
+      <div class="access-bar-text">
+        <strong>Partnership applications reviewed by the ARX technical team.</strong>
+        Enterprise engagements are selective. We evaluate organizational fit, scale, and technical readiness before taking on new partnerships.
+      </div>
+      <div class="access-bar-stat">
+        <div class="num">Q2</div>
+        <div class="label">2026 availability</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BUILD -->
+<section class="ent-build">
+  <div class="ent-build-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:12px;">
+      <div class="section-label med" style="justify-content:center;">Enterprise Capabilities</div>
+      <h2 class="section-h2">We build what off-the-shelf<br>can't <em>reach.</em></h2>
+    </div>
+    <div class="ent-grid">
+      <div class="ent-card reveal d1">
+        <div class="ent-card-num">01</div>
+        <div class="ent-card-title">Bespoke Voice Automation</div>
+        <div class="ent-card-desc">Custom multi-agent architectures designed around your specific operations. Not a template — a purpose-built system mapped to your workflows, your data, and your customers.</div>
+      </div>
+      <div class="ent-card reveal d2">
+        <div class="ent-card-num">02</div>
+        <div class="ent-card-title">Proprietary Data Training</div>
+        <div class="ent-card-desc">Train AI models on your internal documents, call recordings, SOPs, and domain knowledge. Your agent learns your business — not a generic approximation of it.</div>
+      </div>
+      <div class="ent-card reveal d3">
+        <div class="ent-card-num">03</div>
+        <div class="ent-card-title">Full-Stack AI Consulting</div>
+        <div class="ent-card-desc">Infrastructure architecture, model selection, compliance frameworks, integration planning. We embed with your technical team and build the roadmap from the inside.</div>
+      </div>
+      <div class="ent-card reveal d1">
+        <div class="ent-card-num">04</div>
+        <div class="ent-card-title">Multi-Location Deployment</div>
+        <div class="ent-card-desc">Orchestrate dozens of location-specific agents under a single management layer. Centralized reporting. Localized behavior. Enterprise-grade SLAs.</div>
+      </div>
+      <div class="ent-card reveal d2">
+        <div class="ent-card-num">05</div>
+        <div class="ent-card-title">Custom BAA &amp; Compliance</div>
+        <div class="ent-card-desc">Hospital systems, health networks, and regulated industries require more than standard BAAs. We structure custom legal and technical compliance frameworks per engagement.</div>
+      </div>
+      <div class="ent-card reveal d3">
+        <div class="ent-card-num">06</div>
+        <div class="ent-card-title">Long-Term Partnership Model</div>
+        <div class="ent-card-desc">We don't disappear after deployment. Enterprise partnerships include embedded support, quarterly roadmap reviews, and continuous model improvement.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="ent-process">
+  <div class="ent-process-inner">
+    <div class="reveal">
+      <div class="section-label med">The Process</div>
+      <h2 class="section-h2" style="font-size:clamp(32px,4vw,48px)">How an Enterprise<br>engagement <em>begins.</em></h2>
+    </div>
+    <div class="process-steps">
+      <div class="ps reveal d1">
+        <div class="ps-num">01</div>
+        <div class="ps-content">
+          <div class="ps-title">Technical Evaluation Request</div>
+          <div class="ps-desc">Submit an application. We review your organization's scale, technical infrastructure, and AI readiness before scheduling a discovery call. Not every application moves forward — and that's intentional.</div>
+        </div>
+      </div>
+      <div class="ps reveal d2">
+        <div class="ps-num">02</div>
+        <div class="ps-content">
+          <div class="ps-title">Architecture Discovery</div>
+          <div class="ps-desc">A 2-hour working session with the ARX technical team. We map your current operations, identify automation opportunities, and define what "success" means for your organization specifically.</div>
+        </div>
+      </div>
+      <div class="ps reveal d3">
+        <div class="ps-num">03</div>
+        <div class="ps-content">
+          <div class="ps-title">Custom Proposal</div>
+          <div class="ps-desc">We deliver a full technical proposal — architecture diagrams, integration plan, compliance framework, timeline, and pricing. You'll know exactly what you're getting before signing anything.</div>
+        </div>
+      </div>
+      <div class="ps reveal d4">
+        <div class="ps-num">04</div>
+        <div class="ps-content">
+          <div class="ps-title">Build &amp; Deploy</div>
+          <div class="ps-desc">Our team builds in parallel with yours. Staged deployment with testing gates at each phase. No big-bang launch — controlled rollout with rollback protocols at every stage.</div>
+        </div>
+      </div>
+      <div class="ps reveal d5">
+        <div class="ps-num">05</div>
+        <div class="ps-content">
+          <div class="ps-title">Ongoing Partnership</div>
+          <div class="ps-desc">Post-deployment isn't the end — it's the beginning. Quarterly reviews, continuous model improvement, and a dedicated ARX contact embedded in your operations indefinitely.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLICATION CTA -->
+<section class="ent-apply">
+  <div class="ent-apply-inner reveal">
+    <div class="section-label med" style="justify-content:center;margin-bottom:20px;">Enterprise Application</div>
+    <h2>Ready for a <em>different class</em> of AI partner?</h2>
+    <p>We don't sell software. We build infrastructure. If your organization needs bespoke AI automation at scale, we want to hear from you.</p>
+    <button class="btn btn-med" style="font-size:16px;padding:16px 40px;" onclick="openModal()">Apply for Enterprise Partnership</button>
+    <div class="ent-apply-note">Applications are reviewed within 3 business days. We respond to every submission.</div>
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="auditModal" style="display:none;position:fixed;inset:0;background:rgba(6,8,13,.92);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(14px);padding:20px;">
+  <div style="background:var(--smoke);border:1px solid var(--border);border-radius:20px;width:100%;max-width:540px;overflow:hidden;position:relative;">
+    <div style="height:3px;background:linear-gradient(90deg,var(--med-blue),var(--med-teal),var(--gen-lime));"></div>
+    <div style="padding:32px 36px 24px;border-bottom:1px solid var(--border);">
+      <div style="font-family:var(--display);font-size:22px;font-weight:700;margin-bottom:6px;">Apply for Enterprise Partnership</div>
+      <div style="font-size:13px;color:var(--t3);">We review every application. Response within 3 business days.</div>
+      <button onclick="this.closest('.modal-overlay').style.display='none';document.body.style.overflow='';" style="position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;background:var(--ash);border:1px solid var(--border);color:var(--t2);font-size:14px;cursor:pointer;">&#x2715;</button>
+    </div>
+    <div style="padding:28px 36px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);">Name</label><input id="ent-name" style="background:var(--ash);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="Your name"></div>
+          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);">Email</label><input id="ent-email" style="background:var(--ash);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="email" placeholder="you@org.com"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);">Organization</label><input id="ent-org" style="background:var(--ash);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="Organization name"></div>
+        <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);">Division of interest</label><select id="ent-div" style="background:var(--ash);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;"><option disabled selected>Select</option><option>AIVIS Medical Enterprise</option><option>ARX Business Enterprise</option><option>Both / Hybrid</option></select></div>
+        <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);">Describe your use case <span style="color:var(--t3);font-weight:400">(optional)</span></label><input id="ent-notes" style="background:var(--ash);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="What are you trying to automate?"></div>
+      </div>
+      <button style="width:100%;margin-top:14px;padding:13px;border-radius:8px;background:var(--med-blue);color:#fff;font-family:var(--body);font-weight:500;font-size:14px;border:none;cursor:pointer;" onclick="this.textContent='Application Submitted \u2713';this.disabled=true;setTimeout(()=>{this.closest('.modal-overlay').style.display='none';document.body.style.overflow='';},2200)">Submit Partnership Application &rarr;</button>
+      <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:10px;">Every application reviewed personally by the ARX team.</div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand"><a class="nav-logo" href="index.html" style="margin-bottom:4px;display:inline-flex;"><div class="nav-mark">AX</div><span class="nav-wordmark" style="margin-left:10px;">ARX Systems</span></a><p>Architecting the Future of Wealth through AI. Enterprise partnerships by application only.</p></div>
+      <div class="footer-col"><h4>Enterprise</h4><a href="#capabilities">Capabilities</a><a href="#process">Process</a><a href="#apply">Apply</a></div>
+      <div class="footer-col"><h4>Divisions</h4><a href="medical.html">ARX Medical</a><a href="business.html">ARX Business</a><a href="pricing.html">Pricing</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">LinkedIn</a><a href="#">Privacy</a><a href="#">Terms</a><a href="index.html#contact">Contact</a></div>
+    </div>
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2026 ARX Systems.</span><span class="footer-tagline">&ldquo;Architecting the Future of Wealth through AI.&rdquo;</span></div>
+  </div>
+</footer>
+
+<script>
+const nav=document.querySelector('.nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>30),{passive:true});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}),{threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+function openModal(){const m=document.getElementById('auditModal');if(m){m.style.display='flex';document.body.style.overflow='hidden';}}
+</script>
+</body>
+</html>

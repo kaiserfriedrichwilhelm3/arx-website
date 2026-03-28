@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ARX Systems — Scalable AI Voice Agents and Specialized Medical Automation. Two divisions: AIVIS Medical and General Business Voice Solutions.">
+<title>ARX Systems — High-Performance Intelligence for Modern Industry</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+body { background:var(--void); }
+
+/* ---- HERO ---- */
+.hero {
+  min-height:100vh; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:0 48px;
+}
+/* Split background — medical left, general right */
+.hero-split-bg {
+  position:absolute; inset:0; z-index:0;
+  background: linear-gradient(105deg,
+    var(--med-bg) 0%, var(--med-bg) 48%,
+    var(--border) 49%, var(--border) 51%,
+    var(--gen-bg) 52%, var(--gen-bg) 100%);
+}
+.hero-split-bg::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 60% 80% at 20% 40%, #3B7BFF0E 0%, transparent 60%),
+              radial-gradient(ellipse 60% 80% at 80% 60%, #C8F13508 0%, transparent 60%);
+}
+/* Subtle grid texture */
+.hero-grid {
+  position:absolute; inset:0; z-index:0; opacity:.03;
+  background-image: linear-gradient(var(--t1) 1px, transparent 1px), linear-gradient(90deg, var(--t1) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.hero-content { position:relative; z-index:1; max-width:860px; }
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:var(--display); font-size:10px; font-weight:700;
+  letter-spacing:.2em; text-transform:uppercase;
+  color:var(--med-teal); margin-bottom:24px;
+  opacity:0; animation:fadeUp .6s .1s forwards;
+}
+.hero-eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--med-teal); animation:pulse 2s infinite; }
+.hero h1 {
+  font-family:var(--display); font-size:clamp(52px,7vw,86px);
+  font-weight:800; line-height:1.02; margin-bottom:22px;
+  opacity:0; animation:fadeUp .8s .2s forwards;
+}
+.hero h1 .med-word { color:var(--med-blue); }
+.hero h1 .gen-word { color:var(--gen-lime); }
+.hero-sub {
+  font-size:19px; font-weight:300; color:var(--t2); line-height:1.75;
+  max-width:560px; margin-bottom:44px;
+  opacity:0; animation:fadeUp .7s .35s forwards;
+}
+.hero-ctas {
+  display:flex; gap:16px; flex-wrap:wrap;
+  opacity:0; animation:fadeUp .7s .5s forwards;
+}
+.hero-cta-med {
+  font-family:var(--body); font-weight:500; font-size:15px;
+  padding:14px 28px; border-radius:8px;
+  background:linear-gradient(135deg, var(--med-blue), #5B9BFF);
+  color:#fff; border:none; cursor:pointer; text-decoration:none;
+  display:inline-flex; align-items:center; gap:9px;
+  transition:transform .2s, box-shadow .2s;
+}
+.hero-cta-med:hover { transform:translateY(-3px); box-shadow:0 12px 36px #3B7BFF35; }
+.hero-cta-gen {
+  font-family:var(--body); font-weight:600; font-size:15px;
+  padding:14px 28px; border-radius:8px;
+  background:var(--gen-lime); color:#0E0E10;
+  border:none; cursor:pointer; text-decoration:none;
+  display:inline-flex; align-items:center; gap:9px;
+  transition:transform .2s, box-shadow .2s;
+}
+.hero-cta-gen:hover { transform:translateY(-3px); box-shadow:0 12px 36px #C8F13540; }
+.hero-cta-divider { display:flex; align-items:center; color:var(--t3); font-size:12px; }
+
+/* Floating stat cards */
+.hero-stats {
+  display:flex; gap:32px; margin-top:64px; padding-top:40px;
+  border-top:1px solid var(--border);
+  opacity:0; animation:fadeUp .7s .7s forwards;
+  flex-wrap:wrap;
+}
+.hstat { }
+.hstat-num { font-family:var(--display); font-size:32px; font-weight:700; color:var(--t1); line-height:1; }
+.hstat-label { font-size:11px; color:var(--t3); margin-top:4px; letter-spacing:.04em; }
+
+/* ---- DUAL TRACK SECTION ---- */
+.dual-section { padding:100px 48px; background:var(--ink); }
+.dual-inner { max-width:1200px; margin:0 auto; }
+.dual-header { text-align:center; margin-bottom:64px; }
+.dual-header h2 { font-family:var(--display); font-size:clamp(32px,4vw,48px); font-weight:700; margin-bottom:16px; }
+.dual-header p { font-size:17px; font-weight:300; color:var(--t2); max-width:480px; margin:0 auto; }
+
+.dual-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+
+/* MEDICAL CARD */
+.track-card {
+  border-radius:20px; overflow:hidden; position:relative;
+  transition:transform .3s;
+}
+.track-card:hover { transform:translateY(-6px); }
+.track-card-med {
+  background:linear-gradient(160deg, #0D1221 0%, #0A1019 100%);
+  border:1px solid var(--med-border);
+}
+.track-card-med::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:4px;
+  background:linear-gradient(90deg, var(--med-blue), var(--med-teal));
+}
+.track-card-gen {
+  background:linear-gradient(160deg, #131316 0%, #0E0E10 100%);
+  border:1px solid var(--gen-border);
+}
+.track-card-gen::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:4px;
+  background:linear-gradient(90deg, var(--gen-lime), var(--gen-orange));
+}
+.track-inner { padding:44px; }
+.track-icon {
+  width:56px; height:56px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:24px;
+}
+.track-icon-med { background:var(--med-glow); border:1px solid var(--med-border); }
+.track-icon-gen { background:var(--gen-lime-dim); border:1px solid #C8F13530; }
+.track-icon svg { width:26px; height:26px; }
+.track-division { font-family:var(--display); font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; margin-bottom:10px; }
+.track-division-med { color:var(--med-blue); }
+.track-division-gen { color:var(--gen-lime); }
+.track-h3 { font-family:var(--display); font-size:28px; font-weight:700; line-height:1.15; margin-bottom:16px; }
+.track-p { font-size:14px; color:var(--t2); line-height:1.75; margin-bottom:28px; }
+.track-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+.pill { font-size:11px; font-weight:500; padding:5px 12px; border-radius:20px; }
+.pill-med { background:var(--med-glow); color:var(--med-blue); border:1px solid var(--med-border); }
+.pill-gen { background:var(--gen-lime-dim); color:var(--gen-lime); border:1px solid #C8F13530; }
+
+/* ---- STAFF CALCULATOR SECTION ---- */
+.calc-section { padding:100px 48px; background:var(--gen-bg); }
+.calc-inner { max-width:900px; margin:0 auto; }
+.calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.calc-widget {
+  background:var(--gen-card);
+  border:1px solid var(--gen-border);
+  border-radius:20px; padding:40px;
+}
+.calc-widget h3 { font-family:var(--display); font-size:22px; font-weight:700; margin-bottom:8px; }
+.calc-widget p { font-size:13px; color:var(--t3); margin-bottom:32px; }
+.calc-label { display:flex; justify-content:space-between; font-size:13px; color:var(--t2); margin-bottom:10px; font-weight:500; }
+.calc-label span { font-family:var(--display); font-size:17px; color:var(--gen-lime); font-weight:700; }
+.calc-slider {
+  width:100%; -webkit-appearance:none; appearance:none;
+  height:5px; border-radius:3px; outline:none; cursor:pointer;
+  margin-bottom:32px;
+}
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
+  background:var(--gen-lime); border:3px solid var(--gen-bg); cursor:pointer;
+}
+.calc-slider::-moz-range-thumb {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--gen-lime); border:3px solid var(--gen-bg); cursor:pointer;
+}
+.calc-results { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.calc-result-card { background:var(--gen-bg); border:1px solid var(--gen-border); border-radius:12px; padding:18px 20px; }
+.calc-result-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-bottom:8px; }
+.calc-result-val { font-family:var(--display); font-size:26px; font-weight:700; color:var(--t1); }
+.calc-result-val.highlight { color:var(--gen-lime); }
+
+/* ---- SOCIAL PROOF ---- */
+.proof-section { padding:60px 48px; background:var(--ink); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.proof-inner { max-width:1100px; margin:0 auto; text-align:center; }
+.proof-label { font-family:var(--display); font-size:10px; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--t3); margin-bottom:28px; }
+.proof-row { display:flex; justify-content:center; align-items:center; gap:48px; flex-wrap:wrap; }
+.proof-item { font-family:var(--display); font-size:13px; font-weight:600; color:var(--t3); letter-spacing:.06em; opacity:.6; transition:opacity .2s; cursor:default; }
+.proof-item:hover { opacity:1; }
+
+/* ---- RESPONSIVE ---- */
+@media(max-width:860px) {
+  .hero { padding:100px 20px 60px; }
+  .dual-grid, .calc-layout { grid-template-columns:1fr; }
+  .dual-section, .calc-section, .proof-section { padding:72px 20px; }
+  .hero-stats { gap:24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SHARED NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-mark">AX</div>
+    <span class="nav-wordmark">ARX Systems</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="medical.html">Medical (AIVIS)</a></li>
+    <li><a href="business.html">Voice &amp; Business</a></li>
+    <li><a href="enterprise.html">Enterprise</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="openModal('auditModal')">Get a Free Audit</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-split-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Two Divisions. One Mission.</div>
+    <h1>High-Performance<br>Intelligence for<br><span class="med-word">Modern</span> <span class="gen-word">Industry</span></h1>
+    <p class="hero-sub">Scalable AI Voice Agents for every business. Specialized Medical Automation for practices that can't afford errors.</p>
+    <div class="hero-ctas">
+      <a href="medical.html" class="hero-cta-med">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
+        Explore ARX Medical
+      </a>
+      <span class="hero-cta-divider">or</span>
+      <a href="business.html" class="hero-cta-gen">
+        View Voice Solutions
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-label">Always-on coverage</div></div>
+      <div class="hstat"><div class="hstat-num">&lt; 2s</div><div class="hstat-label">Response latency</div></div>
+      <div class="hstat"><div class="hstat-num">Big 5</div><div class="hstat-label">EHR integrations</div></div>
+      <div class="hstat"><div class="hstat-num">70%+</div><div class="hstat-label">Operational margin</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- DUAL TRACK -->
+<section class="dual-section">
+  <div class="dual-inner">
+    <div class="dual-header reveal">
+      <h2>Two divisions. <em>One standard.</em></h2>
+      <p>Purpose-built AI for two distinct demands — precision medicine and relentless business growth.</p>
+    </div>
+    <div class="dual-grid">
+      <!-- MEDICAL CARD -->
+      <div class="track-card track-card-med reveal d1">
+        <div class="track-inner">
+          <div class="track-icon track-icon-med">
+            <svg viewBox="0 0 26 26" fill="none">
+              <path d="M13 3v5h5" stroke="var(--med-blue)" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M8 13h2.5v3H8v3H5v-3H2.5v-3H5v-3h3v3z" fill="var(--med-blue)" opacity=".3"/>
+              <circle cx="13" cy="13" r="10" stroke="var(--med-blue)" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="track-division track-division-med">Division I &nbsp;&middot;&nbsp; ARX Medical</div>
+          <h3 class="track-h3">AIVIS &mdash; The Artificial Voice Integration System</h3>
+          <p class="track-p">Purpose-engineered for the clinical environment. AIVIS doesn't guess — it follows deterministic logic paths to triage patients, sync EHRs, and document every interaction under HIPAA-grade infrastructure.</p>
+          <div class="track-pills">
+            <span class="pill pill-med">HIPAA-Ready</span>
+            <span class="pill pill-med">EHR Write-Back</span>
+            <span class="pill pill-med">Clinical Triage Logic</span>
+            <span class="pill pill-med">EN / ES Bilingual</span>
+            <span class="pill pill-med">SOAP Notes</span>
+          </div>
+          <a href="medical.html" class="btn btn-med">Explore AIVIS
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- GENERAL CARD -->
+      <div class="track-card track-card-gen reveal d2">
+        <div class="track-inner">
+          <div class="track-icon track-icon-gen">
+            <svg viewBox="0 0 26 26" fill="none">
+              <rect x="3" y="7" width="20" height="14" rx="3" stroke="var(--gen-lime)" stroke-width="1.5"/>
+              <path d="M9 7V5a4 4 0 018 0v2" stroke="var(--gen-lime)" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M13 14v2M10 14h6" stroke="var(--gen-lime)" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="track-division track-division-gen">Division II &nbsp;&middot;&nbsp; ARX Business</div>
+          <h3 class="track-h3">AI Voice Agents That Never Sleep</h3>
+          <p class="track-p">Deploy a fully-trained AI voice agent for your business in days. Capture every lead, book every appointment, and answer every question — while you focus on the work that actually pays.</p>
+          <div class="track-pills">
+            <span class="pill pill-gen">24/7 Lead Capture</span>
+            <span class="pill pill-gen">Appointment Booking</span>
+            <span class="pill pill-gen">CRM Integration</span>
+            <span class="pill pill-gen">FAQ Automation</span>
+            <span class="pill pill-gen">ROI Guaranteed</span>
+          </div>
+          <a href="business.html" class="btn btn-gen">View Voice Solutions
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAFF REPLACEMENT CALCULATOR -->
+<section class="calc-section">
+  <div class="calc-inner">
+    <div class="calc-layout">
+      <div class="reveal">
+        <div class="section-label gen">The Math</div>
+        <h2 class="section-h2" style="font-size:clamp(30px,4vw,44px)">Your receptionist costs more than you think.</h2>
+        <p class="section-lead" style="font-size:15px;">A full-time front desk hire runs $3,500&ndash;$5,000/mo when you factor salary, benefits, turnover, and training. ARX replaces that function for $199&ndash;$499/mo &mdash; and never calls in sick.</p>
+      </div>
+      <div class="calc-widget reveal d2" id="staffCalc">
+        <h3>Staff Replacement Savings</h3>
+        <p>Move the slider to your current monthly staff spend</p>
+        <div class="calc-label">Monthly staff spend <span id="staffSpendVal">$3,500/mo</span></div>
+        <input class="calc-slider" type="range" id="staffSpend" min="1500" max="8000" value="3500" step="100">
+        <div class="calc-results">
+          <div class="calc-result-card">
+            <div class="calc-result-label">ARX replaces at</div>
+            <div class="calc-result-val" style="color:var(--gen-lime)">$499/mo</div>
+          </div>
+          <div class="calc-result-card">
+            <div class="calc-result-label">Monthly savings</div>
+            <div class="calc-result-val highlight" id="staffSaveVal">$3,001/mo</div>
+          </div>
+          <div class="calc-result-card" style="grid-column:1/-1">
+            <div class="calc-result-label">Annual savings</div>
+            <div class="calc-result-val highlight" id="staffKeepVal">86% saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL PROOF -->
+<div class="proof-section">
+  <div class="proof-inner">
+    <div class="proof-label">Trusted by practices and businesses across South Florida</div>
+    <div class="proof-row">
+      <span class="proof-item">Cespedes Cardiology, MD, PA</span>
+      <span class="proof-item">Development Partner</span>
+      <span class="proof-item">South Florida SMBs</span>
+      <span class="proof-item">Q2 2026 Pilots Open</span>
+    </div>
+  </div>
+</div>
+
+<!-- AUDIT MODAL -->
+<div class="modal-overlay" id="auditModal" style="display:none;position:fixed;inset:0;background:rgba(6,8,13,.88);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(10px);padding:20px;">
+  <div style="background:#0D1221;border:1px solid var(--med-border);border-radius:20px;width:100%;max-width:520px;overflow:hidden;position:relative;">
+    <div style="height:3px;background:linear-gradient(90deg,var(--med-blue),var(--med-teal));"></div>
+    <div style="padding:32px 36px 28px;border-bottom:1px solid var(--border);">
+      <div style="font-family:var(--display);font-size:24px;font-weight:700;margin-bottom:6px;">Get a Free Audit</div>
+      <div style="font-size:13px;color:var(--t3);">We'll assess your current workflow and show exactly where AI can replace manual overhead.</div>
+      <button class="modal-close" style="position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;background:var(--ash);border:1px solid var(--border);color:var(--t2);font-size:15px;cursor:pointer;">&#x2715;</button>
+    </div>
+    <div class="arx-form" style="padding:28px 36px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Your Name</label>
+          <input id="audit-name" style="background:var(--ink);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:14px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="Dr. Jane Smith">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;">
+          <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Email</label>
+          <input id="audit-email" style="background:var(--ink);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:14px;color:var(--t1);font-family:var(--body);outline:none;" type="email" placeholder="you@practice.com">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">I need</label>
+          <select id="audit-need" style="background:var(--ink);border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:14px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;">
+            <option disabled selected>Select a division</option>
+            <option>ARX Medical (AIVIS) &mdash; for my practice</option>
+            <option>ARX Business &mdash; for my company</option>
+            <option>Enterprise &mdash; custom solution</option>
+            <option>Not sure yet &mdash; help me decide</option>
+          </select>
+        </div>
+      </div>
+      <button class="form-submit btn btn-med" style="width:100%;margin-top:16px;justify-content:center;">Request Free Audit &rarr;</button>
+      <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:10px;">No commitment. Response within 1 business day.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer" id="contact">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="nav-logo" href="index.html" style="margin-bottom:4px;display:inline-flex;">
+          <div class="nav-mark">AX</div>
+          <span class="nav-wordmark" style="margin-left:10px;">ARX Systems</span>
+        </a>
+        <p>Architecting the Future of Wealth through AI. Two divisions. One uncompromising standard.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Medical</h4>
+        <a href="medical.html">AIVIS Overview</a>
+        <a href="medical.html#capabilities">Capabilities</a>
+        <a href="medical.html#compliance">Compliance</a>
+        <a href="pricing.html">AIVIS Pricing</a>
+      </div>
+      <div class="footer-col">
+        <h4>Business</h4>
+        <a href="business.html">Voice Agents</a>
+        <a href="business.html#usecases">Use Cases</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="enterprise.html">Enterprise</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#">LinkedIn</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">&copy; 2026 ARX Systems. All rights reserved.</span>
+      <span class="footer-tagline">&ldquo;Architecting the Future of Wealth through AI.&rdquo;</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Fix modal display
+document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+function openModal(id) {
+  const m = document.getElementById(id);
+  if (m) { m.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+}
+function closeModal(id) {
+  const m = id ? document.getElementById(id) : document.querySelector('.modal-overlay[style*="flex"]');
+  if (m) { m.style.display = 'none'; document.body.style.overflow = ''; }
+}
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; } });
+  const cb = overlay.querySelector('.modal-close');
+  if (cb) cb.addEventListener('click', () => { overlay.style.display = 'none'; document.body.style.overflow = ''; });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => { m.style.display = 'none'; document.body.style.overflow = ''; }); });
+
+// Nav scroll
+const nav = document.querySelector('.nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 30), { passive:true });
+
+// Scroll reveal
+const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }}), { threshold:.08 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Staff calculator
+const slider = document.getElementById('staffSpend');
+const dispSpend = document.getElementById('staffSpendVal');
+const dispSave = document.getElementById('staffSaveVal');
+const dispKeep = document.getElementById('staffKeepVal');
+function updateCalc() {
+  const spend = parseInt(slider.value);
+  const arx = 499;
+  const save = spend - arx;
+  const pct = Math.round((save / spend) * 100);
+  const fill = ((spend - 1500) / (8000 - 1500)) * 100;
+  dispSpend.textContent = '$' + spend.toLocaleString() + '/mo';
+  dispSave.textContent = '$' + save.toLocaleString() + '/mo';
+  dispKeep.textContent = 'Save $' + (save * 12).toLocaleString() + '/yr (' + pct + '%)';
+  slider.style.background = `linear-gradient(to right, var(--gen-lime) ${fill}%, #27272E ${fill}%)`;
+}
+slider.addEventListener('input', updateCalc);
+updateCalc();
+
+// Form submit
+document.querySelectorAll('.form-submit').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.textContent = 'Submitted \u2713 We\u2019ll be in touch.';
+    this.style.opacity = '.7';
+    this.disabled = true;
+    setTimeout(() => { document.querySelectorAll('.modal-overlay').forEach(m => { m.style.display='none'; document.body.style.overflow=''; }); }, 2200);
+  });
+});
+</script>
+</body>
+</html>
