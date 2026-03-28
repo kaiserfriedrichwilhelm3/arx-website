@@ -144,38 +144,6 @@ body { background:var(--void); }
 .pill-med { background:var(--med-glow); color:var(--med-blue); border:1px solid var(--med-border); }
 .pill-gen { background:var(--gen-lime-dim); color:var(--gen-lime); border:1px solid #C8F13530; }
 
-/* ---- STAFF CALCULATOR SECTION ---- */
-.calc-section { padding:100px 48px; background:var(--gen-bg); }
-.calc-inner { max-width:900px; margin:0 auto; }
-.calc-layout { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
-.calc-widget {
-  background:var(--gen-card);
-  border:1px solid var(--gen-border);
-  border-radius:20px; padding:40px;
-}
-.calc-widget h3 { font-family:var(--display); font-size:22px; font-weight:700; margin-bottom:8px; }
-.calc-widget p { font-size:13px; color:var(--t3); margin-bottom:32px; }
-.calc-label { display:flex; justify-content:space-between; font-size:13px; color:var(--t2); margin-bottom:10px; font-weight:500; }
-.calc-label span { font-family:var(--display); font-size:17px; color:var(--gen-lime); font-weight:700; }
-.calc-slider {
-  width:100%; -webkit-appearance:none; appearance:none;
-  height:5px; border-radius:3px; outline:none; cursor:pointer;
-  margin-bottom:32px;
-}
-.calc-slider::-webkit-slider-thumb {
-  -webkit-appearance:none; width:22px; height:22px; border-radius:50%;
-  background:var(--gen-lime); border:3px solid var(--gen-bg); cursor:pointer;
-}
-.calc-slider::-moz-range-thumb {
-  width:22px; height:22px; border-radius:50%;
-  background:var(--gen-lime); border:3px solid var(--gen-bg); cursor:pointer;
-}
-.calc-results { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.calc-result-card { background:var(--gen-bg); border:1px solid var(--gen-border); border-radius:12px; padding:18px 20px; }
-.calc-result-label { font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-bottom:8px; }
-.calc-result-val { font-family:var(--display); font-size:26px; font-weight:700; color:var(--t1); }
-.calc-result-val.highlight { color:var(--gen-lime); }
-
 /* ---- SOCIAL PROOF ---- */
 .proof-section { padding:60px 48px; background:var(--ink); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
 .proof-inner { max-width:1100px; margin:0 auto; text-align:center; }
@@ -187,8 +155,8 @@ body { background:var(--void); }
 /* ---- RESPONSIVE ---- */
 @media(max-width:860px) {
   .hero { padding:100px 20px 60px; }
-  .dual-grid, .calc-layout { grid-template-columns:1fr; }
-  .dual-section, .calc-section, .proof-section { padding:72px 20px; }
+  .dual-grid { grid-template-columns:1fr; }
+  .dual-section, .proof-section { padding:72px 20px; }
   .hero-stats { gap:24px; }
 }
 </style>
@@ -216,25 +184,25 @@ body { background:var(--void); }
   <div class="hero-split-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Two Divisions. One Mission.</div>
-    <h1>High-Performance<br>Intelligence for<br><span class="med-word">Modern</span> <span class="gen-word">Industry</span></h1>
-    <p class="hero-sub">Scalable AI Voice Agents for every business. Specialized Medical Automation for practices that can't afford errors.</p>
+    <div class="hero-eyebrow"><span class="hero-eyebrow-dot"></span>Two Tracks. Two Distinct Markets. One Standard.</div>
+    <h1>Choose your<br><span class="med-word">track.</span></h1>
+    <p class="hero-sub">One path deploys today and drives immediate ROI. The other is redefining the standard of care — and isn't available to everyone.</p>
     <div class="hero-ctas">
-      <a href="medical.html" class="hero-cta-med">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
-        Explore ARX Medical
+      <a href="business.html" class="hero-cta-gen">
+        Deploy Business AI
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <span class="hero-cta-divider">or</span>
-      <a href="business.html" class="hero-cta-gen">
-        View Voice Solutions
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <a href="medical.html" class="hero-cta-med">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/></svg>
+        Explore Medical R&amp;D
       </a>
     </div>
     <div class="hero-stats">
-      <div class="hstat"><div class="hstat-num">24/7</div><div class="hstat-label">Always-on coverage</div></div>
-      <div class="hstat"><div class="hstat-num">&lt; 2s</div><div class="hstat-label">Response latency</div></div>
-      <div class="hstat"><div class="hstat-num">Big 5</div><div class="hstat-label">EHR integrations</div></div>
-      <div class="hstat"><div class="hstat-num">70%+</div><div class="hstat-label">Operational margin</div></div>
+      <div class="hstat"><div class="hstat-num">$499</div><div class="hstat-label">Business agent / month</div></div>
+      <div class="hstat"><div class="hstat-num">&lt; 48hr</div><div class="hstat-label">Business deployment time</div></div>
+      <div class="hstat"><div class="hstat-num">Alpha</div><div class="hstat-label">AIVIS clinical build status</div></div>
+      <div class="hstat"><div class="hstat-num">Q3 '26</div><div class="hstat-label">Next AIVIS pilot intake</div></div>
     </div>
   </div>
 </section>
@@ -243,8 +211,8 @@ body { background:var(--void); }
 <section class="dual-section">
   <div class="dual-inner">
     <div class="dual-header reveal">
-      <h2>Two divisions. <em>One standard.</em></h2>
-      <p>Purpose-built AI for two distinct demands — precision medicine and relentless business growth.</p>
+      <h2>Operational Solutions vs. <em>Developmental Pilots.</em></h2>
+      <p>Two tracks built for fundamentally different markets — and priced accordingly.</p>
     </div>
     <div class="dual-grid">
       <!-- MEDICAL CARD -->
@@ -257,17 +225,21 @@ body { background:var(--void); }
               <circle cx="13" cy="13" r="10" stroke="var(--med-blue)" stroke-width="1.5"/>
             </svg>
           </div>
-          <div class="track-division track-division-med">Division I &nbsp;&middot;&nbsp; ARX Medical</div>
-          <h3 class="track-h3">AIVIS &mdash; The Artificial Voice Integration System</h3>
-          <p class="track-p">Purpose-engineered for the clinical environment. AIVIS doesn't guess — it follows deterministic logic paths to triage patients, sync EHRs, and document every interaction under HIPAA-grade infrastructure.</p>
-          <div class="track-pills">
-            <span class="pill pill-med">HIPAA-Ready</span>
-            <span class="pill pill-med">EHR Write-Back</span>
-            <span class="pill pill-med">Clinical Triage Logic</span>
-            <span class="pill pill-med">EN / ES Bilingual</span>
-            <span class="pill pill-med">SOAP Notes</span>
+          <div class="track-division track-division-med">AIVIS Medical &nbsp;&middot;&nbsp; Innovation Lab</div>
+          <div style="display:inline-flex;align-items:center;gap:8px;background:#3B7BFF18;border:1px solid #3B7BFF44;border-radius:20px;padding:4px 14px;margin-bottom:14px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#FF8080;animation:pulse 1.2s infinite;flex-shrink:0;"></span>
+            <span style="font-family:var(--display);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#A0BEFF;">In Active Clinical Development &mdash; Pilot Applications Only</span>
           </div>
-          <a href="medical.html" class="btn btn-med">Explore AIVIS
+          <h3 class="track-h3">AIVIS &mdash; The Future of Medical Administration</h3>
+          <p class="track-p">Not a chatbot. Not a generic LLM wrapper. AIVIS is a clinical-grade AI OS built on Deterministic State-Machine logic — currently in active development with The Office of Edgardo M. Cespedes, MD, PA.</p>
+          <div class="track-pills">
+            <span class="pill pill-med">HIPAA Architecture</span>
+            <span class="pill pill-med">FSM Triage Logic</span>
+            <span class="pill pill-med">Zero-LLM Emergency Path</span>
+            <span class="pill pill-med">EHR Write-Back (In-Testing)</span>
+            <span class="pill pill-med">Clinical Alpha 1.0</span>
+          </div>
+          <a href="medical.html" class="btn btn-med">Explore Medical R&amp;D
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
@@ -283,52 +255,23 @@ body { background:var(--void); }
               <path d="M13 14v2M10 14h6" stroke="var(--gen-lime)" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
-          <div class="track-division track-division-gen">Division II &nbsp;&middot;&nbsp; ARX Business</div>
-          <h3 class="track-h3">AI Voice Agents That Never Sleep</h3>
-          <p class="track-p">Deploy a fully-trained AI voice agent for your business in days. Capture every lead, book every appointment, and answer every question — while you focus on the work that actually pays.</p>
+          <div class="track-division track-division-gen">ARX Business &nbsp;&middot;&nbsp; Revenue Engine</div>
+          <div style="display:inline-flex;align-items:center;gap:8px;background:#C8F13518;border:1px solid #C8F13540;border-radius:20px;padding:4px 14px;margin-bottom:14px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#C8F135;animation:pulse 1.2s infinite;flex-shrink:0;"></span>
+            <span style="font-family:var(--display);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#C8F135;">Available for Immediate Deployment</span>
+          </div>
+          <h3 class="track-h3">Never Miss a Lead. Never Close Early. Never Call in Sick.</h3>
+          <p class="track-p">Deploy a fully-trained AI voice agent for your business in 48 hours. Capture every lead, book every appointment, and answer every question — for a fraction of what a receptionist costs.</p>
           <div class="track-pills">
             <span class="pill pill-gen">24/7 Lead Capture</span>
             <span class="pill pill-gen">Appointment Booking</span>
             <span class="pill pill-gen">CRM Integration</span>
             <span class="pill pill-gen">FAQ Automation</span>
-            <span class="pill pill-gen">ROI Guaranteed</span>
+            <span class="pill pill-gen">From $499/mo</span>
           </div>
-          <a href="business.html" class="btn btn-gen">View Voice Solutions
+          <a href="business.html" class="btn btn-gen">Deploy Business AI
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STAFF REPLACEMENT CALCULATOR -->
-<section class="calc-section">
-  <div class="calc-inner">
-    <div class="calc-layout">
-      <div class="reveal">
-        <div class="section-label gen">The Math</div>
-        <h2 class="section-h2" style="font-size:clamp(30px,4vw,44px)">Your receptionist costs more than you think.</h2>
-        <p class="section-lead" style="font-size:15px;">A full-time front desk hire runs $3,500&ndash;$5,000/mo when you factor salary, benefits, turnover, and training. ARX replaces that function for $199&ndash;$499/mo &mdash; and never calls in sick.</p>
-      </div>
-      <div class="calc-widget reveal d2" id="staffCalc">
-        <h3>Staff Replacement Savings</h3>
-        <p>Move the slider to your current monthly staff spend</p>
-        <div class="calc-label">Monthly staff spend <span id="staffSpendVal">$3,500/mo</span></div>
-        <input class="calc-slider" type="range" id="staffSpend" min="1500" max="8000" value="3500" step="100">
-        <div class="calc-results">
-          <div class="calc-result-card">
-            <div class="calc-result-label">ARX replaces at</div>
-            <div class="calc-result-val" style="color:var(--gen-lime)">$499/mo</div>
-          </div>
-          <div class="calc-result-card">
-            <div class="calc-result-label">Monthly savings</div>
-            <div class="calc-result-val highlight" id="staffSaveVal">$3,001/mo</div>
-          </div>
-          <div class="calc-result-card" style="grid-column:1/-1">
-            <div class="calc-result-label">Annual savings</div>
-            <div class="calc-result-val highlight" id="staffKeepVal">86% saved</div>
-          </div>
         </div>
       </div>
     </div>
@@ -338,12 +281,11 @@ body { background:var(--void); }
 <!-- SOCIAL PROOF -->
 <div class="proof-section">
   <div class="proof-inner">
-    <div class="proof-label">Trusted by practices and businesses across South Florida</div>
+    <div class="proof-label">Two tracks. Two distinct commitments.</div>
     <div class="proof-row">
-      <span class="proof-item">Cespedes Cardiology, MD, PA</span>
-      <span class="proof-item">Development Partner</span>
-      <span class="proof-item">South Florida SMBs</span>
-      <span class="proof-item">Q2 2026 Pilots Open</span>
+      <span class="proof-item">Business: Deploy in 48 Hours</span>
+      <span class="proof-item">Medical: Clinical Development Partner — Cespedes Cardiology, MD, PA</span>
+      <span class="proof-item">AIVIS Pilot: Q3 2026 Intake Open</span>
     </div>
   </div>
 </div>
@@ -419,7 +361,10 @@ body { background:var(--void); }
     </div>
     <div class="footer-bottom">
       <span class="footer-copy">&copy; 2026 ARX Systems. All rights reserved.</span>
-      <span class="footer-tagline">&ldquo;Architecting the Future of Wealth through AI.&rdquo;</span>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;">
+        <span class="footer-tagline">&ldquo;Architecting the Future of Wealth through AI.&rdquo;</span>
+        <span style="font-family:var(--display);font-size:10px;color:var(--med-blue);letter-spacing:.06em;opacity:.7;">AIVIS Division: Precision Medical Intelligence</span>
+      </div>
     </div>
   </div>
 </footer>
@@ -449,25 +394,6 @@ window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.
 // Scroll reveal
 const obs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }}), { threshold:.08 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-// Staff calculator
-const slider = document.getElementById('staffSpend');
-const dispSpend = document.getElementById('staffSpendVal');
-const dispSave = document.getElementById('staffSaveVal');
-const dispKeep = document.getElementById('staffKeepVal');
-function updateCalc() {
-  const spend = parseInt(slider.value);
-  const arx = 499;
-  const save = spend - arx;
-  const pct = Math.round((save / spend) * 100);
-  const fill = ((spend - 1500) / (8000 - 1500)) * 100;
-  dispSpend.textContent = '$' + spend.toLocaleString() + '/mo';
-  dispSave.textContent = '$' + save.toLocaleString() + '/mo';
-  dispKeep.textContent = 'Save $' + (save * 12).toLocaleString() + '/yr (' + pct + '%)';
-  slider.style.background = `linear-gradient(to right, var(--gen-lime) ${fill}%, #27272E ${fill}%)`;
-}
-slider.addEventListener('input', updateCalc);
-updateCalc();
 
 // Form submit
 document.querySelectorAll('.form-submit').forEach(btn => {
