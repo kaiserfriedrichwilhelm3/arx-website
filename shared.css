@@ -35,9 +35,9 @@
   --gen-surface: #131316;
   --gen-card:    #18181C;
   --gen-border:  #27272E;
-  --gen-lime:    #C8F135;
-  --gen-lime2:   #A8D020;
-  --gen-lime-dim:#C8F13515;
+  --gen-lime:    #D4FF00;
+  --gen-lime2:   #B8E000;
+  --gen-lime-dim:#D4FF0015;
   --gen-orange:  #FF6B35;
 
   /* Typography */
@@ -113,7 +113,7 @@ body {
 .nav-cta {
   font-family:var(--body); font-size:13px; font-weight:600;
   background:var(--med-blue); color:#fff;
-  padding:9px 22px; border-radius:6px; border:none; cursor:pointer;
+  padding:9px 22px; border-radius:4px; border:none; cursor:pointer;
   transition:background .2s, transform .15s;
   text-decoration:none; display:inline-block;
   letter-spacing: -0.01em;
@@ -147,7 +147,7 @@ body {
 .btn {
   display:inline-flex; align-items:center; gap:8px;
   font-family:var(--body); font-weight:600; font-size:14px;
-  padding:13px 28px; border-radius:6px; border:none; cursor:pointer;
+  padding:13px 28px; border-radius:4px; border:none; cursor:pointer;
   text-decoration:none; transition:all .2s;
   letter-spacing: -0.01em;
 }
@@ -185,7 +185,7 @@ body {
   font-size: clamp(36px,4.5vw,56px);
   font-weight: 700;
   line-height: 1.08;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.04em;
   margin-bottom: 20px;
 }
 .section-h2 em {
@@ -199,13 +199,13 @@ body {
 /* ---- CARDS ---- */
 .card-med {
   background:var(--med-card); border:1px solid var(--med-border);
-  border-radius:6px; padding:28px;
+  border-radius:4px; padding:28px;
   transition:border-color .25s, transform .25s;
 }
 .card-med:hover { border-color:var(--med-blue); transform:translateY(-3px); }
 .card-gen {
   background:var(--gen-card); border:1px solid var(--gen-border);
-  border-radius:6px; padding:28px;
+  border-radius:4px; padding:28px;
   transition:border-color .25s, transform .25s;
 }
 .card-gen:hover { border-color:var(--gen-lime)88; transform:translateY(-3px); }
@@ -216,14 +216,14 @@ body {
   letter-spacing:.08em; text-transform:uppercase;
   background:var(--med-glow); color:var(--med-blue);
   border:1px solid var(--med-border);
-  padding:3px 10px; border-radius:4px;
+  padding:3px 10px; border-radius:2px;
 }
 .badge-gen {
   display:inline-block; font-size:10px; font-weight:600;
   letter-spacing:.08em; text-transform:uppercase;
   background:var(--gen-lime-dim); color:var(--gen-lime);
-  border:1px solid #C8F13530;
-  padding:3px 10px; border-radius:4px;
+  border:1px solid #D4FF0030;
+  padding:3px 10px; border-radius:2px;
 }
 
 /* ---- PRICE TAG PRIMITIVES ---- */

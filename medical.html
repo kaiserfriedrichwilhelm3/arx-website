@@ -17,10 +17,7 @@ body { background:var(--med-bg); }
 }
 .med-hero-bg {
   position:absolute; inset:0; z-index:0;
-  background:
-    radial-gradient(ellipse 70% 60% at 100% 20%, #3B7BFF08 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 0% 80%, #00D4C806 0%, transparent 60%),
-    var(--med-bg);
+  background: var(--med-bg);
 }
 .med-hero-grid {
   position:absolute; inset:0; z-index:0; opacity:.02;
@@ -37,7 +34,7 @@ body { background:var(--med-bg); }
 .med-eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--med-teal); animation:pulse 2s infinite; }
 .med-hero h1 {
   font-family:var(--display); font-size:clamp(48px,6.5vw,82px);
-  font-weight:800; line-height:1.03; letter-spacing:-0.03em; margin-bottom:8px;
+  font-weight:800; line-height:1.03; letter-spacing:-0.04em; margin-bottom:8px;
   opacity:0; animation:fadeUp .7s .2s forwards;
 }
 .med-hero h1 .aivis { color:var(--med-blue); }
@@ -66,7 +63,7 @@ body { background:var(--med-bg); }
 .med-stat { padding:0 28px 0 0; border-right:1px solid var(--med-border); }
 .med-stat:first-child { padding-left:0; }
 .med-stat:last-child { border-right:none; }
-.med-stat-num { font-family:var(--display); font-size:28px; font-weight:700; letter-spacing:-0.03em; color:var(--t1); }
+.med-stat-num { font-family:var(--display); font-size:28px; font-weight:700; letter-spacing:-0.04em; color:var(--t1); }
 .med-stat-num em { font-style:normal; color:var(--med-blue); }
 .med-stat-label { font-size:11px; color:var(--t3); margin-top:5px; line-height:1.5; }
 
@@ -122,7 +119,7 @@ body { background:var(--med-bg); }
 .safety-body { padding:36px 40px; display:flex; gap:28px; align-items:flex-start; border-bottom:1px solid #FF4D4D22; }
 .safety-ico { width:48px; height:48px; border-radius:6px; background:#FF4D4D15; border:1px solid #FF4D4D33; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
 .safety-ico svg { width:22px; height:22px; }
-.safety-txt h3 { font-family:var(--display); font-size:24px; font-weight:700; letter-spacing:-0.03em; margin-bottom:10px; }
+.safety-txt h3 { font-family:var(--display); font-size:24px; font-weight:700; letter-spacing:-0.04em; margin-bottom:10px; }
 .safety-txt h3 em { font-style:italic; font-family:var(--serif); font-weight:300; color:#FF8080; letter-spacing:0; }
 .safety-txt p { font-size:14px; color:var(--t2); line-height:1.75; max-width:600px; }
 .safety-triggers { padding:20px 40px; border-bottom:1px solid #FF4D4D22; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
@@ -202,7 +199,7 @@ body { background:var(--med-bg); }
 .truth-block { background:var(--med-bg); border:1px solid var(--med-border); border-radius:6px; padding:56px; position:relative; overflow:hidden; }
 .truth-block::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--med-blue),var(--med-teal)); }
 .truth-eyebrow { font-family:var(--display);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--med-teal);margin-bottom:12px; }
-.truth-h3 { font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-0.03em;margin-bottom:20px;line-height:1.1; }
+.truth-h3 { font-family:var(--display);font-size:clamp(22px,3vw,32px);font-weight:700;letter-spacing:-0.04em;margin-bottom:20px;line-height:1.1; }
 .truth-p { font-size:15px;color:var(--t2);line-height:1.85;margin-bottom:20px; }
 .truth-p strong { color:var(--t1);font-weight:600; }
 .truth-arch { display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin-top:40px;background:var(--med-border);border:1px solid var(--med-border);border-radius:6px;overflow:hidden; }
@@ -213,8 +210,8 @@ body { background:var(--med-bg); }
 
 /* ---- CTA STRIP ---- */
 .med-cta-strip { padding:160px 64px; background:var(--med-bg); text-align:center; position:relative; overflow:hidden; }
-.med-cta-strip::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 40% at 50% 0%,#3B7BFF0A,transparent 60%); pointer-events:none; }
-.med-cta-strip h2 { font-family:var(--display); font-size:clamp(34px,4.5vw,52px); font-weight:700; letter-spacing:-0.03em; margin-bottom:18px; position:relative; }
+.med-cta-strip::before { display:none; }
+.med-cta-strip h2 { font-family:var(--display); font-size:clamp(34px,4.5vw,52px); font-weight:700; letter-spacing:-0.04em; margin-bottom:18px; position:relative; }
 .med-cta-strip p { font-size:17px; font-weight:300; color:var(--t2); max-width:480px; margin:0 auto 40px; position:relative; }
 
 @media(max-width:960px) {
@@ -254,7 +251,7 @@ body { background:var(--med-bg); }
   <div class="med-hero-grid"></div>
   <div class="med-hero-content">
     <div class="med-eyebrow"><span class="med-eyebrow-dot"></span>AIVIS Medical &nbsp;&middot;&nbsp; Innovation Lab &nbsp;&middot;&nbsp; In Active Clinical Development</div>
-    <div style="display:inline-flex;align-items:center;gap:9px;background:#FF4D4D15;border:1px solid #FF4D4D44;border-radius:20px;padding:5px 16px;margin-bottom:18px;opacity:0;animation:fadeUp .6s .15s forwards;">
+    <div style="display:inline-flex;align-items:center;gap:9px;background:#FF4D4D15;border:1px solid #FF4D4D44;border-radius:4px;padding:5px 16px;margin-bottom:18px;opacity:0;animation:fadeUp .6s .15s forwards;">
       <span style="width:7px;height:7px;border-radius:50%;background:#FF8080;animation:pulse 1.2s infinite;flex-shrink:0;"></span>
       <span style="font-family:var(--display);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#FF8080;">Clinical Alpha 1.0 &mdash; Pilot Applications Only &mdash; Q3 2026</span>
     </div>
@@ -597,7 +594,7 @@ body { background:var(--med-bg); }
 
 <!-- PILOT PROGRAM APPLICATION MODAL -->
 <div class="modal-overlay" id="auditModal" style="display:none;position:fixed;inset:0;background:rgba(8,12,20,.92);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(14px);padding:20px;overflow-y:auto;">
-  <div style="background:var(--med-card);border:1px solid var(--med-border);border-radius:20px;width:100%;max-width:560px;overflow:hidden;position:relative;margin:auto;">
+  <div style="background:var(--med-card);border:1px solid var(--med-border);border-radius:4px;width:100%;max-width:560px;overflow:hidden;position:relative;margin:auto;">
     <div style="height:3px;background:linear-gradient(90deg,var(--med-blue),var(--med-teal));"></div>
     <div style="padding:28px 34px 20px;border-bottom:1px solid var(--med-border);">
       <div style="font-family:var(--display);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--med-teal);margin-bottom:6px;">Q3 2026 Pilot Intake</div>
@@ -608,12 +605,12 @@ body { background:var(--med-bg); }
     <div style="padding:24px 34px 30px;">
       <div style="display:flex;flex-direction:column;gap:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Name</label><input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="Dr. Jane Smith"></div>
-          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Email</label><input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="email" placeholder="you@practice.com"></div>
+          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Name</label><input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="Dr. Jane Smith"></div>
+          <div style="display:flex;flex-direction:column;gap:5px;"><label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Email</label><input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="email" placeholder="you@practice.com"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Practice Specialty</label>
-          <select style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;">
+          <select style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;">
             <option disabled selected>Select specialty</option>
             <option>Cardiology</option>
             <option>Primary Care</option>
@@ -624,11 +621,11 @@ body { background:var(--med-bg); }
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Current EHR Provider</label>
-          <input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="e.g. Athena, Epic, NextGen, PracticeSuite">
+          <input style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;" type="text" placeholder="e.g. Athena, Epic, NextGen, PracticeSuite">
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;">
           <label style="font-size:11px;font-weight:600;color:var(--t2);letter-spacing:.04em;">Estimated Monthly Call Volume</label>
-          <select style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;">
+          <select style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--t1);font-family:var(--body);outline:none;cursor:pointer;">
             <option disabled selected>Select range</option>
             <option>Under 500 calls/mo</option>
             <option>500 – 1,500 calls/mo</option>
@@ -644,14 +641,14 @@ body { background:var(--med-bg); }
             <label style="display:flex;align-items:center;gap:9px;font-size:13px;color:var(--t2);cursor:pointer;"><input type="checkbox" style="accent-color:var(--med-blue);width:14px;height:14px;"> Appointment No-Shows</label>
           </div>
         </div>
-        <div style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:10px;padding:14px 16px;">
+        <div style="background:var(--med-bg);border:1px solid var(--med-border);border-radius:4px;padding:14px 16px;">
           <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--t2);cursor:pointer;line-height:1.65;">
             <input type="checkbox" style="accent-color:var(--med-blue);width:14px;height:14px;flex-shrink:0;margin-top:2px;">
             I understand that AIVIS is currently in a limited clinical pilot phase and that my practice will be vetted for compatibility before acceptance.
           </label>
         </div>
       </div>
-      <button style="width:100%;margin-top:16px;padding:13px;border-radius:8px;background:var(--med-blue);color:#fff;font-family:var(--body);font-weight:600;font-size:14px;border:none;cursor:pointer;" onclick="this.textContent='Application Submitted \u2713 We\u2019ll be in touch.';this.disabled=true;setTimeout(()=>{this.closest('.modal-overlay').style.display='none';document.body.style.overflow='';},2400)">Submit Pilot Application &rarr;</button>
+      <button style="width:100%;margin-top:16px;padding:13px;border-radius:4px;background:var(--med-blue);color:#fff;font-family:var(--body);font-weight:600;font-size:14px;border:none;cursor:pointer;" onclick="this.textContent='Application Submitted \u2713 We\u2019ll be in touch.';this.disabled=true;setTimeout(()=>{this.closest('.modal-overlay').style.display='none';document.body.style.overflow='';},2400)">Submit Pilot Application &rarr;</button>
       <div style="font-size:11px;color:var(--t3);text-align:center;margin-top:10px;">BAA executed before any data is shared. Q3 2026 pilot cohort &mdash; limited positions.</div>
     </div>
   </div>
@@ -665,7 +662,7 @@ body { background:var(--med-bg); }
       <div class="footer-col"><h4>Company</h4><a href="index.html">Home</a><a href="business.html">Business Division</a><a href="enterprise.html">Enterprise</a><a href="#">LinkedIn</a></div>
       <div class="footer-col"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">HIPAA Notice</a><a href="index.html#contact">Contact</a></div>
     </div>
-    <div class="footer-bottom"><span class="footer-copy">&copy; 2026 ARX Systems. All rights reserved.</span><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;"><span class="footer-tagline">&ldquo;Architecting the Future of Wealth through AI.&rdquo;</span><span style="font-family:var(--display);font-size:10px;color:var(--med-blue);letter-spacing:.06em;opacity:.7;">AIVIS Division: Precision Medical Intelligence</span></div></div>
+    <div class="footer-bottom"><span class="footer-copy">&copy; 2026 ARX Systems. All rights reserved.</span><div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;"><span class="footer-tagline">&ldquo;Deterministic intelligence for clinical environments.&rdquo;</span><span style="font-family:var(--display);font-size:10px;color:var(--med-blue);letter-spacing:.06em;opacity:.7;">AIVIS Division: Precision Medical Intelligence</span></div></div>
   </div>
 </footer>
 
