@@ -4,7 +4,6 @@ import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import SystemStatus from '@/components/SystemStatus';
 import GeneralAIMS from '@/components/GeneralAIMS';
-import MedicalAIMS from '@/components/MedicalAIMS';
 import Calculator from '@/components/Calculator';
 import Pricing from '@/components/Pricing';
 import Changelog from '@/components/Changelog';
@@ -20,7 +19,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>AIMS Alpha 1.0 — ARX Systems</title>
+        <title>AIMS Alpha 1.0.4 — ARX Systems</title>
       </Head>
 
       <Nav onApply={open} />
@@ -29,7 +28,6 @@ export default function Home() {
         <Hero onApply={open} />
         <SystemStatus />
         <GeneralAIMS />
-        <MedicalAIMS />
         <Calculator />
         <Pricing onApply={open} />
         <Changelog />

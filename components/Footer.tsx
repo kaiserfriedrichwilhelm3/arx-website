@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { motion } from 'motion/react';
 
 interface FooterProps {
@@ -45,10 +46,15 @@ export default function Footer({ onApply }: FooterProps) {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '16px' }}>
               Product
             </div>
-            {['General AIMS', 'AIMS Medical', 'Calculator', 'Pricing', 'Changelog'].map((label) => (
+            {[
+              { label: 'General AIMS', href: '#general' },
+              { label: 'Calculator', href: '#calculator' },
+              { label: 'Pricing', href: '#pricing' },
+              { label: 'Changelog', href: '#changelog' },
+            ].map(({ label, href }) => (
               <a
                 key={label}
-                href={`#${label.toLowerCase().replace(' aims', '').replace(' ', '-')}`}
+                href={href}
                 style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', marginBottom: '8px', transition: 'color 0.2s' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}
@@ -56,6 +62,12 @@ export default function Footer({ onApply }: FooterProps) {
                 {label}
               </a>
             ))}
+            <Link
+              href="/medical"
+              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--medical)', textDecoration: 'none', marginBottom: '8px', transition: 'opacity 0.2s' }}
+            >
+              AIMS Medical →
+            </Link>
           </div>
 
           {/* Col 3 — Company */}

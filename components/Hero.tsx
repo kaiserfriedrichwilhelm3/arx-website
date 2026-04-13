@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
 
 interface HeroProps {
@@ -11,12 +12,12 @@ const CX = 300;
 const CY = 250;
 
 const ARMS = [
-  { id: 'voice',     label: 'VOICE',     x: 120, y: 120, type: 'gold',    range: [0.15, 0.35] as [number,number] },
-  { id: 'revenue',   label: 'REVENUE',   x: 480, y: 120, type: 'gold',    range: [0.20, 0.40] as [number,number] },
-  { id: 'calls',     label: 'CALLS',     x:  80, y: 280, type: 'gold',    range: [0.25, 0.45] as [number,number] },
-  { id: 'clinical',  label: 'CLINICAL',  x: 520, y: 280, type: 'medical', range: [0.30, 0.50] as [number,number] },
-  { id: 'insurance', label: 'INSURANCE', x: 160, y: 420, type: 'medical', range: [0.35, 0.55] as [number,number] },
-  { id: 'scribe',    label: 'SCRIBE',    x: 440, y: 420, type: 'medical', range: [0.40, 0.60] as [number,number] },
+  { id: 'voice',     label: 'VOICE',     x: 115, y: 115, type: 'gold',    range: [0.15, 0.35] as [number,number] },
+  { id: 'revenue',   label: 'REVENUE',   x: 485, y: 115, type: 'gold',    range: [0.20, 0.40] as [number,number] },
+  { id: 'calls',     label: 'CALLS',     x:  75, y: 280, type: 'gold',    range: [0.25, 0.45] as [number,number] },
+  { id: 'clinical',  label: 'CLINICAL',  x: 525, y: 280, type: 'medical', range: [0.30, 0.50] as [number,number] },
+  { id: 'insurance', label: 'INSURANCE', x: 155, y: 425, type: 'medical', range: [0.35, 0.55] as [number,number] },
+  { id: 'scribe',    label: 'SCRIBE',    x: 445, y: 425, type: 'medical', range: [0.40, 0.60] as [number,number] },
 ];
 
 function ArmIcon({ id }: { id: string }) {
@@ -104,14 +105,12 @@ function HeroText({ onApply }: HeroProps) {
         >
           Deploy General AIMS
         </motion.button>
-        <motion.button
-          onClick={onApply}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--white)', background: 'transparent', border: '1px solid var(--white)', borderRadius: 'var(--radius-badge)', padding: '12px 24px', cursor: 'pointer', letterSpacing: '0.06em' }}
+        <Link
+          href="/medical"
+          style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--medical)', background: 'transparent', border: '1px solid var(--medical)', borderRadius: 'var(--radius-badge)', padding: '12px 24px', textDecoration: 'none', letterSpacing: '0.06em' }}
         >
-          Apply for Medical Pilot
-        </motion.button>
+          AIMS Medical →
+        </Link>
       </motion.div>
     </>
   );
