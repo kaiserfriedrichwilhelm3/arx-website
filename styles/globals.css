@@ -1,25 +1,26 @@
 @import "tailwindcss";
 
 :root {
-  --obsidian:       #0A0A0A;
-  --surface:        #111111;
-  --surface-2:      #161616;
-  --border:         rgba(250, 250, 250, 0.08);
-  --border-gold:    rgba(212, 175, 55, 0.3);
-  --border-medical: rgba(74, 158, 255, 0.25);
-  --white:          #FAFAFA;
-  --muted:          #666666;
-  --muted-2:        #444444;
-  --gold:           #D4AF37;
-  --gold-muted:     rgba(212, 175, 55, 0.12);
-  --medical:        #4A9EFF;
-  --medical-muted:  rgba(74, 158, 255, 0.12);
-  --danger:         #FF4444;
-  --success:        #22C55E;
-  --radius-card:    8px;
-  --radius-badge:   4px;
-  --font-serif:     'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-mono:      'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  --obsidian:         #0A0A0A;
+  --surface:          #111111;
+  --surface-2:        #161616;
+  --border:           rgba(250, 250, 250, 0.08);
+  --border-gold:      rgba(212, 175, 55, 0.3);
+  --border-medical:   rgba(74, 158, 255, 0.25);
+  --white:            #FAFAFA;
+  --muted:            #666666;
+  --muted-2:          #444444;
+  --gold:             #D4AF37;
+  --gold-muted:       rgba(212, 175, 55, 0.12);
+  --medical:          #4A9EFF;
+  --medical-muted:    rgba(74, 158, 255, 0.12);
+  --danger:           #FF4444;
+  --success:          #22C55E;
+  --warning:          #F59E0B;
+  --radius-card:      8px;
+  --radius-badge:     4px;
+  --font-serif:       'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-mono:        'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
 }
 
 *,
@@ -50,6 +51,7 @@ body {
 
 input[type="range"] {
   accent-color: var(--gold);
+  cursor: pointer;
 }
 
 select, input {
@@ -62,10 +64,7 @@ select, input {
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--obsidian); }
-::-webkit-scrollbar-thumb {
-  background: var(--muted-2);
-  border-radius: 2px;
-}
+::-webkit-scrollbar-thumb { background: var(--muted-2); border-radius: 2px; }
 
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; transform: scale(1); }
@@ -76,6 +75,8 @@ select, input {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+
+.cursor-blink { animation: blink 1s ease-in-out infinite; }
 
 @keyframes marquee {
   0% { transform: translateX(0); }

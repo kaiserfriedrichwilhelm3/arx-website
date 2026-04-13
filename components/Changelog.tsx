@@ -9,7 +9,7 @@ interface Entry {
 
 const ENTRIES: Entry[] = [
   {
-    version: 'v1.2.0',
+    version: 'v1.0.4',
     date: 'April 2026',
     title: 'Multi-Voice Concurrent Scaling',
     changes: [
@@ -19,13 +19,23 @@ const ENTRIES: Entry[] = [
     ],
   },
   {
-    version: 'v1.1.0',
+    version: 'v1.0.3',
     date: 'March 2026',
     title: 'Optimized RCM Denial Logic',
     changes: [
       'Integrated payer-specific denial pattern database',
       'Appeal letter generation: 3 templates per payer type',
       'Denial detection accuracy: 94.2% on Cespedes Cardiology dataset',
+    ],
+  },
+  {
+    version: 'v1.0.2',
+    date: 'February 2026',
+    title: 'Prescription Guard + Claims Audit Beta',
+    changes: [
+      'State machine enforcement layer for multi-step prescriptions live',
+      'Claims Audit Engine: real-time CPT/ICD-10 mismatch detection',
+      'Front Desk Triage module: zero-missed-call guarantee active',
     ],
   },
   {
@@ -70,7 +80,7 @@ export default function Changelog() {
             System Changelog
           </h2>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)' }}>
-            // AIMS Alpha 1.x patch history
+            // AIMS Alpha 1.0.x patch history
           </p>
         </motion.div>
 

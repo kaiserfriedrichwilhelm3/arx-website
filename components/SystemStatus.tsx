@@ -1,6 +1,6 @@
 export default function SystemStatus() {
   const stats = [
-    { label: 'SYSTEM STATUS', value: 'AIMS v1.2.0 STABLE', dot: true },
+    { label: 'SYSTEM STATUS', value: 'AIMS Alpha 1.0.4 STABLE', dot: true },
     { label: 'UPTIME', value: '99.97%' },
     { label: 'ACTIVE DEPLOYMENTS', value: '1 CLINICAL PILOT + ACCEPTING BUSINESS APPS' },
   ];

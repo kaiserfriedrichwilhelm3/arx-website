@@ -135,6 +135,46 @@ export default function GeneralAIMS() {
             accent="gold"
           />
         </motion.div>
+
+        {/* Cost of Inaction */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2, delay: 0.2 }}
+          style={{
+            marginTop: '24px',
+            background: 'var(--surface)',
+            border: '1px solid rgba(245, 158, 11, 0.3)',
+            borderRadius: 'var(--radius-card)',
+            padding: '24px 32px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '32px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', flex: 1, minWidth: '260px' }}>
+            <span style={{ color: 'var(--warning)', fontSize: '16px', flexShrink: 0, marginTop: '2px' }}>⚠</span>
+            <div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--warning)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                Cost of Inaction
+              </div>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8 }}>
+                After 5 minutes, conversion probability drops 80%. Every unanswered call is a lost deal. AIMS responds in under 30 seconds — guaranteed.
+              </p>
+            </div>
+          </div>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '52px', fontWeight: 500, color: 'var(--warning)', lineHeight: 1 }}>
+              &lt;30s
+            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '4px' }}>
+              AIMS Response Time
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       <style>{`

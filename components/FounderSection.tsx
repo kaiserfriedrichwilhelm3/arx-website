@@ -15,7 +15,7 @@ interface TerminalLine {
 
 const TERMINAL_LINES: TerminalLine[] = [
   { text: '$ aims status',                              color: 'muted' },
-  { text: 'AIMS v1.2.0 — STABLE',                      color: 'medical' },
+  { text: 'AIMS Alpha 1.0.4 — STABLE',                  color: 'medical' },
   { text: 'Uptime: 99.97% │ Active pilots: 1',         color: 'muted' },
   { text: '',                                           color: 'muted' },
   { text: '$ aims deploy --client=new --profile=business', color: 'muted' },
@@ -25,7 +25,7 @@ const TERMINAL_LINES: TerminalLine[] = [
   { text: '→ Deployment complete in 47h 22m',          color: 'gold' },
   { text: '',                                           color: 'muted' },
   { text: '$ aims founder --contact',                  color: 'muted' },
-  { text: 'Connecting to ARX Systems...',              color: 'medical' },
+  { text: 'Connecting to Gabriel Cespedes...',         color: 'medical' },
   { text: '→ Direct line open. No queue.',             color: 'gold' },
   { text: '█',                                         color: 'muted', cursor: true },
 ];
