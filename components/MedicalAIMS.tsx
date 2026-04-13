@@ -1,187 +1,123 @@
 import { motion } from 'motion/react';
 import BentoCard from './BentoCard';
 
-const CARDS = [
-  {
-    title: 'Arm 04 — Clinical Scribe',
-    body: 'Real-time ambient documentation. AIMS listens to patient encounters and generates structured SOAP notes, ICD-10 codes, and CPT suggestions instantly.',
-    badge: 'PILOT',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Arm 05 — Insurance Recovery',
-    body: 'AIMS identifies underpaid claims, generates appeal documentation, and tracks resubmission outcomes. Recovers revenue that disappears in manual workflows.',
-    badge: 'PILOT',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Prior Auth Automation',
-    body: 'Autonomous prior authorization submission, status tracking, and follow-up across payers. Cuts auth processing from days to hours.',
-    badge: 'ROADMAP',
-    span: 'double' as const,
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <rect x="9" y="11" width="6" height="11" rx="1" />
-        <path d="M5 11V7a7 7 0 0 1 14 0v4" />
-      </svg>
-    ),
-  },
-  {
-    title: 'Patient Communication',
-    body: 'Appointment reminders, pre-visit instructions, post-visit follow-ups, and care gap outreach. All automated, all HIPAA-compliant.',
-    badge: 'PILOT',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-    ),
-  },
-  {
-    title: '$0 Down Pilot',
-    body: 'No upfront cost. No 12-month contracts. AIMS deploys into your practice in 30 days. You pay only after measurable revenue recovery is proven.',
-    badge: 'OPEN NOW',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-      </svg>
-    ),
-  },
-];
+const containerVariants = {
+  visible: { transition: { staggerChildren: 0.08 } },
+};
 
 export default function MedicalAIMS() {
   return (
-    <section id="medical" style={{ padding: '120px 32px', background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+    <section
+      id="medical"
+      style={{ padding: '96px 32px', background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}
+    >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Section header */}
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: '64px', maxWidth: '600px' }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}
+          style={{ textAlign: 'center', marginBottom: '64px' }}
         >
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              fontWeight: 500,
-              color: 'var(--medical-blue)',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              display: 'block',
-              marginBottom: '16px',
-            }}
-          >
-            AIMS MEDICAL
-          </span>
-          <h2
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(28px, 4vw, 48px)',
-              fontWeight: 700,
-              color: 'var(--white)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              marginBottom: '20px',
-            }}
-          >
-            Built for the revenue cycle.
-            <br />
-            <span style={{ color: 'var(--medical-blue)' }}>Proven in cardiology.</span>
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'var(--white)', letterSpacing: '-0.02em', marginBottom: '12px' }}>
+            AIMS Medical
           </h2>
-          <p
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '14px',
-              color: 'var(--muted)',
-              lineHeight: 1.7,
-            }}
-          >
-            Deployed at Cespedes Cardiology. AIMS Medical handles the documentation, coding, and payer communication that consumes 40% of clinical staff time — returning that time to patient care.
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)' }}>
+            // precision-tuned for clinical practice
           </p>
-
-          {/* Live pilot badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              marginTop: '24px',
-              padding: '10px 16px',
-              background: 'var(--medical-muted)',
-              border: '1px solid rgba(74,158,255,0.3)',
-              borderRadius: 'var(--radius-badge)',
-            }}
-          >
-            <span
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: 'var(--medical-blue)',
-                display: 'inline-block',
-                animation: 'pulse-dot 2s ease-in-out infinite',
-              }}
-            />
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                fontWeight: 500,
-                color: 'var(--medical-blue)',
-                letterSpacing: '0.08em',
-              }}
-            >
-              LIVE PILOT — CESPEDES CARDIOLOGY
-            </span>
-          </div>
+          <div style={{ width: '40px', height: '1px', background: 'var(--border-medical)', margin: '20px auto 0' }} />
         </motion.div>
 
         {/* Bento grid */}
-        <div
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-40px' }}
+          style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '16px' }}
+        >
+          <BentoCard
+            index={0}
+            title="Insurance Defense Engine"
+            subtitle="Pre-authorization automation, denial pattern detection, and AI-generated appeal letters. Fights denials before they cost you."
+            badge="PILOT ONLY"
+            badgeVariant="medical"
+            accent="medical"
+            wide={false}
+            style={{ gridColumn: '1', gridRow: '1 / 3' } as React.CSSProperties}
+          />
+          <BentoCard
+            index={1}
+            title="Prescription Fulfillment Guard"
+            subtitle="Deterministic state machine: patient seen within configured window → auto-fill approved. Otherwise: escalate to physician. Zero hallucinations."
+            badge="PILOT ONLY"
+            badgeVariant="medical"
+          />
+          <BentoCard
+            index={2}
+            title="Live Session Scribe"
+            subtitle="Real-time clinical note generation during patient encounters. Physician reviews and approves. Eliminates documentation debt."
+            badge="PILOT ONLY"
+            badgeVariant="medical"
+            accent="medical"
+          />
+          <BentoCard
+            index={3}
+            title="FHIR R4 Memory Layer"
+            subtitle="All patient context stored in the interoperable standard. Zero data silos. Every arm reads from the same source of truth."
+            stat="R4"
+            statLabel="FHIR COMPLIANT"
+          />
+          <BentoCard
+            index={4}
+            title="Claims Audit Engine"
+            subtitle="Post-encounter CPT code validation against visit notes before submission. Catches undercoding and overcoding before they become denials."
+            badge="PILOT ONLY"
+            badgeVariant="medical"
+          />
+          <BentoCard
+            index={5}
+            title="Front Desk Triage"
+            subtitle="Scheduling, intake, insurance verification, and pre-auth initiated before staff touches a single file."
+            stat="<2min"
+            statLabel="AVG HANDLE TIME"
+          />
+        </motion.div>
+
+        {/* Proof bar */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '16px',
+            marginTop: '48px',
+            borderTop: '1px solid var(--border)',
+            borderBottom: '1px solid var(--border)',
+            padding: '20px 0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
           }}
         >
-          {CARDS.map((card, i) => (
-            <BentoCard
-              key={card.title}
-              title={card.title}
-              body={card.body}
-              badge={card.badge}
-              icon={card.icon}
-              span={card.span}
-              accent="medical"
-              index={i}
-            />
-          ))}
-        </div>
+          <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--success)', display: 'inline-block', animation: 'pulse-dot 2s ease-in-out infinite' }} />
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em', color: 'var(--muted)', textTransform: 'uppercase' }}>
+            Active Pilot Partner — Cespedes Cardiology, MD, PA — Miami, FL
+          </span>
+        </motion.div>
       </div>
 
       <style>{`
-        @keyframes pulse-dot {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.7); }
-        }
-        @media (max-width: 640px) {
-          #medical > div > div:last-child {
-            grid-template-columns: 1fr !important;
+        @media (max-width: 900px) {
+          #medical > div > div:nth-child(2) {
+            grid-template-columns: 1fr 1fr !important;
           }
-          #medical > div > div:last-child > div[style*="span 2"] {
-            grid-column: span 1 !important;
+        }
+        @media (max-width: 600px) {
+          #medical > div > div:nth-child(2) {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

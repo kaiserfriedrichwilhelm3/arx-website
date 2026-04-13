@@ -1,75 +1,63 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { motion } from 'motion/react';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
 
-function formatCurrency(n: number): string {
+// ── helpers ──────────────────────────────────────────────────────────
+function fmt(n: number): string {
   if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
-  return `$${Math.round(n)}`;
+  if (n >= 1_000) return `$${Math.round(n / 1_000).toLocaleString()}K`;
+  return `$${Math.round(n).toLocaleString()}`;
 }
 
-export default function Calculator() {
-  const [leads, setLeads] = useState(200);
-  const [closeRate, setCloseRate] = useState(15);
-  const [dealValue, setDealValue] = useState(5000);
-  const [hoursPerWeek, setHoursPerWeek] = useState(20);
-  const [isMedical, setIsMedical] = useState(false);
-  const [monthlyPatients, setMonthlyPatients] = useState(400);
+function useCountUp(target: number, duration = 600) {
+  const [display, setDisplay] = useState(target);
+  const prev = useRef(target);
+  useEffect(() => {
+    const from = prev.current;
+    const start = performance.now();
+    let raf: number;
+    const tick = (now: number) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplay(Math.round(from + (target - from) * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else prev.current = target;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return display;
+}
 
-  const accentColor = isMedical ? 'var(--medical-blue)' : 'var(--gold)';
+// ── sub-components ────────────────────────────────────────────────────
+interface SliderRowProps {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (v: number) => void;
+  display: string;
+  displayColor?: string;
+  note?: string;
+  noteColor?: string;
+}
 
-  const result = useMemo(() => {
-    const convertedLeads = Math.round(leads * (closeRate / 100));
-    const monthlyLeadValue = convertedLeads * dealValue;
-    const monthlyTimeValue = hoursPerWeek * 4 * 75; // $75/hr opportunity cost
-    const medicalBonus = isMedical ? monthlyPatients * 45 : 0; // $45 avg recovered per patient
-    const total = monthlyLeadValue + monthlyTimeValue + medicalBonus;
-    return { total, monthlyLeadValue, monthlyTimeValue, medicalBonus, convertedLeads };
-  }, [leads, closeRate, dealValue, hoursPerWeek, isMedical, monthlyPatients]);
-
-  const chartData = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({
-      month: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][i],
-      withAIMS: Math.round(result.total * (1 + i * 0.04)),
-      withoutAIMS: Math.round(result.total * 0.35 * (1 + i * 0.01)),
-    }));
-  }, [result.total]);
-
-  const SliderRow = ({
-    label,
-    value,
-    min,
-    max,
-    step,
-    onChange,
-    format,
-  }: {
-    label: string;
-    value: number;
-    min: number;
-    max: number;
-    step: number;
-    onChange: (v: number) => void;
-    format: (v: number) => string;
-  }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.06em' }}>
-          {label}
-        </span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 500, color: 'var(--white)' }}>
-          {format(value)}
-        </span>
+function SliderRow({ label, value, min, max, step, onChange, display, displayColor = 'var(--gold)', note, noteColor }: SliderRowProps) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{label}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: displayColor, fontWeight: 500 }}>{display}</span>
       </div>
       <input
         type="range"
@@ -78,320 +66,303 @@ export default function Calculator() {
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        style={{ width: '100%', height: '4px', cursor: 'pointer' }}
+        style={{ width: '100%', cursor: 'pointer' }}
       />
+      {note && (
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: noteColor || 'var(--muted)' }}>{note}</span>
+      )}
     </div>
   );
+}
+
+// ── BUSINESS PROFILE ──────────────────────────────────────────────────
+function BusinessCalculator() {
+  const [monthlyLeads, setMonthlyLeads] = useState(50);
+  const [responseTime, setResponseTime] = useState(45);
+  const [avgDeal, setAvgDeal] = useState(3000);
+  const [sdrCount, setSdrCount] = useState(1);
+
+  const calc = useMemo(() => {
+    const decayMultiplier =
+      responseTime <= 5 ? 1.0 :
+      responseTime <= 30 ? 0.35 :
+      responseTime <= 60 ? 0.20 :
+      responseTime <= 120 ? 0.10 : 0.05;
+    const monthlyLeadsLost = Math.round(monthlyLeads * (1 - decayMultiplier));
+    const revenueFromDecay = monthlyLeadsLost * avgDeal * 0.25;
+    const sdrCost = sdrCount * 5200;
+    const aimsMonthly = 299;
+    const monthlyRecovery = revenueFromDecay + sdrCost - aimsMonthly;
+    const yearOneNet = monthlyRecovery * 12;
+    const leadsRecovered = Math.round(monthlyLeads * 0.35 * 12);
+    const sdrSavings = sdrCost * 12;
+    const chartData = Array.from({ length: 12 }, (_, i) => ({
+      month: `M${i + 1}`,
+      lost: Math.round(revenueFromDecay * (i + 1)),
+      recovered: Math.round(Math.max(monthlyRecovery, 0) * (i + 1)),
+    }));
+    return { monthlyRecovery, yearOneNet, leadsRecovered, sdrSavings, chartData };
+  }, [monthlyLeads, responseTime, avgDeal, sdrCount]);
+
+  const animatedValue = useCountUp(Math.max(calc.yearOneNet, 0));
 
   return (
-    <section id="calculator" style={{ padding: '120px 32px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6 }}
-          style={{ marginBottom: '56px' }}
-        >
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              fontWeight: 500,
-              color: 'var(--gold)',
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              display: 'block',
-              marginBottom: '16px',
-            }}
-          >
-            ROI CALCULATOR
-          </span>
-          <h2
-            style={{
-              fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(28px, 4vw, 48px)',
-              fontWeight: 700,
-              color: 'var(--white)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.02em',
-              marginBottom: '16px',
-            }}
-          >
-            Model your return before you commit.
-          </h2>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--muted)', lineHeight: 1.7 }}>
-            Adjust the inputs below to see projected monthly value recovered by AIMS.
-          </p>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      {/* Inputs */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <SliderRow label="Monthly Inbound Leads" value={monthlyLeads} min={10} max={500} step={5} onChange={setMonthlyLeads} display={monthlyLeads.toLocaleString()} />
+        <SliderRow
+          label="Lead Response Time"
+          value={responseTime}
+          min={1}
+          max={240}
+          step={1}
+          onChange={setResponseTime}
+          display={`${responseTime} min`}
+          note="⚠ After 5 minutes, conversion probability drops 80%"
+          noteColor="var(--danger)"
+        />
+        <SliderRow label="Average Deal Value" value={avgDeal} min={500} max={25000} step={250} onChange={setAvgDeal} display={`$${avgDeal.toLocaleString()}`} />
+        <SliderRow
+          label="SDR Headcount"
+          value={sdrCount}
+          min={0}
+          max={10}
+          step={1}
+          onChange={setSdrCount}
+          display={`${sdrCount} person${sdrCount !== 1 ? 's' : ''}`}
+          note="Avg SDR cost $5,200/mo fully loaded"
+        />
+      </div>
 
-          {/* Medical toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '24px' }}>
-            <button
-              onClick={() => setIsMedical(false)}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                fontWeight: 500,
-                color: !isMedical ? 'var(--obsidian)' : 'var(--muted)',
-                background: !isMedical ? 'var(--gold)' : 'transparent',
-                border: `1px solid ${!isMedical ? 'var(--gold)' : 'var(--border)'}`,
-                borderRadius: 'var(--radius-badge)',
-                padding: '6px 14px',
-                cursor: 'pointer',
-                letterSpacing: '0.06em',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              BUSINESS
-            </button>
-            <button
-              onClick={() => setIsMedical(true)}
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '11px',
-                fontWeight: 500,
-                color: isMedical ? 'var(--obsidian)' : 'var(--muted)',
-                background: isMedical ? 'var(--medical-blue)' : 'transparent',
-                border: `1px solid ${isMedical ? 'var(--medical-blue)' : 'var(--border)'}`,
-                borderRadius: 'var(--radius-badge)',
-                padding: '6px 14px',
-                cursor: 'pointer',
-                letterSpacing: '0.06em',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              MEDICAL
-            </button>
+      {/* Output */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>Year 1 Net Recovery</div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '52px', fontWeight: 500, color: 'var(--gold)', lineHeight: 1 }}>
+            {fmt(animatedValue)}
           </div>
-        </motion.div>
+        </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', alignItems: 'start' }}>
-          {/* Left: sliders */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-card)',
-              padding: '32px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '28px',
-            }}
-          >
-            <SliderRow
-              label="MONTHLY LEADS"
-              value={leads}
-              min={10}
-              max={2000}
-              step={10}
-              onChange={setLeads}
-              format={(v) => v.toLocaleString()}
-            />
-            <SliderRow
-              label="CLOSE RATE"
-              value={closeRate}
-              min={1}
-              max={50}
-              step={1}
-              onChange={setCloseRate}
-              format={(v) => `${v}%`}
-            />
-            <SliderRow
-              label="AVG DEAL VALUE"
-              value={dealValue}
-              min={500}
-              max={100000}
-              step={500}
-              onChange={setDealValue}
-              format={(v) => `$${v.toLocaleString()}`}
-            />
-            <SliderRow
-              label="ADMIN HOURS / WEEK"
-              value={hoursPerWeek}
-              min={1}
-              max={80}
-              step={1}
-              onChange={setHoursPerWeek}
-              format={(v) => `${v}h`}
-            />
-            {isMedical && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                transition={{ duration: 0.3 }}
-              >
-                <SliderRow
-                  label="MONTHLY PATIENTS"
-                  value={monthlyPatients}
-                  min={50}
-                  max={2000}
-                  step={50}
-                  onChange={setMonthlyPatients}
-                  format={(v) => v.toLocaleString()}
-                />
-              </motion.div>
-            )}
+        <ResponsiveContainer width="100%" height={160}>
+          <AreaChart data={calc.chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="lostGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#FF4444" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="#FF4444" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="recGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="month" tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} />
+            <YAxis tickFormatter={(v) => fmt(v)} tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} width={55} />
+            <Tooltip contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border-gold)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '11px', color: 'var(--white)' }} formatter={(v) => [fmt(Number(v)), '']} />
+            <Area type="monotone" dataKey="lost" stroke="#FF4444" strokeWidth={1.5} fill="url(#lostGrad)" name="Revenue Lost to Delay" isAnimationActive />
+            <Area type="monotone" dataKey="recovered" stroke="#D4AF37" strokeWidth={2} fill="url(#recGrad)" name="Revenue Captured by AIMS" isAnimationActive />
+          </AreaChart>
+        </ResponsiveContainer>
 
-            {/* Result breakdown */}
-            <div
-              style={{
-                borderTop: '1px solid var(--border)',
-                paddingTop: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px',
-              }}
-            >
-              {[
-                { label: 'Revenue Recovery', value: result.monthlyLeadValue },
-                { label: 'Time Value Recovered', value: result.monthlyTimeValue },
-                ...(isMedical ? [{ label: 'Medical Billing Recovery', value: result.medicalBonus }] : []),
-              ].map((row) => (
-                <div key={row.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)' }}>
-                    {row.label}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--white)' }}>
-                    {formatCurrency(row.value)}
-                  </span>
-                </div>
-              ))}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  borderTop: '1px solid var(--border)',
-                  paddingTop: '12px',
-                  marginTop: '4px',
-                }}
-              >
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 500, color: 'var(--white)', letterSpacing: '0.06em' }}>
-                  TOTAL / MONTH
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '20px',
-                    fontWeight: 700,
-                    color: accentColor,
-                  }}
-                >
-                  {formatCurrency(result.total)}
-                </span>
-              </div>
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          {[
+            { label: 'Leads Recovered', val: calc.leadsRecovered.toLocaleString() },
+            { label: 'SDR Cost Saved', val: fmt(calc.sdrSavings) },
+            { label: 'Response Time', val: 'Instant' },
+          ].map((s) => (
+            <div key={s.label}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.label}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--gold)', marginTop: '2px' }}>{s.val}</div>
             </div>
-          </motion.div>
-
-          {/* Right: chart */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-card)',
-              padding: '32px',
-            }}
-          >
-            <div style={{ marginBottom: '24px' }}>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                12-MONTH PROJECTION
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
-              {[
-                { label: 'With AIMS', color: isMedical ? 'var(--medical-blue)' : 'var(--gold)' },
-                { label: 'Without AIMS', color: 'var(--muted)' },
-              ].map((item) => (
-                <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ width: '16px', height: '2px', background: item.color, display: 'inline-block' }} />
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)' }}>{item.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <ResponsiveContainer width="100%" height={280}>
-              <AreaChart data={chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
-                <defs>
-                  <linearGradient id="aimsGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop
-                      offset="5%"
-                      stopColor={isMedical ? '#4A9EFF' : '#D4AF37'}
-                      stopOpacity={0.25}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor={isMedical ? '#4A9EFF' : '#D4AF37'}
-                      stopOpacity={0}
-                    />
-                  </linearGradient>
-                  <linearGradient id="baseGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#888888" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#888888" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(250,250,250,0.05)" />
-                <XAxis
-                  dataKey="month"
-                  tick={{ fontFamily: 'monospace', fontSize: 10, fill: '#888888' }}
-                  axisLine={false}
-                  tickLine={false}
-                />
-                <YAxis
-                  tickFormatter={(v) => formatCurrency(v)}
-                  tick={{ fontFamily: 'monospace', fontSize: 10, fill: '#888888' }}
-                  axisLine={false}
-                  tickLine={false}
-                  width={60}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--border)',
-                    borderRadius: '4px',
-                    fontFamily: 'monospace',
-                    fontSize: '12px',
-                    color: 'var(--white)',
-                  }}
-                  formatter={(value) => [formatCurrency(Number(value)), '']}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="withoutAIMS"
-                  stroke="#888888"
-                  strokeWidth={1.5}
-                  fill="url(#baseGradient)"
-                  strokeDasharray="4 4"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="withAIMS"
-                  stroke={isMedical ? '#4A9EFF' : '#D4AF37'}
-                  strokeWidth={2}
-                  fill="url(#aimsGradient)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </motion.div>
+          ))}
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          #calculator > div > div:last-child {
+          #calculator > div > div:last-child > div:first-child {
             grid-template-columns: 1fr !important;
           }
         }
       `}</style>
+    </div>
+  );
+}
+
+// ── MEDICAL PROFILE ───────────────────────────────────────────────────
+function MedicalCalculator() {
+  const [monthlyClaims, setMonthlyClaims] = useState(400);
+  const [denialRate, setDenialRate] = useState(12);
+  const [avgClaimValue, setAvgClaimValue] = useState(350);
+  const [physicianHours, setPhysicianHours] = useState(12);
+
+  const calc = useMemo(() => {
+    const deniedClaims = Math.round(monthlyClaims * (denialRate / 100));
+    const recoveryRate = 0.65;
+    const claimRecovery = deniedClaims * avgClaimValue * recoveryRate;
+    const docDebtMonthly = physicianHours * 4.33 * 300;
+    const docDebtRecovered = docDebtMonthly * 0.70;
+    const monthlyRecovery = claimRecovery + docDebtRecovered;
+    const yearOneRecovery = monthlyRecovery * 12;
+    const annualDenialsPrevented = Math.round(deniedClaims * recoveryRate * 12);
+    const annualDocHoursReturned = Math.round(physicianHours * 0.70 * 52);
+    const chartData = Array.from({ length: 12 }, (_, i) => ({
+      month: `M${i + 1}`,
+      denials: Math.round(deniedClaims * avgClaimValue * (i + 1)),
+      recovered: Math.round(monthlyRecovery * (i + 1)),
+    }));
+    return { monthlyRecovery, yearOneRecovery, annualDenialsPrevented, annualDocHoursReturned, chartData, docDebtMonthly };
+  }, [monthlyClaims, denialRate, avgClaimValue, physicianHours]);
+
+  const animatedValue = useCountUp(Math.round(calc.yearOneRecovery));
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+      {/* Inputs */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <SliderRow label="Monthly Claim Count" value={monthlyClaims} min={50} max={3000} step={25} onChange={setMonthlyClaims} display={monthlyClaims.toLocaleString()} displayColor="var(--medical)" />
+        <SliderRow
+          label="Current Denial Rate"
+          value={denialRate}
+          min={1}
+          max={40}
+          step={1}
+          onChange={setDenialRate}
+          display={`${denialRate}%`}
+          displayColor={denialRate > 15 ? 'var(--danger)' : 'var(--medical)'}
+          note="Industry avg: 12–15%. Above 15% = systemic issue."
+        />
+        <SliderRow label="Average Claim Value" value={avgClaimValue} min={100} max={2000} step={25} onChange={setAvgClaimValue} display={`$${avgClaimValue.toLocaleString()}`} displayColor="var(--medical)" />
+        <SliderRow
+          label="Physician Hours / Week on Docs"
+          value={physicianHours}
+          min={1}
+          max={30}
+          step={1}
+          onChange={setPhysicianHours}
+          display={`${physicianHours} hrs/wk`}
+          displayColor="var(--medical)"
+          note={`At $300/hr opportunity cost = ${fmt(calc.docDebtMonthly)}/mo in documentation debt`}
+        />
+      </div>
+
+      {/* Output */}
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border-medical)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
+            AIMS Recovered Payer Revenue — Year 1
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '52px', fontWeight: 500, color: 'var(--medical)', lineHeight: 1 }}>
+            {fmt(animatedValue)}
+          </div>
+        </div>
+
+        <ResponsiveContainer width="100%" height={160}>
+          <AreaChart data={calc.chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+            <defs>
+              <linearGradient id="denialGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#FF4444" stopOpacity={0.15} />
+                <stop offset="95%" stopColor="#FF4444" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="medRecGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#4A9EFF" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#4A9EFF" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="month" tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} />
+            <YAxis tickFormatter={(v) => fmt(Number(v))} tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} width={55} />
+            <Tooltip contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border-medical)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '11px', color: 'var(--white)' }} formatter={(v) => [fmt(Number(v)), '']} />
+            <Area type="monotone" dataKey="denials" stroke="#FF4444" strokeWidth={1.5} fill="url(#denialGrad)" name="Denial Losses (Without AIMS)" isAnimationActive />
+            <Area type="monotone" dataKey="recovered" stroke="#4A9EFF" strokeWidth={2} fill="url(#medRecGrad)" name="AIMS Recovered Revenue" isAnimationActive />
+          </AreaChart>
+        </ResponsiveContainer>
+
+        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          {[
+            { label: 'Denials Prevented', val: calc.annualDenialsPrevented.toLocaleString() },
+            { label: 'Payer Revenue Recovered', val: fmt(calc.yearOneRecovery) },
+            { label: 'Physician Hours Returned', val: `${calc.annualDocHoursReturned} hrs` },
+          ].map((s) => (
+            <div key={s.label}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.label}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--medical)', marginTop: '2px' }}>{s.val}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Burnout callout */}
+        <div style={{ background: 'var(--medical-muted)', border: '1px solid var(--border-medical)', borderRadius: 'var(--radius-badge)', padding: '12px' }}>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--medical)', lineHeight: 1.6 }}>
+            AIMS returns {calc.annualDocHoursReturned} hrs/yr of physician time. That is {Math.round(calc.annualDocHoursReturned / 52)} fewer documentation hours per week. Physician burnout: measurably reduced.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── MAIN COMPONENT ────────────────────────────────────────────────────
+type Profile = 'business' | 'medical';
+
+export default function Calculator() {
+  const [profile, setProfile] = useState<Profile>('business');
+  const shouldReduce = useReducedMotion();
+
+  const toggleStyle = (active: boolean, color: string): React.CSSProperties => ({
+    fontFamily: 'var(--font-mono)',
+    fontSize: '12px',
+    letterSpacing: '0.06em',
+    color: active ? 'var(--obsidian)' : 'var(--muted)',
+    background: active ? color : 'transparent',
+    border: `1px solid ${active ? color : 'var(--border)'}`,
+    borderRadius: '999px',
+    padding: '10px 24px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  });
+
+  return (
+    <section id="calculator" style={{ padding: '96px 32px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}
+          style={{ textAlign: 'center', marginBottom: '48px' }}
+        >
+          <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'var(--white)', letterSpacing: '-0.02em', marginBottom: '12px' }}>
+            Calculate Your Recovery
+          </h2>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)', marginBottom: '32px' }}>
+            // live projection — adjust inputs to see your number
+          </p>
+
+          {/* Profile toggle */}
+          <div style={{ display: 'inline-flex', gap: '8px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '999px', padding: '4px' }}>
+            <button onClick={() => setProfile('business')} style={toggleStyle(profile === 'business', 'var(--gold)')}>
+              GENERAL BUSINESS
+            </button>
+            <button onClick={() => setProfile('medical')} style={toggleStyle(profile === 'medical', 'var(--medical)')}>
+              MEDICAL PRACTICE
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Calculator panels */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={profile}
+            initial={shouldReduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={shouldReduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+          >
+            {profile === 'business' ? <BusinessCalculator /> : <MedicalCalculator />}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </section>
   );
 }

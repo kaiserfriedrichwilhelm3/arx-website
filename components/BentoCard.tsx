@@ -3,140 +3,129 @@ import { motion, useReducedMotion } from 'motion/react';
 
 interface BentoCardProps {
   title: string;
-  body: string;
-  accent?: 'gold' | 'medical';
-  icon?: React.ReactNode;
+  subtitle: string;
+  stat?: string;
+  statLabel?: string;
   badge?: string;
-  span?: 'single' | 'double';
+  badgeVariant?: 'gold' | 'medical' | 'muted';
+  accent?: 'gold' | 'medical' | 'none';
+  wide?: boolean;
+  children?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
   index?: number;
 }
 
 export default function BentoCard({
   title,
-  body,
-  accent = 'gold',
-  icon,
+  subtitle,
+  stat,
+  statLabel,
   badge,
-  span = 'single',
+  badgeVariant = 'muted',
+  accent = 'none',
+  wide = false,
+  children,
+  className,
+  style,
   index = 0,
 }: BentoCardProps) {
   const ref = useRef(null);
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduce = useReducedMotion();
 
-  const accentColor = accent === 'gold' ? 'var(--gold)' : 'var(--medical-blue)';
-  const accentMuted = accent === 'gold' ? 'var(--gold-muted)' : 'var(--medical-muted)';
-  const borderAccent = accent === 'gold' ? 'var(--border-gold)' : 'rgba(74, 158, 255, 0.3)';
+  const borderColor =
+    accent === 'gold' ? 'var(--border-gold)' :
+    accent === 'medical' ? 'var(--border-medical)' :
+    'var(--border)';
+
+  const statColor =
+    accent === 'gold' ? 'var(--gold)' :
+    accent === 'medical' ? 'var(--medical)' :
+    'var(--white)';
+
+  const badgeColor =
+    badgeVariant === 'gold' ? 'var(--gold)' :
+    badgeVariant === 'medical' ? 'var(--medical)' :
+    'var(--muted)';
+
+  const badgeBorder =
+    badgeVariant === 'gold' ? 'var(--border-gold)' :
+    badgeVariant === 'medical' ? 'var(--border-medical)' :
+    'var(--border)';
+
+  const badgeBg =
+    badgeVariant === 'gold' ? 'var(--gold-muted)' :
+    badgeVariant === 'medical' ? 'var(--medical-muted)' :
+    'transparent';
 
   return (
     <motion.div
       ref={ref}
-      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
-      whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{
-        type: 'spring',
-        stiffness: 80,
-        damping: 18,
-        mass: 1.2,
-        delay: index * 0.07,
-      }}
+      initial={{ opacity: 0, y: shouldReduce ? 0 : 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2, delay: index * 0.06 }}
+      className={className}
       style={{
-        gridColumn: span === 'double' ? 'span 2' : 'span 1',
+        gridColumn: wide ? 'span 2' : 'span 1',
         background: 'var(--surface)',
-        border: `1px solid var(--border)`,
+        border: `1px solid ${borderColor}`,
         borderRadius: 'var(--radius-card)',
-        padding: '28px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
+        padding: '24px',
         position: 'relative',
         overflow: 'hidden',
-        cursor: 'default',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        ...style,
       }}
-      whileHover={
-        shouldReduceMotion
-          ? {}
-          : { borderColor: borderAccent, transition: { duration: 0.2 } }
-      }
     >
-      {/* Top accent line */}
-      <div
-        style={{
+      {/* Badge */}
+      {badge && (
+        <span style={{
           position: 'absolute',
-          top: 0,
-          left: '28px',
-          right: '28px',
-          height: '1px',
-          background: accentColor,
-          opacity: 0.4,
-        }}
-      />
+          top: '16px',
+          right: '16px',
+          fontFamily: 'var(--font-mono)',
+          fontSize: '8px',
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          color: badgeColor,
+          background: badgeBg,
+          border: `1px solid ${badgeBorder}`,
+          borderRadius: 'var(--radius-badge)',
+          padding: '3px 8px',
+        }}>
+          {badge}
+        </span>
+      )}
 
-      {/* Header row */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-        {icon && (
-          <div
-            style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-badge)',
-              background: accentMuted,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: accentColor,
-              flexShrink: 0,
-            }}
-          >
-            {icon}
+      {/* Stat */}
+      {stat && (
+        <div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '42px', fontWeight: 500, color: statColor, lineHeight: 1 }}>
+            {stat}
           </div>
-        )}
-        {badge && (
-          <span
-            style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '10px',
-              fontWeight: 500,
-              color: accentColor,
-              background: accentMuted,
-              border: `1px solid ${borderAccent}`,
-              borderRadius: 'var(--radius-badge)',
-              padding: '3px 8px',
-              letterSpacing: '0.08em',
-              whiteSpace: 'nowrap',
-              marginLeft: 'auto',
-            }}
-          >
-            {badge}
-          </span>
-        )}
-      </div>
+          {statLabel && (
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginTop: '4px' }}>
+              {statLabel}
+            </div>
+          )}
+        </div>
+      )}
 
-      {/* Content */}
-      <div>
-        <h3
-          style={{
-            fontFamily: 'var(--font-serif)',
-            fontSize: '18px',
-            fontWeight: 700,
-            color: 'var(--white)',
-            marginBottom: '8px',
-            lineHeight: 1.3,
-          }}
-        >
-          {title}
-        </h3>
-        <p
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '13px',
-            color: 'var(--muted)',
-            lineHeight: 1.65,
-          }}
-        >
-          {body}
-        </p>
-      </div>
+      {/* Title */}
+      <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '20px', color: 'var(--white)', lineHeight: 1.25 }}>
+        {title}
+      </h3>
+
+      {/* Subtitle */}
+      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
+        {subtitle}
+      </p>
+
+      {/* Children (decorative content) */}
+      {children}
     </motion.div>
   );
 }
