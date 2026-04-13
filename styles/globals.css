@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --obsidian: #0A0A0A;
+  --surface: #111111;
+  --border: rgba(250, 250, 250, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.3);
+  --white: #FAFAFA;
+  --muted: #888888;
+  --gold: #D4AF37;
+  --gold-muted: rgba(212, 175, 55, 0.15);
+  --medical-blue: #4A9EFF;
+  --medical-muted: rgba(74, 158, 255, 0.15);
+  --danger: #FF4444;
+  --radius-card: 8px;
+  --radius-badge: 4px;
+  --font-serif: var(--font-playfair);
+  --font-mono: var(--font-jetbrains);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--obsidian);
+  color: var(--white);
+  overflow-x: hidden;
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+input[type="range"] {
+  accent-color: var(--gold);
+}
+
+::selection {
+  background: var(--gold-muted);
+  color: var(--white);
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--obsidian); }
+::-webkit-scrollbar-thumb {
+  background: rgba(250, 250, 250, 0.1);
+  border-radius: 2px;
+}
