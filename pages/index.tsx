@@ -2,11 +2,11 @@ import { useState } from 'react';
 import Head from 'next/head';
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
-import SystemStatus from '@/components/SystemStatus';
-import GeneralAIMS from '@/components/GeneralAIMS';
+import WhatIsAIMS from '@/components/WhatIsAIMS';
+import HowItWorks from '@/components/HowItWorks';
+import AIMAArms from '@/components/AIMAArms';
 import Calculator from '@/components/Calculator';
 import Pricing from '@/components/Pricing';
-import Changelog from '@/components/Changelog';
 import FounderSection from '@/components/FounderSection';
 import Footer from '@/components/Footer';
 import Modal from '@/components/Modal';
@@ -19,18 +19,19 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>AIMS Alpha 1.0.4 — ARX Systems</title>
+        <title>AIMS — ARX Systems</title>
+        <meta name="description" content="The agentic operating layer for modern business. One Brain. Multiple Arms. AIMS Alpha 1.0 now in development." />
       </Head>
 
       <Nav onApply={open} />
 
       <main>
         <Hero onApply={open} />
-        <SystemStatus />
-        <GeneralAIMS />
+        <WhatIsAIMS />
+        <HowItWorks />
+        <AIMAArms onApply={open} />
         <Calculator />
         <Pricing onApply={open} />
-        <Changelog />
         <FounderSection onApply={open} />
       </main>
 

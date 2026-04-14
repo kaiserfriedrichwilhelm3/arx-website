@@ -9,30 +9,30 @@ interface FounderSectionProps {
 
 interface TerminalLine {
   text: string;
-  color: 'muted' | 'medical' | 'gold';
+  color: 'muted' | 'galen' | 'gold';
   cursor?: boolean;
 }
 
 const TERMINAL_LINES: TerminalLine[] = [
   { text: '$ aims status',                              color: 'muted' },
-  { text: 'AIMS Alpha 1.0.4 — STABLE',                  color: 'medical' },
-  { text: 'Uptime: 99.97% │ Active pilots: 1',         color: 'muted' },
-  { text: '',                                           color: 'muted' },
-  { text: '$ aims deploy --client=new --profile=business', color: 'muted' },
-  { text: '✓ CRM adapters: connected',                 color: 'medical' },
-  { text: '✓ Voice layer: online',                     color: 'medical' },
-  { text: '✓ Lead engine: armed',                      color: 'medical' },
-  { text: '→ Deployment complete in 47h 22m',          color: 'gold' },
-  { text: '',                                           color: 'muted' },
+  { text: 'AIMS Alpha 1.0 — In Development',           color: 'gold' },
+  { text: 'Build progress: nominal',                   color: 'muted' },
+  { text: '',                                          color: 'muted' },
+  { text: '$ aims config --show',                      color: 'muted' },
+  { text: 'Brain: architecture complete',              color: 'galen' },
+  { text: 'Arms: modules in development',              color: 'galen' },
+  { text: 'Interface: UI layer in progress',           color: 'galen' },
+  { text: '→ Early access cohort: open',               color: 'gold' },
+  { text: '',                                          color: 'muted' },
   { text: '$ aims founder --contact',                  color: 'muted' },
-  { text: 'Connecting to Gabriel Cespedes...',         color: 'medical' },
-  { text: '→ Direct line open. No queue.',             color: 'gold' },
+  { text: 'ARX Systems — Miami, FL',                   color: 'galen' },
+  { text: '→ Founders work directly with you.',        color: 'gold' },
   { text: '█',                                         color: 'muted', cursor: true },
 ];
 
 const LINE_COLOR = {
   muted: 'var(--muted)',
-  medical: 'var(--medical)',
+  galen: 'var(--galen)',
   gold: 'var(--gold)',
 } as const;
 
@@ -73,16 +73,16 @@ export default function FounderSection({ onApply }: FounderSectionProps) {
           </div>
 
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'var(--white)', lineHeight: 1.15, marginBottom: '32px' }}>
-            Direct-to-Founder.
-            <br />No Account Managers.
-            <br />No Bureaucracy.
+            Built by Founders.
+            <br />Launched with Founders.
+            <br />No Intermediaries.
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
             {[
-              'Every ARX integration is personally overseen. When you deploy AIMS, you work directly with the engineer who built it. No ticket queue. No escalation chain.',
-              'The ARX model is built for speed. From signed agreement to live deployment in 48 hours for business clients. For medical pilots, full FHIR integration in under two weeks.',
-              'This is the operational advantage of a founder-led firm. The same velocity that built AIMS Alpha 1.0 is what deploys it for you.',
+              'AIMS is being built by a founder-led team at ARX Systems. Every early access partner works directly with the engineers building the platform — no account managers, no support tickets, no escalation chains.',
+              'Early access partners shape the product roadmap. Your workflows, your edge cases, your integration requirements inform what gets built next. This is the advantage of joining before launch.',
+              'ARX Systems operates out of Miami, FL. We are selective about who we bring in during Alpha. If AIMS fits your business, we want to hear from you directly.',
             ].map((para, i) => (
               <p key={i} style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 {para}
@@ -106,7 +106,7 @@ export default function FounderSection({ onApply }: FounderSectionProps) {
               cursor: 'pointer',
             }}
           >
-            Apply for Direct Integration →
+            Join the Alpha →
           </motion.button>
         </motion.div>
 

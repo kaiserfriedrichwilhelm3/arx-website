@@ -37,7 +37,7 @@ export default function Footer({ onApply }: FooterProps) {
               One Brain. Multiple Arms.
             </p>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted-2)', marginTop: '4px' }}>
-              AIMS Alpha 1.0 — ARX Systems
+              AIMS Alpha 1.0 — ARX Systems — Miami, FL
             </p>
           </div>
 
@@ -47,10 +47,11 @@ export default function Footer({ onApply }: FooterProps) {
               Product
             </div>
             {[
-              { label: 'General AIMS', href: '#general' },
+              { label: 'What Is AIMS', href: '#what-is-aims' },
+              { label: 'How It Works', href: '#how-it-works' },
+              { label: 'The Six Arms', href: '#arms' },
               { label: 'Calculator', href: '#calculator' },
               { label: 'Pricing', href: '#pricing' },
-              { label: 'Changelog', href: '#changelog' },
             ].map(({ label, href }) => (
               <a
                 key={label}
@@ -63,10 +64,10 @@ export default function Footer({ onApply }: FooterProps) {
               </a>
             ))}
             <Link
-              href="/medical"
-              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--medical)', textDecoration: 'none', marginBottom: '8px', transition: 'opacity 0.2s' }}
+              href="/galen"
+              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--galen)', textDecoration: 'none', marginBottom: '8px', transition: 'opacity 0.2s' }}
             >
-              AIMS Medical →
+              Galen — Clinical →
             </Link>
           </div>
 
@@ -88,13 +89,17 @@ export default function Footer({ onApply }: FooterProps) {
             ))}
           </div>
 
-          {/* Col 4 — Deploy */}
+          {/* Col 4 — Status */}
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Deploy
+              Status
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', marginBottom: '12px' }}>
-              Miami, FL
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <span className="status-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--warning)', flexShrink: 0, display: 'block' }} />
+              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)' }}>Alpha 1.0 — In Development</span>
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.6 }}>
+              Early access cohort now open.
             </p>
             <button
               onClick={onApply}
@@ -102,7 +107,7 @@ export default function Footer({ onApply }: FooterProps) {
               onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
               onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
             >
-              Apply for Integration →
+              Join the Alpha →
             </button>
           </div>
         </motion.div>

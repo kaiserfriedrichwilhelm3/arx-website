@@ -10,6 +10,11 @@ function fmt(n: number): string {
   return `$${Math.round(n).toLocaleString()}`;
 }
 
+function fmtHrs(n: number): string {
+  if (n >= 1000) return `${Math.round(n / 1000).toLocaleString()}K hrs`;
+  return `${Math.round(n)} hrs`;
+}
+
 function useCountUp(target: number, duration = 600) {
   const [display, setDisplay] = useState(target);
   const prev = useRef(target);
@@ -40,49 +45,51 @@ interface SliderRowProps {
   display: string;
   note?: string;
   noteColor?: string;
+  galenRange?: boolean;
 }
 
-function SliderRow({ label, value, min, max, step, onChange, display, note, noteColor }: SliderRowProps) {
+function SliderRow({ label, value, min, max, step, onChange, display, note, noteColor, galenRange }: SliderRowProps) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>{label}</span>
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--gold)', fontWeight: 500 }}>{display}</span>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--galen)', fontWeight: 500 }}>{display}</span>
       </div>
-      <input type="range" min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} />
+      <input type="range" className={galenRange ? 'galen-range' : undefined} min={min} max={max} step={step} value={value} onChange={(e) => onChange(Number(e.target.value))} />
       {note && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: noteColor || 'var(--muted)' }}>{note}</span>}
     </div>
   );
 }
 
-export default function Calculator() {
+export default function GalenCalculator() {
   const shouldReduce = useReducedMotion();
-  const [monthlyLeads, setMonthlyLeads] = useState(50);
-  const [responseTime, setResponseTime] = useState(45);
-  const [avgDeal, setAvgDeal] = useState(3000);
-  const [sdrCount, setSdrCount] = useState(1);
+  const [monthlyClaims, setMonthlyClaims] = useState(400);
+  const [denialRate, setDenialRate] = useState(15);
+  const [avgClaimValue, setAvgClaimValue] = useState(850);
+  const [docHoursPerDay, setDocHoursPerDay] = useState(2);
+  const [providers, setProviders] = useState(2);
 
   const calc = useMemo(() => {
-    const decayMultiplier =
-      responseTime <= 5   ? 1.00 :
-      responseTime <= 30  ? 0.35 :
-      responseTime <= 60  ? 0.20 :
-      responseTime <= 120 ? 0.10 : 0.05;
-    const leadsLost = Math.round(monthlyLeads * (1 - decayMultiplier));
-    const recoveredLeadRevenue = leadsLost * avgDeal * 0.25;
-    const sdrSavings = sdrCount * 5200;
-    const aimsEstimatedCost = 499;
-    const monthlyOpportunity = recoveredLeadRevenue + sdrSavings - aimsEstimatedCost;
+    const deniedClaims = Math.round(monthlyClaims * (denialRate / 100));
+    const monthlyDeniedRevenue = deniedClaims * avgClaimValue;
+    // Estimate 40% of denials are recoverable with automated management
+    const recoverableRevenue = monthlyDeniedRevenue * 0.40;
+    // Documentation time reclaimed: 70% of doc hours
+    const monthlyDocHours = docHoursPerDay * providers * 22; // working days
+    const reclaimedDocHours = Math.round(monthlyDocHours * 0.70);
+    // Assume $150/hr physician time value
+    const docTimeValue = reclaimedDocHours * 150;
+    const galenEstimatedCost = 0; // $0 pilot
+    const monthlyOpportunity = recoverableRevenue + docTimeValue - galenEstimatedCost;
     const yearOneOpportunity = monthlyOpportunity * 12;
-    const leadsRecoverable = Math.round(monthlyLeads * decayMultiplier * 12);
-    const sdrAnnual = sdrSavings * 12;
+    const annualReclaimedHours = reclaimedDocHours * 12;
     const chartData = Array.from({ length: 12 }, (_, i) => ({
       month: `M${i + 1}`,
-      lost: Math.round(recoveredLeadRevenue * (i + 1)),
-      opportunity: Math.round(Math.max(monthlyOpportunity, 0) * (i + 1)),
+      denied: Math.round(monthlyDeniedRevenue * (i + 1)),
+      recovered: Math.round(Math.max(monthlyOpportunity, 0) * (i + 1)),
     }));
-    return { yearOneOpportunity, leadsRecoverable, sdrAnnual, chartData };
-  }, [monthlyLeads, responseTime, avgDeal, sdrCount]);
+    return { yearOneOpportunity, annualReclaimedHours, monthlyDeniedRevenue, chartData };
+  }, [monthlyClaims, denialRate, avgClaimValue, docHoursPerDay, providers]);
 
   const animatedValue = useCountUp(Math.max(Math.round(calc.yearOneOpportunity), 0));
 
@@ -95,7 +102,7 @@ export default function Calculator() {
           transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}
           style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'var(--white)', letterSpacing: '-0.02em', marginBottom: '12px' }}>
-            Estimate Your Opportunity
+            Estimate Your Practice Opportunity
           </h2>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)' }}>
             // projection model — not a performance guarantee
@@ -103,9 +110,9 @@ export default function Calculator() {
         </motion.div>
 
         {/* Disclaimer */}
-        <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '12px', marginBottom: '32px', textAlign: 'center' }}>
+        <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border-galen)', borderRadius: 'var(--radius-card)', padding: '12px', marginBottom: '32px', textAlign: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)' }}>
-            This tool uses industry-average benchmarks to model potential value. AIMS has not yet launched. Results will vary based on your business and implementation.
+            This tool models potential value using industry-average benchmarks. Galen has not yet launched. Results will vary based on your practice, specialty, and payer mix.
           </span>
         </div>
 
@@ -114,25 +121,26 @@ export default function Calculator() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.4 }}
-          className="calc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          className="galen-calc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
 
           {/* Inputs */}
           <div style={{ background: 'var(--obsidian)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <SliderRow label="Monthly Inbound Leads" value={monthlyLeads} min={10} max={500} step={5} onChange={setMonthlyLeads} display={monthlyLeads.toLocaleString()} />
-            <SliderRow label="Current Lead Response Time" value={responseTime} min={1} max={240} step={1} onChange={setResponseTime} display={`${responseTime} min`}
-              note="⚠  Industry data: conversion drops ~80% after 5 minutes" noteColor="var(--danger)" />
-            <SliderRow label="Average Deal Value ($)" value={avgDeal} min={500} max={25000} step={250} onChange={setAvgDeal} display={`$${avgDeal.toLocaleString()}`} />
-            <SliderRow label="Current SDR Headcount" value={sdrCount} min={0} max={10} step={1} onChange={setSdrCount} display={`${sdrCount} person${sdrCount !== 1 ? 's' : ''}`}
-              note="Average fully-loaded SDR cost: ~$5,200/mo" />
+            <SliderRow galenRange label="Monthly Claims Submitted" value={monthlyClaims} min={50} max={3000} step={50} onChange={setMonthlyClaims} display={monthlyClaims.toLocaleString()} />
+            <SliderRow galenRange label="Current Denial Rate (%)" value={denialRate} min={1} max={40} step={1} onChange={setDenialRate} display={`${denialRate}%`}
+              note="Industry average: 10–30% first-pass denial rate" />
+            <SliderRow galenRange label="Average Claim Value ($)" value={avgClaimValue} min={100} max={5000} step={50} onChange={setAvgClaimValue} display={`$${avgClaimValue.toLocaleString()}`} />
+            <SliderRow galenRange label="Documentation Hours / Provider / Day" value={docHoursPerDay} min={0.5} max={6} step={0.5} onChange={setDocHoursPerDay} display={`${docHoursPerDay} hrs`}
+              note="Physicians spend ~2–3 hrs/day on clinical documentation" />
+            <SliderRow galenRange label="Number of Providers" value={providers} min={1} max={20} step={1} onChange={setProviders} display={`${providers} provider${providers !== 1 ? 's' : ''}`} />
           </div>
 
           {/* Output */}
-          <div style={{ background: 'var(--obsidian)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ background: 'var(--obsidian)', border: '1px solid var(--border-galen)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
                 Projected Year 1 Opportunity
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '56px', fontWeight: 500, color: 'var(--gold)', lineHeight: 1 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '56px', fontWeight: 500, color: 'var(--galen)', lineHeight: 1 }}>
                 {fmt(animatedValue)}
               </div>
             </div>
@@ -140,38 +148,38 @@ export default function Calculator() {
             <ResponsiveContainer width="100%" height={180}>
               <AreaChart data={calc.chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="lostGrad" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="galenDeniedGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#FF4444" stopOpacity={0.12} />
                     <stop offset="95%" stopColor="#FF4444" stopOpacity={0} />
                   </linearGradient>
-                  <linearGradient id="oppGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.18} />
-                    <stop offset="95%" stopColor="#D4AF37" stopOpacity={0} />
+                  <linearGradient id="galenRecoveredGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#4A9EFF" stopOpacity={0.18} />
+                    <stop offset="95%" stopColor="#4A9EFF" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis dataKey="month" tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} />
                 <YAxis tickFormatter={(v) => fmt(Number(v))} tick={{ fontFamily: 'monospace', fontSize: 9, fill: '#666' }} axisLine={false} tickLine={false} width={55} />
-                <Tooltip contentStyle={{ background: '#111111', border: '1px solid var(--border-gold)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '11px', color: '#FAFAFA' }} formatter={(v) => [fmt(Number(v)), '']} />
-                <Area type="monotone" dataKey="lost" stroke="#FF4444" strokeWidth={1.5} fill="url(#lostGrad)" name="Lead Revenue Lost to Decay" isAnimationActive />
-                <Area type="monotone" dataKey="opportunity" stroke="#D4AF37" strokeWidth={2} fill="url(#oppGrad)" name="Projected Opportunity Captured" isAnimationActive />
+                <Tooltip contentStyle={{ background: '#111111', border: '1px solid rgba(74,158,255,0.3)', borderRadius: '4px', fontFamily: 'monospace', fontSize: '11px', color: '#FAFAFA' }} formatter={(v) => [fmt(Number(v)), '']} />
+                <Area type="monotone" dataKey="denied" stroke="#FF4444" strokeWidth={1.5} fill="url(#galenDeniedGrad)" name="Denied Revenue (Cumulative)" isAnimationActive />
+                <Area type="monotone" dataKey="recovered" stroke="#4A9EFF" strokeWidth={2} fill="url(#galenRecoveredGrad)" name="Projected Opportunity Captured" isAnimationActive />
               </AreaChart>
             </ResponsiveContainer>
 
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               {[
-                { label: 'Leads Potentially Recoverable / yr', val: calc.leadsRecoverable.toLocaleString() },
-                { label: 'Projected SDR Savings', val: fmt(calc.sdrAnnual) },
-                { label: 'Target Response Time', val: '<30 sec' },
+                { label: 'Monthly Denied Revenue', val: fmt(calc.monthlyDeniedRevenue) },
+                { label: 'Documentation Hours Reclaimed / yr', val: fmtHrs(calc.annualReclaimedHours) },
+                { label: 'Pilot Cost', val: '$0 upfront' },
               ].map((s) => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.label}</div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--gold)', marginTop: '2px' }}>{s.val}</div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--galen)', marginTop: '2px' }}>{s.val}</div>
                 </div>
               ))}
             </div>
 
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', fontStyle: 'italic' }}>
-              Projections use industry-average benchmarks. Not a performance guarantee.
+              Projections use industry-average benchmarks. Not a performance guarantee. Physician time valued at $150/hr estimate.
             </p>
           </div>
         </motion.div>
@@ -179,7 +187,7 @@ export default function Calculator() {
 
       <style>{`
         @media (max-width: 768px) {
-          .calc-grid { grid-template-columns: 1fr !important; }
+          .galen-calc-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 interface NavProps {
   onApply: () => void;
+  galenPage?: boolean;
 }
 
 const ARXMark = () => (
@@ -16,26 +16,24 @@ const ARXMark = () => (
 );
 
 const HOME_LINKS = [
-  { label: 'General', href: '#general' },
+  { label: 'AIMS', href: '#what-is-aims' },
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Early Access', href: '#early-access' },
+  { label: 'Galen', href: '/galen' },
+];
+
+const GALEN_LINKS = [
+  { label: 'Overview', href: '#top' },
+  { label: 'Capabilities', href: '#capabilities' },
   { label: 'Calculator', href: '#calculator' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'Changelog', href: '#changelog' },
+  { label: 'Access', href: '#access' },
 ];
 
-const MEDICAL_LINKS = [
-  { label: 'Overview', href: '#overview' },
-  { label: 'Modules', href: '#modules' },
-  { label: 'Case Study', href: '#case-study' },
-  { label: 'Pilot Offer', href: '#pilot' },
-];
-
-export default function Nav({ onApply }: NavProps) {
+export default function Nav({ onApply, galenPage = false }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const shouldReduce = useReducedMotion();
-  const router = useRouter();
-  const isMedical = router.pathname === '/medical';
-  const links = isMedical ? MEDICAL_LINKS : HOME_LINKS;
+  const links = galenPage ? GALEN_LINKS : HOME_LINKS;
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 60);
@@ -69,44 +67,67 @@ export default function Nav({ onApply }: NavProps) {
             </div>
           </Link>
 
-          {/* Status pill — desktop only */}
-          <div className="status-pill" style={{ display: 'flex', alignItems: 'center', gap: '7px', border: '1px solid var(--border)', borderRadius: '999px', padding: '4px 12px' }}>
-            <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--success)', display: 'block', animation: 'pulse-dot 2s ease-in-out infinite' }} />
+          <div className="nav-status" style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid var(--border)', borderRadius: '999px', padding: '4px 12px' }}>
+            <span className="status-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--warning)', display: 'block', flexShrink: 0 }} />
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
-              AIMS Alpha 1.0.4 — STABLE
+              AIMS Alpha 1.0 — In Development
             </span>
           </div>
         </div>
 
-        {/* Center links */}
+        {/* Center */}
         <div className="nav-links" style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
-          {links.map((link) => (
-            <a key={link.href} href={link.href}
-              style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
-              {link.label}
-            </a>
-          ))}
+          {links.map((link) =>
+            link.href.startsWith('/') ? (
+              <Link key={link.href} href={link.href}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
+                {link.label}
+              </Link>
+            ) : (
+              <a key={link.href} href={link.href}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
+                {link.label}
+              </a>
+            )
+          )}
         </div>
 
         {/* Right CTAs */}
         <div className="nav-ctas" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Link href="/medical"
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--medical)', border: '1px solid var(--border-medical)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', textDecoration: 'none', letterSpacing: '0.06em', transition: 'background 0.2s' }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--medical-muted)')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
-            AIMS Medical →
-          </Link>
-          <motion.button
-            onClick={onApply}
-            whileHover={shouldReduce ? {} : { scale: 1.02, background: 'var(--gold-muted)' }}
-            whileTap={shouldReduce ? {} : { scale: 0.98 }}
-            style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.06em', color: 'var(--gold)', background: 'transparent', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', cursor: 'pointer' }}>
-            Apply for Integration
-          </motion.button>
+          {galenPage ? (
+            <>
+              <Link href="/"
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', border: '1px solid var(--border)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', textDecoration: 'none', letterSpacing: '0.06em', transition: 'color 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
+                ← AIMS
+              </Link>
+              <motion.button onClick={onApply}
+                whileHover={shouldReduce ? {} : { background: 'var(--galen-muted)' }}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.06em', color: 'var(--galen)', background: 'transparent', border: '1px solid var(--border-galen)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', cursor: 'pointer' }}>
+                Inquire About Galen
+              </motion.button>
+            </>
+          ) : (
+            <>
+              <Link href="/galen"
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--galen)', border: '1px solid var(--border-galen)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', textDecoration: 'none', letterSpacing: '0.06em', transition: 'background 0.2s' }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'var(--galen-muted)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
+                Galen →
+              </Link>
+              <motion.button onClick={onApply}
+                whileHover={shouldReduce ? {} : { background: 'var(--gold-muted)' }}
+                style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.06em', color: 'var(--gold)', background: 'transparent', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-badge)', padding: '6px 12px', cursor: 'pointer' }}>
+                Join the Alpha
+              </motion.button>
+            </>
+          )}
 
-          {/* Hamburger */}
           <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'none', flexDirection: 'column', gap: '5px' }}
             aria-label="Toggle menu">
@@ -122,41 +143,50 @@ export default function Nav({ onApply }: NavProps) {
         </div>
       </motion.nav>
 
-      {/* Mobile overlay */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
-            style={{ position: 'fixed', inset: 0, zIndex: 99, background: 'var(--obsidian)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            style={{ position: 'fixed', inset: 0, zIndex: 40, background: 'var(--obsidian)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            <button onClick={() => setMenuOpen(false)}
+              style={{ position: 'absolute', top: '20px', right: '24px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '18px' }}>
+              ✕
+            </button>
             {links.map((link, i) => (
-              <motion.a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}
-                initial={{ opacity: 0, y: shouldReduce ? 0 : -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06, type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}
-                style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', color: 'var(--white)', textDecoration: 'none', padding: '12px 0' }}>
-                {link.label}
-              </motion.a>
+              link.href.startsWith('/') ? (
+                <motion.div key={link.href}
+                  initial={{ opacity: 0, y: shouldReduce ? 0 : -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}>
+                  <Link href={link.href} onClick={() => setMenuOpen(false)}
+                    style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', color: 'var(--white)', textDecoration: 'none', padding: '12px 0', display: 'block' }}>
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ) : (
+                <motion.a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}
+                  initial={{ opacity: 0, y: shouldReduce ? 0 : -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, type: 'spring', stiffness: 80, damping: 18, mass: 1.2 }}
+                  style={{ fontFamily: 'var(--font-serif)', fontSize: '32px', color: 'var(--white)', textDecoration: 'none', padding: '12px 0' }}>
+                  {link.label}
+                </motion.a>
+              )
             ))}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: links.length * 0.06 + 0.1 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center', marginTop: '24px' }}>
-              <Link href="/medical" onClick={() => setMenuOpen(false)}
-                style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--medical)', border: '1px solid var(--border-medical)', borderRadius: 'var(--radius-badge)', padding: '12px 24px', textDecoration: 'none' }}>
-                AIMS Medical →
-              </Link>
-              <button onClick={() => { setMenuOpen(false); onApply(); }}
-                style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--gold)', background: 'transparent', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-badge)', padding: '12px 24px', cursor: 'pointer' }}>
-                Apply for Integration
-              </button>
-            </motion.div>
+            <motion.button onClick={() => { setMenuOpen(false); onApply(); }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: links.length * 0.06 + 0.1 }}
+              style={{ marginTop: '24px', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--gold)', background: 'transparent', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-badge)', padding: '12px 32px', cursor: 'pointer' }}>
+              Join the Alpha →
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>
 
       <style>{`
         @media (max-width: 768px) {
-          .nav-links { display: none !important; }
-          .status-pill { display: none !important; }
+          .nav-links  { display: none !important; }
+          .nav-status { display: none !important; }
           .nav-ctas > a, .nav-ctas > button:not(.hamburger) { display: none !important; }
-          .hamburger { display: flex !important; }
+          .hamburger  { display: flex !important; }
         }
       `}</style>
     </>

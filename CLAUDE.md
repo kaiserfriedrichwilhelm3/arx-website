@@ -1,99 +1,90 @@
-# AIMS Alpha 1.0 — Project Memory (CLAUDE.md)
+# ARX Systems — Project Memory (CLAUDE.md)
+# Last updated: 2026-04-14
 
-## SYSTEM STATUS
-AIMS Alpha 1.0.4 — STABLE
-Changelog:
-  v1.0.4: Context hygiene + HIPAA audit pass
-  v1.0.3: Scribe latency improvements
-  v1.0.2: RCM denial pattern expansion
-  v1.0.1: Cespedes Cardiology live deployment
-  v1.0.0: Initial Alpha release
+## PRODUCT TRUTH
+Nothing is deployed. AIMS Alpha 1.0 is in active development.
+The Galen medical pilot has not started. Write all copy in future-tense
+or present-architecture-tense only. No proven results, no live stats.
 
-## PRODUCT CONTEXT
-Company: ARX Systems | Product: AIMS Alpha 1.0
-Brand: One Brain. Multiple Arms.
-Model: Direct-to-Founder — no account managers, no ticket queues
+## PRODUCTS
+  AIMS  — Artificial Intelligence Management System
+          Unified agentic operating layer for SMBs
+          Status: Alpha 1.0, in development
 
-TWO DEPLOYMENT SECTORS (never mix their pricing in the same view):
+  Galen — Clinical implementation of AIMS for private medical practices
+          Status: In development, accepting inquiries
+          Named after Galen of Pergamon
 
-  SECTOR A — GENERAL AIMS (any professional service business)
-    Starter  ($499/mo):   Arm 01 — Voice + Lead Qualification
-    Growth   ($2,400/mo): Arms 01–03 — + Revenue Recovery + Outbound
-    Scale    ($5,800/mo): Full Platform + Direct Integration Engineer
+  Company: ARX Systems | Founder-led | Miami, FL
 
-  SECTOR B — AIMS MEDICAL (clinical practices only)
-    Single offering: Zero-Cost Clinical Pilot
-    $0 upfront | First 30 days free | 40% lifetime discount on v2.0
-    Modules: Insurance Defense, Prescription Guard, Live Session Scribe,
-             FHIR R4 Memory, Claims Audit, Front Desk Triage
-    Pilot partner: Cespedes Cardiology, MD, PA — Miami, FL
+## SITE PAGES
+  /         → AIMS homepage (general business, primary)
+  /galen    → Galen medical sub-page (dedicated clinical)
 
-## SITE ARCHITECTURE
-  / (index) — Business-first homepage with sector toggle
-  /medical  — Dedicated medical sub-page (its own Next.js page)
+## BANNED WORDS / PHRASES (never appear on any page)
+  ✗ "AIVIS" — old brand name, fully retired
+  ✗ "Deploy" on any CTA button
+  ✗ "Live in 48 hours" or any deployment timeline
+  ✗ "Cespedes Cardiology" as an active/clinical partner
+  ✗ "In Active Clinical Development"
+  ✗ "HIPAA" in any form (no compliance page exists)
+  ✗ "1 Clinical Pilot" in system status
+  ✗ Any proven metric presented as a result (%, $, uptime)
+  ✗ "Direct Founder access" in any pricing tier
+  ✗ Fixed pricing presented as "available now"
 
-## REPO & DEPLOYMENT
-  GitHub: kaiserfriedrichwilhelm3/arx-website
-  Live: https://arx-website-production.up.railway.app/
-  Platform: Railway — auto-deploys on push to main
-  Build: npm run build | Start: npm start (next start)
-  Old stack: Node/Express static → REPLACED by Next.js Pages Router
+## CORRECT CTA LANGUAGE
+  Primary:   "Join the Alpha" / "Request Early Access"
+  Medical:   "Inquire About Galen" / "Request a Galen Demo"
+  Secondary: "Learn More" / "Explore AIMS" / "See How It Works"
+  Never:     "Deploy", "Buy Now", "Get Started Today", "Sign Up"
 
 ## DESIGN SYSTEM
 
-### Colors — CSS custom properties ONLY, never hardcode hex in JSX
+Colors (CSS custom properties — NEVER hardcode hex in JSX):
   --obsidian:         #0A0A0A
   --surface:          #111111
   --surface-2:        #161616
   --border:           rgba(250,250,250,0.08)
   --border-gold:      rgba(212,175,55,0.3)
-  --border-medical:   rgba(74,158,255,0.25)
+  --border-galen:     rgba(74,158,255,0.25)
   --white:            #FAFAFA
   --muted:            #666666
   --muted-2:          #444444
   --gold:             #D4AF37
   --gold-muted:       rgba(212,175,55,0.12)
-  --medical:          #4A9EFF
-  --medical-muted:    rgba(74,158,255,0.12)
+  --galen:            #4A9EFF
+  --galen-muted:      rgba(74,158,255,0.12)
   --danger:           #FF4444
   --success:          #22C55E
   --warning:          #F59E0B
 
-### Typography
-  Serif display: Playfair Display 400,700 → var(--font-serif)
-  Monospace UI:  JetBrains Mono 400,500  → var(--font-mono)
-  Loaded via Google Fonts link in _document.tsx (sandbox build constraint)
+Typography:
+  NOTE: next/font/google causes 403 at build time in Railway sandbox.
+  Fonts loaded via CDN link in _document.tsx.
+  CSS vars: --font-serif, --font-mono set in _document.tsx <style> block.
   FORBIDDEN: Inter, Roboto, Arial, system-ui, sans-serif
 
-### Borders & Depth
-  Border width: 1px only.
-  NO box-shadow — border + bg contrast for depth
-  Border radius: 8px cards | 4px badges | 2px dividers
-  Glassmorphism: Nav ONLY — rgba(10,10,10,0.85) + backdrop-blur-xl
-
-### Spacing
-  Base unit: 4px
-  Card padding: 24px
-  Section vertical: 96px desktop / 56px mobile
-  Grid gap: 16px mobile / 24px desktop
-
-## ANIMATION SYSTEM
-  Library: motion/react v12 — import from "motion/react"
+## ANIMATION
+  Library: motion/react v12 — import from "motion/react" ONLY
   AIMS Spring: { type:'spring', stiffness:80, damping:18, mass:1.2 }
-  Reduced motion: useReducedMotion() — if true, opacity only
+  Reduced motion: useReducedMotion() in every animated component
+
+## MODAL FIX (CRITICAL)
+  Overlay: position:fixed; inset:0; display:flex; align-items:center;
+    justify-content:center; z-index:9999
+  Panel: width:100%; max-width:480px; margin:0 16px
+  DO NOT use position:absolute or top/left on the panel.
 
 ## CODING STANDARDS
-  1. No wrapper logic — every component self-contained, fully typed
-  2. No TypeScript any
-  3. Deterministic state only
-  4. All colors via CSS vars — never hex in JSX
-  5. Inline SVG only — never img src="*.svg"
-  6. Pages Router (/pages directory) — NOT App Router
-  7. All interactive components: use client at top
-  8. Every component has TypeScript interface for props
-  9. No form HTML tags — div wrappers with onClick
-
-## COMPONENT LIST
-Nav, Hero, SystemStatus, BentoCard, GeneralAIMS, Calculator, Pricing,
-Changelog, FounderSection, Modal, Footer,
-MedicalHero, CaseStudy, MedicalModules, MedicalCalculator, MedicalPricing
+  1. No TypeScript any
+  2. All colors via CSS vars — never hex in JSX
+  3. CDN fonts via _document.tsx
+  4. Inline SVG only
+  5. Pages Router — NOT App Router
+  6. 'use client' on every interactive component
+  7. TypeScript interface for every component's props
+  8. No HTML form tags
+  9. scroll-margin-top via [id] global rule in globals.css
+  10. Status dots: var(--warning) orange — NOT green
+  11. Integration tiles: individual DOM elements, never concatenated string

@@ -5,14 +5,14 @@ export default function Document() {
     <Html lang="en">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="description" content="AIMS — Agentic Intelligence Management System. One agent. Multiple execution arms. Built for enterprise revenue recovery and clinical workflow automation." />
         <meta name="theme-color" content="#0A0A0A" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="ARX Systems — AIMS Agentic Hub" />
-        <meta property="og:description" content="One Agent. Multiple Arms. Enterprise-grade agentic infrastructure for revenue recovery, clinical automation, and operational intelligence." />
+        <meta property="og:title" content="AIMS — ARX Systems" />
+        <meta property="og:description" content="The agentic operating layer for modern business. One Brain. Multiple Arms. AIMS Alpha 1.0 now in development." />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="ARX Systems — AIMS" />
-        <meta name="twitter:description" content="One Agent. Multiple Arms." />
+        <meta name="twitter:title" content="AIMS — ARX Systems" />
+        <meta name="twitter:description" content="One Brain. Multiple Arms. AIMS Alpha 1.0 in development." />
+        {/* CDN fonts — next/font/google causes 403 in Railway build sandbox */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -22,8 +22,8 @@ export default function Document() {
         <link rel="icon" href="/favicon.ico" />
         <style>{`
           :root {
-            --font-playfair: 'Playfair Display', Georgia, 'Times New Roman', serif;
-            --font-jetbrains: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+            --font-serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
           }
         `}</style>
       </Head>
