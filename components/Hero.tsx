@@ -14,7 +14,7 @@ const CY = 250;
 const ARMS = [
   { id: 'voice',     label: 'VOICE',     x: 115, y: 115, color: 'var(--gold)',  dash: undefined,  range: [0.15, 0.35] as [number, number] },
   { id: 'revenue',   label: 'REVENUE',   x: 485, y: 115, color: 'var(--gold)',  dash: undefined,  range: [0.20, 0.40] as [number, number] },
-  { id: 'calls',     label: 'CALLS',     x:  75, y: 280, color: 'var(--gold)',  dash: undefined,  range: [0.25, 0.45] as [number, number] },
+  { id: 'leads',     label: 'LEADS',     x:  75, y: 280, color: 'var(--gold)',  dash: undefined,  range: [0.25, 0.45] as [number, number] },
   { id: 'scribing',  label: 'SCRIBING',  x: 525, y: 280, color: 'var(--galen)', dash: '6 4',      range: [0.30, 0.50] as [number, number] },
   { id: 'insurance', label: 'INSURANCE', x: 155, y: 425, color: 'var(--galen)', dash: '6 4',      range: [0.35, 0.55] as [number, number] },
   { id: 'triage',    label: 'TRIAGE',    x: 445, y: 425, color: 'var(--galen)', dash: '6 4',      range: [0.40, 0.60] as [number, number] },
@@ -41,7 +41,7 @@ function StaticHero({ onApply }: HeroProps) {
   );
 }
 
-function HeroText({ onApply }: HeroProps) {
+function HeroText({ onApply: _ }: HeroProps) {
   return (
     <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '720px' }}>
       <motion.div
@@ -49,7 +49,7 @@ function HeroText({ onApply }: HeroProps) {
         transition={{ type: 'spring', stiffness: 80, damping: 18, mass: 1.2, delay: 0.2 }}
         style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '16px' }}
       >
-        Artificial Intelligence Management System
+        Artificial Intelligence Management System · Alpha 1.0
       </motion.div>
       <motion.h1
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ function HeroText({ onApply }: HeroProps) {
       >
         AIMS is the agentic operating layer for modern business. It connects every tool,
         workflow, and data source in your organization into one deterministic interface —
-        moving your business from manual oversight to autonomous execution.
+        moving from manual oversight to autonomous execution. Not a chatbot. A system.
       </motion.p>
       <motion.div
         initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
@@ -168,7 +168,7 @@ export default function Hero({ onApply }: HeroProps) {
 
         <motion.div style={{ opacity: statusOpacity, position: 'absolute', bottom: '40px', left: 0, right: 0, textAlign: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.15em', color: 'var(--muted)', textTransform: 'uppercase' }}>
-            AIMS Alpha 1.0 In Development · Accepting Early Access Partners
+            AIMS Alpha 1.0 In Development · Early Access Applications Open
           </span>
         </motion.div>
       </div>

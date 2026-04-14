@@ -34,7 +34,7 @@ export default function GalenArms({ onInquire }: GalenArmsProps) {
           <BentoCard index={0} accent="galen"
             title="Insurance Defense"
             subtitle="Designed to monitor every submitted claim, flag denial patterns before they compound, and draft appeal documentation automatically. Built to convert reactive denial management into a proactive revenue protection layer."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
             style={{ gridColumn: '1 / span 2' } as React.CSSProperties}
           />
 
@@ -42,28 +42,28 @@ export default function GalenArms({ onInquire }: GalenArmsProps) {
           <BentoCard index={1} accent="galen"
             title="Prescription Guard"
             subtitle="Designed to manage refill requests, prior authorization workflows, and formulary exception submissions without pulling clinical staff into administrative loops. Built to resolve these requests faster and with fewer escalations."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
           />
 
           {/* Card 3 */}
           <BentoCard index={2} accent="galen"
             title="Live Session Scribe"
             subtitle="Designed to transcribe and structure clinical encounters in real time, producing compliant documentation that integrates with your EHR. Built to return the 2–3 hours per day currently lost to note-writing."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
           />
 
           {/* Card 4 */}
           <BentoCard index={3} accent="galen"
             title="FHIR R4 Memory"
             subtitle="A structured patient data layer built on FHIR R4 standards. Designed to maintain longitudinal context across encounters, surface relevant history at intake, and sync with existing EHR infrastructure without requiring a rip-and-replace."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
           />
 
           {/* Card 5 — spans cols 2-3 */}
           <BentoCard index={4} accent="galen"
             title="Claims Audit"
             subtitle="Designed to audit submitted claims for coding errors, missing modifiers, and documentation gaps before submission — reducing denial rates at the source. Built to run continuously against your active claims pipeline."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
             style={{ gridColumn: 'span 2' } as React.CSSProperties}
           />
 
@@ -71,7 +71,7 @@ export default function GalenArms({ onInquire }: GalenArmsProps) {
           <BentoCard index={5} accent="galen"
             title="Front Desk Triage"
             subtitle="Designed to handle inbound patient contacts — calls, messages, appointment requests — and route them according to clinical priority rules. Built so no patient contact goes unanswered regardless of front desk capacity."
-            badge="IN DEVELOPMENT" badgeVariant="muted"
+            badge="Alpha Stage · Limited Access" badgeVariant="muted"
           />
         </div>
 

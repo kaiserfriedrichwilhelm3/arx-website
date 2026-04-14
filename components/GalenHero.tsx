@@ -29,7 +29,7 @@ export default function GalenHero({ onInquire }: GalenHeroProps) {
           transition={{ duration: 0.4 }}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '48px' }}
         >
-          <Link href="/" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s' }}
+          <Link href="/aims" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', textDecoration: 'none', transition: 'color 0.2s' }}
             onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
             onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}
           >
