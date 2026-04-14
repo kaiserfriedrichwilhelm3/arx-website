@@ -4,16 +4,17 @@ import Nav from '@/components/Nav';
 import GalenHero from '@/components/GalenHero';
 import GalenProblem from '@/components/GalenProblem';
 import GalenArms from '@/components/GalenArms';
+import GalenSecurity from '@/components/GalenSecurity';
 import GalenCalculator from '@/components/GalenCalculator';
 import GalenAccess from '@/components/GalenAccess';
 import FounderSection from '@/components/FounderSection';
 import Footer from '@/components/Footer';
-import Modal from '@/components/Modal';
+import GalenForm from '@/components/GalenForm';
 
 export default function Galen() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const open = () => setModalOpen(true);
-  const close = () => setModalOpen(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const open = () => setFormOpen(true);
+  const close = () => setFormOpen(false);
 
   return (
     <>
@@ -22,19 +23,20 @@ export default function Galen() {
         <meta name="description" content="Galen: the clinical implementation of AIMS. Insurance defense, live session scribing, claims audit, and front desk triage — in development by ARX Systems." />
       </Head>
 
-      <Nav onApply={open} galenPage />
+      <Nav page="galen" onApply={open} />
 
       <main>
         <GalenHero onInquire={open} />
         <GalenProblem />
         <GalenArms onInquire={open} />
+        <GalenSecurity />
         <GalenCalculator />
         <GalenAccess onInquire={open} />
         <FounderSection onApply={open} />
       </main>
 
       <Footer onApply={open} />
-      <Modal isOpen={modalOpen} onClose={close} galenMode />
+      <GalenForm isOpen={formOpen} onClose={close} />
     </>
   );
 }

@@ -33,42 +33,38 @@ export default function Footer({ onApply }: FooterProps) {
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.2em', lineHeight: 1 }}>SYSTEMS</div>
               </div>
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', marginTop: '3px', lineHeight: 1.6 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>
               One Brain. Multiple Arms.
             </p>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted-2)', marginTop: '4px' }}>
-              AIMS Alpha 1.0 — ARX Systems — Miami, FL
+              AIMS Alpha 1.0 · ARX Systems · In Development
             </p>
           </div>
 
-          {/* Col 2 — Product */}
+          {/* Col 2 — Platform */}
           <div>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Product
+              Platform
             </div>
-            {[
-              { label: 'What Is AIMS', href: '#what-is-aims' },
-              { label: 'How It Works', href: '#how-it-works' },
-              { label: 'The Six Arms', href: '#arms' },
-              { label: 'Calculator', href: '#calculator' },
-              { label: 'Pricing', href: '#pricing' },
-            ].map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', marginBottom: '8px', transition: 'color 0.2s' }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}
-              >
-                {label}
-              </a>
-            ))}
-            <Link
-              href="/galen"
-              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--galen)', textDecoration: 'none', marginBottom: '8px', transition: 'opacity 0.2s' }}
-            >
-              Galen — Clinical →
+            <Link href="/aims"
+              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', marginBottom: '8px', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
+              AIMS
             </Link>
+            <Link href="/galen"
+              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--galen)', textDecoration: 'none', marginBottom: '8px', transition: 'opacity 0.2s' }}>
+              Galen — Clinical
+            </Link>
+            <span style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted-2)', marginBottom: '8px', cursor: 'default' }}>
+              Atlas <em style={{ fontSize: '9px' }}>soon</em>
+            </span>
+            <a href="/aims#early-access"
+              style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', marginBottom: '8px', transition: 'color 0.2s' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
+              Early Access
+            </a>
           </div>
 
           {/* Col 3 — Company */}
@@ -77,13 +73,10 @@ export default function Footer({ onApply }: FooterProps) {
               Company
             </div>
             {['LinkedIn', 'Privacy Policy', 'Terms'].map((label) => (
-              <a
-                key={label}
-                href="#"
+              <a key={label} href="#"
                 style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', textDecoration: 'none', marginBottom: '8px', transition: 'color 0.2s' }}
                 onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--white)')}
-                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}
-              >
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}>
                 {label}
               </a>
             ))}
@@ -94,25 +87,20 @@ export default function Footer({ onApply }: FooterProps) {
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '16px' }}>
               Status
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
               <span className="status-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--warning)', flexShrink: 0, display: 'block' }} />
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)' }}>Alpha 1.0 — In Development</span>
             </div>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.6 }}>
-              Early access cohort now open.
-            </p>
-            <button
-              onClick={onApply}
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted)', marginBottom: '12px' }}>Miami, FL</p>
+            <button onClick={onApply}
               style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--gold)', textDecoration: 'none', transition: 'text-decoration 0.2s' }}
               onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
-              onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
-            >
-              Join the Alpha →
+              onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}>
+              Apply for Early Access →
             </button>
           </div>
         </motion.div>
 
-        {/* Bottom strip */}
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: '24px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)' }}>
             © {year} ARX Systems. All rights reserved.
@@ -125,14 +113,10 @@ export default function Footer({ onApply }: FooterProps) {
 
       <style>{`
         @media (max-width: 900px) {
-          footer > div > div:first-child {
-            grid-template-columns: 1fr 1fr !important;
-          }
+          footer > div > div:first-child { grid-template-columns: 1fr 1fr !important; }
         }
         @media (max-width: 500px) {
-          footer > div > div:first-child {
-            grid-template-columns: 1fr !important;
-          }
+          footer > div > div:first-child { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </footer>
