@@ -112,9 +112,6 @@ export default function Landing() {
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
                 Galen · Medicine
               </a>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted-2)', border: '1px solid var(--border)', borderRadius: '999px', padding: '4px 12px', cursor: 'default' }}>
-                Atlas · Real Estate <em style={{ fontSize: '8px', marginLeft: '4px' }}>Coming Soon</em>
-              </span>
             </div>
           </motion.div>
         </main>

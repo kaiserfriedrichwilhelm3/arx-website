@@ -21,6 +21,10 @@ export default function Galen() {
       <Head>
         <title>Galen — Clinical AI Operating System | ARX Systems</title>
         <meta name="description" content="Galen is the clinical implementation of AIMS for private medical practices. Insurance defense, ambient scribing, EHR integration. In development by ARX Systems." />
+        <meta property="og:title" key="og:title" content="Galen — Clinical AI Operating System | ARX Systems" />
+        <meta property="og:description" key="og:description" content="Galen is the clinical implementation of AIMS for private medical practices. Insurance defense, ambient scribing, EHR integration. In development." />
+        <meta name="twitter:title" key="twitter:title" content="Galen — Clinical AI Operating System | ARX Systems" />
+        <meta name="twitter:description" key="twitter:description" content="Galen is the clinical implementation of AIMS for private medical practices. Insurance defense, ambient scribing, EHR integration." />
       </Head>
 
       <Nav page="galen" onApply={inquire} />

@@ -4,11 +4,7 @@ import { motion } from 'motion/react';
 const spring = { type: 'spring' as const, stiffness: 80, damping: 18, mass: 1.2 };
 const vp = { once: true, margin: '-40px' as const };
 
-interface IndustrySuiteProps {
-  onAtlasInterest: () => void;
-}
-
-export default function IndustrySuite({ onAtlasInterest }: IndustrySuiteProps) {
+export default function IndustrySuite() {
   return (
     <section id="industry-suite" style={{ padding: '96px 32px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
@@ -51,31 +47,16 @@ export default function IndustrySuite({ onAtlasInterest }: IndustrySuiteProps) {
             </Link>
           </motion.div>
 
-          {/* Atlas card — coming soon, dimmed */}
+          {/* Atlas card — in planning */}
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={vp} transition={{ ...spring, delay: 0.08 }}
-            style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '24px', opacity: 0.65 }}>
+            style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '24px', opacity: 0.5 }}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted-2)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: '8px' }}>
-              Real Estate · Coming Soon
+              Real Estate · In Planning
             </div>
             <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '26px', color: 'var(--muted-2)', marginBottom: '12px' }}>Atlas</h3>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted-2)', lineHeight: 1.8, marginBottom: '16px' }}>
-              The real estate implementation of AIMS. Designed for agencies, brokerages, and
-              property management firms. Lead qualification, listing automation, and CRM
-              orchestration — built on the AIMS core.
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted-2)', lineHeight: 1.8 }}>
+              The real estate implementation of AIMS — for agencies, brokerages, and property management firms. Architecture in planning. Not yet in development.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '20px' }}>
-              {['Listing + Lead Automation', 'Client Qualification Engine', 'Offer + Contract Tracking', 'Market Analytics Layer'].map((f) => (
-                <div key={f} style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--muted-2)' }}>→ {f}</div>
-              ))}
-            </div>
-            <div
-              onClick={onAtlasInterest}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted-2)', border: '1px solid var(--border)', borderRadius: '999px', padding: '4px 12px', cursor: 'pointer', transition: 'color 0.2s, border-color 0.2s' }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--muted)'; e.currentTarget.style.borderColor = 'rgba(250,250,250,0.15)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--muted-2)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-            >
-              Accepting Early Interest
-            </div>
           </motion.div>
         </div>
       </div>

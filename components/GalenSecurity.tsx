@@ -5,6 +5,12 @@ const vp = { once: true, margin: '-40px' as const };
 
 const PILLARS = [
   {
+    icon: '⊕',
+    title: 'HIPAA-Aligned Architecture',
+    body: 'Galen is architected against HIPAA Security Rule requirements — administrative, physical, and technical safeguards — with zero patient data retention, end-to-end encryption, and auditable access logging. A Business Associate Agreement (BAA) is executed with every pilot partner before any clinical data is processed. ARX Systems is building toward SOC 2 Type II certification ahead of Galen\'s clinical launch.',
+    featured: true,
+  },
+  {
     icon: '◈',
     title: 'Zero Retention Architecture',
     body: 'Galen processes clinical session data in memory only. No patient content is written to persistent storage. Session context is cleared on session close — nothing is retained beyond the active encounter.',
@@ -60,13 +66,13 @@ export default function GalenSecurity() {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={vp} transition={{ ...spring, delay: 0.05 }}
           style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '12px 20px', marginBottom: '48px', textAlign: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)' }}>
-            Galen is in development. The security architecture described below is the design target for the clinical release — not a certification claim. No patient data has been processed.
+            Galen is in development. The security architecture described is the design target for clinical release. No patient data has been processed. A full technical security overview and BAA are provided to pilot partners at onboarding.
           </span>
         </motion.div>
 
         {/* Pillars grid */}
         <div className="security-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '40px' }}>
-          {PILLARS.map(({ icon, title, body }, i) => (
+          {PILLARS.map(({ icon, title, body, featured }, i) => (
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 20 }}
@@ -74,17 +80,21 @@ export default function GalenSecurity() {
               viewport={vp}
               transition={{ ...spring, delay: i * 0.05 }}
               style={{
-                background: 'var(--surface)',
-                border: '1px solid var(--border-galen)',
+                background: featured ? 'var(--surface-2)' : 'var(--surface)',
+                border: `1px solid ${featured ? 'var(--border-gold)' : 'var(--border-galen)'}`,
                 borderRadius: 'var(--radius-card)',
                 padding: '24px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '12px',
+                gridColumn: featured ? '1 / -1' : undefined,
               }}
             >
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', color: 'var(--galen)', lineHeight: 1 }}>{icon}</span>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '18px', color: 'var(--white)', lineHeight: 1.25 }}>{title}</h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', color: featured ? 'var(--gold)' : 'var(--galen)', lineHeight: 1 }}>{icon}</span>
+                {featured && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '8px', color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '0.15em', border: '1px solid var(--border-gold)', borderRadius: '2px', padding: '2px 6px' }}>Required for clinical deployment</span>}
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: featured ? '22px' : '18px', color: 'var(--white)', lineHeight: 1.25 }}>{title}</h3>
               <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)', lineHeight: 1.75 }}>{body}</p>
             </motion.div>
           ))}

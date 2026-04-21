@@ -91,7 +91,8 @@ export default function GalenCalculator() {
     return { yearOneOpportunity, annualReclaimedHours, monthlyDeniedRevenue, chartData };
   }, [monthlyClaims, denialRate, avgClaimValue, docHoursPerDay, providers]);
 
-  const animatedValue = useCountUp(Math.max(Math.round(calc.yearOneOpportunity), 0));
+  const animatedHours = useCountUp(Math.max(calc.annualReclaimedHours, 0));
+  const animatedRevenue = useCountUp(Math.max(Math.round(calc.yearOneOpportunity), 0));
 
   return (
     <section id="calculator" style={{ padding: '96px 32px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
@@ -137,11 +138,14 @@ export default function GalenCalculator() {
           {/* Output */}
           <div style={{ background: 'var(--obsidian)', border: '1px solid var(--border-galen)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
-                Projected Year 1 Opportunity
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Documentation Hours Reclaimed / Year
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', fontStyle: 'italic', marginBottom: '8px' }}>
+                Based on provider count + documentation hours entered
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '56px', fontWeight: 500, color: 'var(--galen)', lineHeight: 1 }}>
-                {fmt(animatedValue)}
+                {animatedHours.toLocaleString()}
               </div>
             </div>
 
@@ -167,8 +171,7 @@ export default function GalenCalculator() {
 
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               {[
-                { label: 'Monthly Denied Revenue', val: fmt(calc.monthlyDeniedRevenue) },
-                { label: 'Documentation Hours Reclaimed / yr', val: fmtHrs(calc.annualReclaimedHours) },
+                { label: 'Denied Revenue / Month', val: fmt(calc.monthlyDeniedRevenue) },
                 { label: 'Pilot Cost', val: '$0 upfront' },
               ].map((s) => (
                 <div key={s.label}>
@@ -178,8 +181,20 @@ export default function GalenCalculator() {
               ))}
             </div>
 
+            <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-badge)', padding: '12px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Projected Year 1 Opportunity
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '22px', fontWeight: 500, color: 'var(--galen)', lineHeight: 1 }}>
+                {fmt(animatedRevenue)}
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', marginTop: '4px' }}>
+                Illustrative only — not a guarantee of outcome.
+              </div>
+            </div>
+
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', fontStyle: 'italic' }}>
-              Projections use industry-average benchmarks. Not a performance guarantee. Physician time valued at $150/hr estimate.
+              ARX Systems does not guarantee any financial outcome. This tool models operational load, not recoverable revenue. Physician time valued at $150/hr estimate.
             </p>
           </div>
         </motion.div>

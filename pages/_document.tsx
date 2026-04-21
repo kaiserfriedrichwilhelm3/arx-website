@@ -7,11 +7,11 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta name="theme-color" content="#0A0A0A" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="ARX Systems — AIMS + Galen" />
-        <meta property="og:description" content="The agentic AI operating layer for modern business and clinical medicine. One Brain. Multiple Arms. AIMS Alpha 1.0 in development." />
+        <meta property="og:title" key="og:title" content="ARX Systems — AIMS + Galen" />
+        <meta property="og:description" key="og:description" content="The agentic AI operating layer for modern business and clinical medicine. One Brain. Multiple Arms. AIMS Alpha 1.0 in development." />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="ARX Systems — AIMS + Galen" />
-        <meta name="twitter:description" content="One Brain. Multiple Arms. The agentic AI operating layer for business and medicine." />
+        <meta name="twitter:title" key="twitter:title" content="ARX Systems — AIMS + Galen" />
+        <meta name="twitter:description" key="twitter:description" content="One Brain. Multiple Arms. The agentic AI operating layer for business and medicine." />
         {/* CDN fonts — next/font/google causes 403 in Railway build sandbox */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

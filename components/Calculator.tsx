@@ -83,6 +83,7 @@ export default function Calculator() {
     const yearOneOpportunity = monthlyOpportunity * 12;
     const leadsRecoverable = Math.round(monthlyLeads * decayMultiplier * 12);
     const sdrAnnual = sdrCost * 12;
+    const hoursReclaimed = sdrCount * 1920 + Math.round(leadsRecoverable * 0.25);
     const chartData = Array.from({ length: 12 }, (_, i) => ({
       month: `M${i + 1}`,
       lost: Math.round(totalMonthlyLoss * (i + 1)),
@@ -90,12 +91,13 @@ export default function Calculator() {
     }));
 
     return {
-      yearOneOpportunity, leadsRecoverable, sdrAnnual, chartData,
+      yearOneOpportunity, leadsRecoverable, sdrAnnual, hoursReclaimed, chartData,
       decayMultiplier, leadsLostToDecay, humanErrorLoss, sdrCost, monthlyOpportunity,
     };
   }, [monthlyLeads, responseTime, avgDeal, sdrCount, includeHumanError]);
 
-  const animatedValue = useCountUp(Math.max(Math.round(calc.yearOneOpportunity), 0));
+  const animatedHours = useCountUp(Math.max(calc.hoursReclaimed, 0));
+  const animatedRevenue = useCountUp(Math.max(Math.round(calc.yearOneOpportunity), 0));
 
   return (
     <section id="calculator" style={{ padding: '96px 32px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
@@ -196,13 +198,13 @@ export default function Calculator() {
           <div style={{ background: 'var(--obsidian)', border: '1px solid var(--border-gold)', borderRadius: 'var(--radius-card)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '4px' }}>
-                Projected Year 1 Revenue Opportunity
+                Hours Reclaimed / Year
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', fontStyle: 'italic', marginBottom: '8px' }}>
-                Based on your inputs + industry benchmarks
+                SDR headcount + lead follow-up time, automated
               </div>
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '56px', fontWeight: 500, color: 'var(--gold)', lineHeight: 1 }}>
-                {fmt(animatedValue)}
+                {animatedHours.toLocaleString()}
               </div>
             </div>
 
@@ -229,8 +231,7 @@ export default function Calculator() {
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               {[
                 { label: 'Leads Recaptured / yr', val: calc.leadsRecoverable.toLocaleString() },
-                { label: 'SDR Cost Eliminated', val: fmt(calc.sdrAnnual) },
-                { label: 'Response Target', val: '<30 sec' },
+                { label: 'SDR Cost Offset / yr', val: fmt(calc.sdrAnnual) },
               ].map((s) => (
                 <div key={s.label}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{s.label}</div>
@@ -239,8 +240,20 @@ export default function Calculator() {
               ))}
             </div>
 
+            <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-badge)', padding: '12px' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Potential Revenue Recaptured
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '22px', fontWeight: 500, color: 'var(--gold)', lineHeight: 1 }}>
+                {fmt(animatedRevenue)}
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: 'var(--muted)', marginTop: '4px' }}>
+                Illustrative only — not a guarantee of outcome.
+              </div>
+            </div>
+
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--muted)', fontStyle: 'italic', marginTop: '4px' }}>
-              Projections use published conversion research and industry cost averages. Not a performance guarantee from ARX Systems.
+              ARX Systems does not guarantee any financial outcome. This tool models operational load, not recoverable revenue.
             </p>
           </div>
         </motion.div>
