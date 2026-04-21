@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 interface QualificationGateProps {
@@ -41,6 +42,7 @@ function OptionButton({ label, selected, onClick }: { label: string; selected: b
 
 export default function QualificationGate({ onApply }: QualificationGateProps) {
   const shouldReduce = useReducedMotion();
+  const router = useRouter();
   const [q1, setQ1] = useState<Option | null>(null);
   const [q2, setQ2] = useState<Option | null>(null);
   const [q3, setQ3] = useState<Option | null>(null);
@@ -54,6 +56,13 @@ export default function QualificationGate({ onApply }: QualificationGateProps) {
     setResult(qualified ? 'qualified' : 'waitlist');
   };
 
+  const applyWithAnswers = () => {
+    const params = new URLSearchParams();
+    if (q1) params.set('leads', q1);
+    if (q3) params.set('challenge', q3);
+    router.push(`/apply?${params.toString()}`);
+  };
+
   if (result === 'qualified') {
     return (
       <AnimatePresence>
@@ -63,7 +72,7 @@ export default function QualificationGate({ onApply }: QualificationGateProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={spring}
         >
-          <QualifiedPricing onApply={onApply} />
+          <QualifiedPricing onApply={applyWithAnswers} />
         </motion.div>
       </AnimatePresence>
     );

@@ -1,5 +1,7 @@
-import { useState } from 'react';
+'use client';
+
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Nav from '@/components/Nav';
 import GalenHero from '@/components/GalenHero';
 import GalenProblem from '@/components/GalenProblem';
@@ -9,34 +11,31 @@ import GalenCalculator from '@/components/GalenCalculator';
 import GalenAccess from '@/components/GalenAccess';
 import FounderSection from '@/components/FounderSection';
 import Footer from '@/components/Footer';
-import GalenForm from '@/components/GalenForm';
 
 export default function Galen() {
-  const [formOpen, setFormOpen] = useState(false);
-  const open = () => setFormOpen(true);
-  const close = () => setFormOpen(false);
+  const router = useRouter();
+  const inquire = () => router.push('/apply/galen');
 
   return (
     <>
       <Head>
-        <title>Galen — ARX Systems</title>
-        <meta name="description" content="Galen: the clinical implementation of AIMS. Insurance defense, live session scribing, claims audit, and front desk triage — in development by ARX Systems." />
+        <title>Galen — Clinical AI Operating System | ARX Systems</title>
+        <meta name="description" content="Galen is the clinical implementation of AIMS for private medical practices. Insurance defense, ambient scribing, EHR integration. In development by ARX Systems." />
       </Head>
 
-      <Nav page="galen" onApply={open} />
+      <Nav page="galen" onApply={inquire} />
 
       <main>
-        <GalenHero onInquire={open} />
+        <GalenHero onInquire={inquire} />
         <GalenProblem />
-        <GalenArms onInquire={open} />
+        <GalenArms onInquire={inquire} />
         <GalenSecurity />
         <GalenCalculator />
-        <GalenAccess onInquire={open} />
-        <FounderSection onApply={open} />
+        <GalenAccess onInquire={inquire} />
+        <FounderSection onApply={inquire} />
       </main>
 
-      <Footer onApply={open} />
-      <GalenForm isOpen={formOpen} onClose={close} />
+      <Footer onApply={inquire} />
     </>
   );
 }

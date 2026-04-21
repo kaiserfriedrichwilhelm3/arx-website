@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
 import WhatIsAIMS from '@/components/WhatIsAIMS';
@@ -12,35 +12,32 @@ import Calculator from '@/components/Calculator';
 import QualificationGate from '@/components/QualificationGate';
 import FounderSection from '@/components/FounderSection';
 import Footer from '@/components/Footer';
-import AIMSForm from '@/components/AIMSForm';
 
 export default function AIMSPage() {
-  const [formOpen, setFormOpen] = useState(false);
-  const open = () => setFormOpen(true);
-  const close = () => setFormOpen(false);
+  const router = useRouter();
+  const apply = () => router.push('/apply');
 
   return (
     <>
       <Head>
-        <title>AIMS — ARX Systems</title>
-        <meta name="description" content="AIMS: the agentic operating layer for modern business. Voice management, revenue intelligence, lead qualification, and more. Alpha 1.0 in development by ARX Systems." />
+        <title>AIMS — The Agentic Operating Layer | ARX Systems</title>
+        <meta name="description" content="AIMS is the agentic operating layer for modern business. Voice management, revenue intelligence, lead qualification — one deterministic system. Alpha 1.0 in development." />
       </Head>
 
-      <Nav page="aims" onApply={open} />
+      <Nav page="aims" onApply={apply} />
 
       <main>
-        <Hero onApply={open} />
+        <Hero onApply={apply} />
         <WhatIsAIMS />
         <HowItWorks />
-        <AIMAArms onApply={open} />
-        <IndustrySuite onAtlasInterest={open} />
+        <AIMAArms onApply={apply} />
+        <IndustrySuite onAtlasInterest={apply} />
         <Calculator />
-        <QualificationGate onApply={open} />
-        <FounderSection onApply={open} />
+        <QualificationGate onApply={apply} />
+        <FounderSection onApply={apply} />
       </main>
 
-      <Footer onApply={open} />
-      <AIMSForm isOpen={formOpen} onClose={close} />
+      <Footer onApply={apply} />
     </>
   );
 }

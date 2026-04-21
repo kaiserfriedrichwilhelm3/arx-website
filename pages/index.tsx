@@ -11,8 +11,8 @@ export default function Landing() {
   return (
     <>
       <Head>
-        <title>ARX Systems — AIMS + Galen</title>
-        <meta name="description" content="The agentic AI operating layer for modern business and clinical medicine. One Brain. Multiple Arms. AIMS Alpha 1.0 in development." />
+        <title>ARX Systems — Agentic Operating Layer for Modern Business</title>
+        <meta name="description" content="ARX Systems builds AIMS — the agentic operating layer for modern business — and Galen, its clinical implementation for private medical practices. One Brain. Multiple Arms." />
       </Head>
 
       <div style={{ minHeight: '100vh', background: 'var(--obsidian)', display: 'flex', flexDirection: 'column', position: 'relative' }}>
