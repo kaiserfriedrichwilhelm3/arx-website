@@ -40,8 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# legacy static HTML files (replaced by Next.js)
-index.html
+# legacy static HTML files
 business.html
 medical.html
 pricing.html

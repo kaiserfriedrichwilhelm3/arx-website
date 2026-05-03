@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Galen — AI Receptionist for Medical Practices · ARX Systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0A1628;
+    --navy-2:#142238;
+    --navy-3:#1c2c45;
+    --ink:#0E1218;
+    --ink-2:#2a2f38;
+    --muted:#6b7280;
+    --muted-2:#9aa3ad;
+    --bg:#F7F6F2;
+    --bg-2:#EDEBE3;
+    --line:#E2DFD5;
+    --line-2:#D5D2C6;
+    --gold:#C8A35C;
+    --gold-2:#B6913F;
+    --white:#ffffff;
+    --ok:#3a8a5e;
+    --warn:#c2823a;
+    --shadow: 0 1px 2px rgba(10,22,40,.04), 0 8px 24px rgba(10,22,40,.06);
+    --shadow-lg: 0 1px 2px rgba(10,22,40,.05), 0 24px 60px rgba(10,22,40,.10);
+    --radius: 6px;
+    --radius-lg: 10px;
+    --maxw: 1200px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter', system-ui, -apple-system, Segoe UI, Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::selection{background:var(--navy);color:#fff}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+  @media (max-width:640px){ .wrap{padding:0 20px} }
+
+  /* ---------- Nav ---------- */
+  .nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,246,242,.82);
+    backdrop-filter:saturate(140%) blur(10px);
+    -webkit-backdrop-filter:saturate(140%) blur(10px);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .nav.scrolled{border-bottom-color:var(--line); background:rgba(247,246,242,.92)}
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    height:72px;
+  }
+  .logo{display:flex;flex-direction:column;line-height:1;gap:3px}
+  .logo .parent{
+    font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  .logo .product{
+    font-family:'Newsreader', Georgia, serif;
+    font-size:24px;font-weight:500;letter-spacing:-.01em;color:var(--ink);
+  }
+  .nav-links{display:flex;gap:32px;align-items:center}
+  .nav-links a{
+    font-size:14px;color:var(--ink-2);font-weight:450;
+    transition:color .15s ease;
+  }
+  .nav-links a:hover{color:var(--navy)}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    height:40px;padding:0 18px;border-radius:var(--radius);
+    font-size:14px;font-weight:500;letter-spacing:.005em;
+    transition:transform .12s ease, background .15s ease, color .15s ease, box-shadow .15s ease;
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--navy);color:#fff}
+  .btn-primary:hover{background:var(--navy-2);transform:translateY(-1px);box-shadow:0 6px 16px rgba(10,22,40,.18)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--ink);background:#fff}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-gold:hover{background:var(--gold-2);color:#fff}
+  .btn-lg{height:48px;padding:0 22px;font-size:15px}
+  .btn .arr{transition:transform .15s ease}
+  .btn:hover .arr{transform:translateX(3px)}
+
+  .menu-toggle{display:none}
+  .nav-mobile{display:none;border-top:1px solid var(--line);background:var(--bg)}
+  @media (max-width:880px){
+    .nav-links{display:none}
+    .menu-toggle{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--line-2);border-radius:6px}
+    .nav-mobile.open{display:block}
+    .nav-mobile a{display:block;padding:14px 20px;font-size:15px;border-bottom:1px solid var(--line)}
+    .nav-mobile .btn{margin:14px 20px;display:flex;justify-content:center}
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{padding:80px 0 100px;position:relative}
+  @media (max-width:880px){.hero{padding:48px 0 64px}}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:72px;align-items:center}
+  @media (max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:48px}}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:500;
+    margin-bottom:24px;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold)}
+  h1.hero-title{
+    font-family:'Newsreader', Georgia, serif;
+    font-weight:500;
+    font-size:clamp(40px, 6vw, 72px);
+    line-height:1.02;
+    letter-spacing:-.022em;
+    margin:0 0 24px;
+    color:var(--ink);
+    text-wrap:pretty;
+  }
+  h1.hero-title em{font-style:italic;color:var(--navy)}
+  .hero-sub{
+    font-size:18px;line-height:1.55;color:var(--ink-2);
+    max-width:540px;margin:0 0 36px;
+  }
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-meta{
+    display:flex;gap:32px;margin-top:48px;padding-top:28px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--muted);
+  }
+  .hero-meta strong{display:block;color:var(--ink);font-size:15px;font-weight:500;margin-bottom:2px;font-family:'Newsreader',serif}
+
+  /* ---------- Dashboard mock ---------- */
+  .mock{
+    background:#fff;border-radius:14px;
+    box-shadow:var(--shadow-lg);
+    border:1px solid var(--line);
+    overflow:hidden;
+    position:relative;
+  }
+  .mock-bar{
+    display:flex;align-items:center;gap:8px;
+    padding:12px 16px;border-bottom:1px solid var(--line);
+    background:#FAFAF6;
+  }
+  .mock-bar .dots{display:flex;gap:6px}
+  .mock-bar .dots span{width:10px;height:10px;border-radius:50%;background:#E1DDD0}
+  .mock-bar .url{
+    flex:1;text-align:center;font-family:'JetBrains Mono',monospace;
+    font-size:11px;color:var(--muted);letter-spacing:.02em;
+  }
+  .mock-body{padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .mock-card{
+    border:1px solid var(--line);border-radius:8px;padding:14px;background:#fff;
+  }
+  .mock-card .label{
+    font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500;
+  }
+  .mock-card .val{
+    font-family:'Newsreader',serif;font-size:28px;font-weight:500;margin-top:4px;color:var(--ink);
+  }
+  .mock-card .delta{font-size:11px;color:var(--ok);margin-top:2px}
+  .mock-feed{
+    grid-column:1/-1;border:1px solid var(--line);border-radius:8px;background:#fff;
+    overflow:hidden;
+  }
+  .mock-feed-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:12px 14px;border-bottom:1px solid var(--line);
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:500;
+  }
+  .mock-feed-head .live{display:flex;align-items:center;gap:6px;color:var(--ok)}
+  .mock-feed-head .live .pulse{
+    width:6px;height:6px;border-radius:50%;background:var(--ok);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.85)}}
+  .feed-row{
+    display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;
+    padding:11px 14px;border-bottom:1px solid var(--line);font-size:12.5px;
+  }
+  .feed-row:last-child{border-bottom:none}
+  .feed-row.fresh{background:#FAF7EE}
+  .feed-row .who{color:var(--ink);font-weight:500}
+  .feed-row .reason{color:var(--muted)}
+  .feed-row .tag{
+    font-size:10px;font-weight:500;letter-spacing:.04em;
+    padding:3px 7px;border-radius:4px;text-transform:uppercase;
+  }
+  .tag.ai{background:#EDEFF5;color:var(--navy)}
+  .tag.human{background:#F2EEE2;color:var(--gold-2)}
+  .tag.booked{background:#E8F1EC;color:var(--ok)}
+  .feed-row time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+  /* ---------- Section base ---------- */
+  section{padding:120px 0;border-top:1px solid var(--line)}
+  @media (max-width:880px){section{padding:72px 0}}
+  .section-eyebrow{
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:500;
+    margin-bottom:18px;display:flex;align-items:center;gap:10px;
+  }
+  .section-eyebrow .num{font-family:'JetBrains Mono',monospace;color:var(--gold-2)}
+  h2.section-title{
+    font-family:'Newsreader',serif;font-weight:500;
+    font-size:clamp(32px, 4.4vw, 52px);line-height:1.05;letter-spacing:-.02em;
+    margin:0 0 24px;color:var(--ink);text-wrap:pretty;max-width:820px;
+  }
+  .section-lede{font-size:18px;color:var(--ink-2);max-width:680px;margin:0 0 56px}
+
+  /* ---------- Problem ---------- */
+  .problem-stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+    border-top:1px solid var(--line);
+  }
+  @media (max-width:800px){.problem-stats{grid-template-columns:1fr}}
+  .stat{
+    padding:36px 32px 36px 0;border-right:1px solid var(--line);
+  }
+  .stat:last-child{border-right:none}
+  @media (max-width:800px){
+    .stat{border-right:none;border-bottom:1px solid var(--line);padding:32px 0}
+    .stat:last-child{border-bottom:none}
+  }
+  .stat .num{
+    font-family:'Newsreader',serif;font-weight:500;
+    font-size:64px;line-height:1;letter-spacing:-.02em;color:var(--navy);
+    margin-bottom:14px;
+  }
+  .stat .desc{font-size:15px;color:var(--ink-2);max-width:280px;line-height:1.5}
+  .problem-note{
+    margin-top:56px;padding:32px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+    font-size:18px;line-height:1.55;color:var(--ink-2);max-width:760px;
+  }
+  .problem-note span{color:var(--ink);font-weight:500}
+
+  /* ---------- How It Works ---------- */
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:24px}
+  @media (max-width:880px){.how-grid{grid-template-columns:1fr;gap:20px}}
+  .how-step{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:36px 28px;position:relative;transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .how-step:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .how-step .step-num{
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold-2);
+    letter-spacing:.05em;margin-bottom:24px;
+  }
+  .how-step h3{
+    font-family:'Newsreader',serif;font-size:28px;font-weight:500;
+    letter-spacing:-.01em;margin:0 0 12px;color:var(--ink);
+  }
+  .how-step p{font-size:15px;color:var(--ink-2);margin:0;line-height:1.55}
+  .how-icon{
+    width:44px;height:44px;border:1px solid var(--line-2);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;
+    background:var(--bg);
+  }
+
+  /* ---------- Language ---------- */
+  .language{background:var(--bg-2)}
+  .language-headline em{font-style:italic;color:var(--gold-2)}
+  .lang-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:start;margin-top:8px}
+  @media (max-width:980px){.lang-grid{grid-template-columns:1fr;gap:40px}}
+  .lang-callout{
+    background:var(--navy);color:#fff;border-radius:12px;padding:32px;
+    box-shadow:var(--shadow-lg);position:relative;
+  }
+  .lang-callout-label{
+    font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:rgba(255,255,255,.55);font-weight:500;margin-bottom:20px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .lang-callout-label::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  .lang-callout-body{display:flex;flex-direction:column;gap:14px}
+  .lang-line{display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center}
+  .lang-flag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;
+    color:var(--gold);letter-spacing:.05em;
+    border:1px solid rgba(255,255,255,.18);border-radius:4px;
+    padding:4px 0;text-align:center;
+  }
+  .lang-bar{height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+  .lang-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),#e2c285);border-radius:2px}
+  .lang-name{font-size:14px;color:#fff;font-weight:450}
+  .lang-callout-foot{
+    margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);
+    font-size:13px;color:rgba(255,255,255,.6);line-height:1.5;
+  }
+  .lang-points{display:flex;flex-direction:column;gap:0}
+  .lang-point{padding:24px 0;border-top:1px solid var(--line)}
+  .lang-point:first-child{border-top:none;padding-top:0}
+  .lang-point-num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-2);
+    letter-spacing:.05em;margin-bottom:10px;
+  }
+  .lang-point h4{
+    font-family:'Newsreader',serif;font-size:22px;font-weight:500;
+    margin:0 0 8px;color:var(--ink);letter-spacing:-.01em;
+  }
+  .lang-point p{font-size:15px;color:var(--ink-2);margin:0;line-height:1.55}
+
+  /* ---------- Pricing ---------- */
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}
+  @media (max-width:980px){.price-grid{grid-template-columns:1fr}}
+  .tier{
+    background:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:36px 32px;display:flex;flex-direction:column;gap:24px;
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .tier:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:var(--line-2)}
+  .tier.featured{
+    background:var(--navy);color:#fff;border-color:var(--navy);position:relative;
+  }
+  .tier.featured .tier-name,.tier.featured .tier-price,.tier.featured .tier-best{color:#fff}
+  .tier.featured .tier-setup{color:rgba(255,255,255,.6)}
+  .tier.featured .tier-feature{border-color:rgba(255,255,255,.12)}
+  .tier.featured .tier-feature .k{color:rgba(255,255,255,.55)}
+  .tier.featured .tier-feature .v{color:#fff}
+  .tier.featured .tier-flag{
+    position:absolute;top:-12px;left:32px;
+    background:var(--gold);color:var(--navy);
+    font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;
+    padding:5px 10px;border-radius:4px;
+  }
+  .tier-name{
+    font-family:'Newsreader',serif;font-size:24px;font-weight:500;color:var(--ink);
+    letter-spacing:-.01em;
+  }
+  .tier-price{
+    font-family:'Newsreader',serif;font-size:42px;font-weight:500;color:var(--ink);
+    letter-spacing:-.02em;line-height:1;
+  }
+  .tier-price .per{font-size:15px;color:var(--muted);font-family:'Inter',sans-serif;font-weight:400;margin-left:4px}
+  .tier-setup{font-size:13px;color:var(--muted);margin-top:6px}
+  .tier-features{display:flex;flex-direction:column;gap:0;flex:1}
+  .tier-feature{
+    display:flex;flex-direction:column;gap:3px;padding:14px 0;border-top:1px solid var(--line);
+  }
+  .tier-feature:first-child{border-top:none;padding-top:0}
+  .tier-feature .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .tier-feature .v{font-size:14px;color:var(--ink);line-height:1.45}
+  .tier-best{
+    font-size:13px;color:var(--ink-2);padding:14px 0;border-top:1px solid var(--line);
+    font-style:italic;font-family:'Newsreader',serif;
+  }
+  .tier .btn{justify-content:center;width:100%}
+  .tier.featured .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.25)}
+  .tier.featured .btn-ghost:hover{background:rgba(255,255,255,.08);border-color:#fff}
+
+  /* ---------- Security ---------- */
+  .security{
+    background:var(--navy);color:#fff;border-top:none;
+    position:relative;overflow:hidden;
+  }
+  .security::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      radial-gradient(circle at 85% 15%, rgba(200,163,92,.06), transparent 40%),
+      radial-gradient(circle at 15% 85%, rgba(200,163,92,.04), transparent 40%);
+    pointer-events:none;
+  }
+  .security .wrap{position:relative}
+  .security .section-eyebrow{color:rgba(255,255,255,.55)}
+  .security .section-eyebrow .num{color:var(--gold)}
+  .security h2.section-title{color:#fff}
+  .security .section-lede{color:rgba(255,255,255,.7)}
+  .trust-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:0;margin-top:24px;
+    border-top:1px solid rgba(255,255,255,.1);
+  }
+  @media (max-width:720px){.trust-grid{grid-template-columns:1fr}}
+  .trust{
+    padding:32px 32px 32px 0;border-bottom:1px solid rgba(255,255,255,.1);
+    border-right:1px solid rgba(255,255,255,.1);
+    display:flex;gap:20px;align-items:flex-start;
+  }
+  .trust:nth-child(2n){border-right:none;padding-right:0;padding-left:32px}
+  @media (max-width:720px){.trust{border-right:none;padding:24px 0!important}}
+  .trust-icon{
+    width:36px;height:36px;border:1px solid rgba(255,255,255,.18);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold);
+  }
+  .trust h4{
+    font-family:'Newsreader',serif;font-size:20px;font-weight:500;color:#fff;
+    margin:0 0 6px;letter-spacing:-.01em;
+  }
+  .trust p{font-size:14px;color:rgba(255,255,255,.65);margin:0;line-height:1.5}
+  .security-quote{
+    margin-top:48px;padding-top:32px;border-top:1px solid rgba(255,255,255,.1);
+    font-family:'Newsreader',serif;font-size:20px;font-style:italic;
+    color:rgba(255,255,255,.85);max-width:720px;line-height:1.45;
+  }
+
+  /* ---------- Why ARX ---------- */
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+  @media (max-width:880px){.why-grid{grid-template-columns:1fr;gap:40px}}
+  .why-grid p{font-size:18px;line-height:1.6;color:var(--ink-2);margin:0}
+  .why-grid p strong{color:var(--ink);font-weight:500}
+  .why-list{display:flex;flex-direction:column;gap:0}
+  .why-list li{
+    list-style:none;padding:24px 0;border-top:1px solid var(--line);
+    display:flex;gap:18px;align-items:flex-start;
+  }
+  .why-list li:first-child{border-top:none;padding-top:0}
+  .why-list .marker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold-2);
+    flex-shrink:0;padding-top:4px;
+  }
+  .why-list .body{font-size:16px;color:var(--ink);line-height:1.5}
+  .why-list .body em{display:block;font-style:normal;color:var(--muted);font-size:13px;margin-top:4px}
+
+  /* ---------- Form ---------- */
+  .form-section{background:var(--bg-2)}
+  .form-wrap{
+    max-width:680px;margin:0 auto;text-align:center;
+  }
+  .form-wrap .section-eyebrow{justify-content:center}
+  .form-wrap h2{margin-left:auto;margin-right:auto;text-align:center}
+  .form-wrap .section-lede{margin-left:auto;margin-right:auto;text-align:center}
+  .form{
+    background:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:40px;text-align:left;box-shadow:var(--shadow);
+    margin-top:8px;
+  }
+  @media (max-width:640px){.form{padding:28px 24px}}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+  @media (max-width:640px){.form-row{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;
+  }
+  .field input, .field select, .field textarea{
+    font-family:inherit;font-size:15px;color:var(--ink);
+    background:#fff;border:1px solid var(--line-2);border-radius:6px;
+    padding:12px 14px;outline:none;transition:border-color .15s ease, box-shadow .15s ease;
+    width:100%;
+  }
+  .field textarea{resize:vertical;min-height:96px}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,22,40,.08);
+  }
+  .field.error input, .field.error select{border-color:#b94545;box-shadow:0 0 0 3px rgba(185,69,69,.08)}
+  .field .err{font-size:12px;color:#b94545;margin-top:2px}
+  .form-submit{margin-top:8px}
+  .form-submit .btn{width:100%;justify-content:center}
+  .form-note{
+    margin-top:18px;font-size:13px;color:var(--muted);text-align:center;line-height:1.5;
+  }
+  .form-success{
+    text-align:center;padding:24px 8px;
+  }
+  .form-success .check{
+    width:56px;height:56px;border-radius:50%;background:var(--navy);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+  }
+  .form-success h3{font-family:'Newsreader',serif;font-size:28px;font-weight:500;margin:0 0 10px;letter-spacing:-.01em}
+  .form-success p{color:var(--ink-2);margin:0;font-size:15px}
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--navy);color:rgba(255,255,255,.7);
+    padding:64px 0 40px;
+  }
+  .foot-grid{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:32px;align-items:start;
+  }
+  @media (max-width:780px){.foot-grid{grid-template-columns:1fr;gap:32px;text-align:left}}
+  .foot-logo .parent{color:rgba(255,255,255,.5)}
+  .foot-logo .product{color:#fff}
+  .foot-info{font-size:13px;color:rgba(255,255,255,.5);margin-top:14px;line-height:1.6}
+  .foot-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap}
+  @media (max-width:780px){.foot-links{justify-content:flex-start}}
+  .foot-links a{font-size:14px;color:rgba(255,255,255,.7)}
+  .foot-links a:hover{color:#fff}
+  .foot-meta{display:flex;gap:18px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+  @media (max-width:780px){.foot-meta{justify-content:flex-start}}
+  .foot-meta a{font-size:13px;color:rgba(255,255,255,.5)}
+  .foot-meta a:hover{color:#fff}
+  .foot-bottom{
+    margin-top:48px;padding-top:24px;border-top:1px solid rgba(255,255,255,.08);
+    font-size:12px;color:rgba(255,255,255,.4);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  }
+
+  /* ---------- Reveal animation ---------- */
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== NAV ============== -->
+<header class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="logo" aria-label="ARX Systems Galen home">
+      <span class="parent">ARX Systems</span>
+      <span class="product">Galen</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#how">How It Works</a>
+      <a href="#language">Languages</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#security">Security</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn-primary">Request a Demo</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+  </div>
+  <div class="nav-mobile" id="navMobile">
+    <a href="#how">How It Works</a>
+    <a href="#language">Languages</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#security">Security</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="btn btn-primary">Request a Demo</a>
+  </div>
+</header>
+
+<a id="top"></a>
+
+<!-- ============== HERO ============== -->
+<section class="hero" style="border-top:none;padding-top:80px">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <div class="eyebrow"><span class="dot"></span> AI Receptionist · Built for Medical Practices</div>
+      <h1 class="hero-title">Your front desk, <em>answered.</em><br/>Every call, every time.</h1>
+      <p class="hero-sub">Galen is an AI call agent built exclusively for medical practices. It books appointments, handles patient inquiries, and gives your team a live dashboard of every call — human and AI.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary btn-lg">Request a Demo <span class="arr">→</span></a>
+        <a href="#how" class="btn btn-ghost btn-lg">See How It Works ↓</a>
+      </div>
+      <div class="hero-meta">
+        <div><strong>Zero-Retention</strong>Architecture</div>
+        <div><strong>BAA</strong>Signed with every contract</div>
+        <div><strong>24/7</strong>Always answered</div>
+      </div>
+    </div>
+    <div class="reveal" id="heroMock">
+      <!-- Dashboard mock injected here by JavaScript -->
+    </div>
+  </div>
+</section>
+
+<!-- ============== PROBLEM ============== -->
+<section id="problem">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">01</span> The Problem</div>
+      <h2 class="section-title">Every unanswered call is a patient walking out the door.</h2>
+    </div>
+    <div class="problem-stats reveal">
+      <div class="stat">
+        <div class="num" data-count="67" data-suffix="%">67%</div>
+        <div class="desc">of patients who reach voicemail don't call back.</div>
+      </div>
+      <div class="stat">
+        <div class="num">2–3<span style="font-size:32px;color:var(--muted);font-weight:400"> hrs</span></div>
+        <div class="desc">lost per day, per provider, to administrative calls.</div>
+      </div>
+      <div class="stat">
+        <div class="num">$150K<span style="font-size:32px;color:var(--muted);font-weight:400">+</span></div>
+        <div class="desc">in annual revenue lost per practice to missed patient contacts.</div>
+      </div>
+    </div>
+    <p class="problem-note reveal"><span>Your front desk is the first impression every patient has of your practice.</span> When calls go unanswered, patients leave. Galen makes sure that never happens.</p>
+  </div>
+</section>
+
+<!-- ============== HOW IT WORKS ============== -->
+<section id="how">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">02</span> How It Works</div>
+      <h2 class="section-title">Three steps. No staff training. No new hardware.</h2>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal">
+        <div class="how-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="step-num">STEP 01</div>
+        <h3>Galen answers</h3>
+        <p>Every inbound call handled instantly, 24/7. No hold music. No voicemail. Patients hear a calm, professional voice on the first ring.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+        </div>
+        <div class="step-num">STEP 02</div>
+        <h3>Galen books</h3>
+        <p>Appointments confirmed, FAQs resolved, patients routed correctly. Direct integration with your existing scheduling system.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0A1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 5-5"/></svg>
+        </div>
+        <div class="step-num">STEP 03</div>
+        <h3>You see everything</h3>
+        <p>Live dashboard showing every call, every outcome, every metric. AI and human calls in one place. No black boxes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== LANGUAGE ============== -->
+<section id="language" class="language">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">03</span> Multi-Language</div>
+      <h2 class="section-title language-headline">Language is no longer a barrier. <em>It is a pathway.</em></h2>
+      <p class="section-lede">Galen answers in the language each patient speaks. Every call is handled with the same warmth, the same accuracy, and the same clinical care — across languages your front desk has never been able to staff for.</p>
+    </div>
+    <div class="lang-grid reveal">
+      <div class="lang-callout">
+        <div class="lang-callout-label">Detected on connect</div>
+        <div class="lang-callout-body">
+          <div class="lang-line">
+            <span class="lang-flag">EN</span>
+            <div class="lang-bar"><div class="lang-bar-fill" style="width:96%"></div></div>
+            <span class="lang-name">English</span>
+          </div>
+          <div class="lang-line">
+            <span class="lang-flag">ES</span>
+            <div class="lang-bar"><div class="lang-bar-fill" style="width:88%"></div></div>
+            <span class="lang-name">Español</span>
+          </div>
+          <div class="lang-line">
+            <span class="lang-flag">HT</span>
+            <div class="lang-bar"><div class="lang-bar-fill" style="width:74%"></div></div>
+            <span class="lang-name">Kreyòl Ayisyen</span>
+          </div>
+          <div class="lang-line">
+            <span class="lang-flag">PT</span>
+            <div class="lang-bar"><div class="lang-bar-fill" style="width:69%"></div></div>
+            <span class="lang-name">Português</span>
+          </div>
+          <div class="lang-line">
+            <span class="lang-flag">ZH</span>
+            <div class="lang-bar"><div class="lang-bar-fill" style="width:62%"></div></div>
+            <span class="lang-name">中文</span>
+          </div>
+        </div>
+        <div class="lang-callout-foot">+ 30 more, including Tagalog, Vietnamese, Arabic, Russian, French.</div>
+      </div>
+      <div class="lang-points">
+        <div class="lang-point">
+          <div class="lang-point-num">01</div>
+          <h4>Auto-detect on the first word</h4>
+          <p>Galen identifies the patient's language from their first sentence and adapts in real time. No phone-tree menus. No "press 2 for Spanish."</p>
+        </div>
+        <div class="lang-point">
+          <div class="lang-point-num">02</div>
+          <h4>Clinical vocabulary in every language</h4>
+          <p>Symptoms, medications, insurance terms — trained on medical context, not generic translation. Patients describe what hurts in their own words.</p>
+        </div>
+        <div class="lang-point">
+          <div class="lang-point-num">03</div>
+          <h4>Your dashboard, one language</h4>
+          <p>Every conversation is transcribed and surfaced in English on your team's dashboard, with the original audio preserved for review.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== PRICING ============== -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">04</span> Pricing</div>
+      <h2 class="section-title">Three tiers. Transparent pricing.</h2>
+      <p class="section-lede">Choose the layer that fits your practice today. Move up when you're ready. No long-term contracts.</p>
+    </div>
+    <div class="price-grid">
+      <div class="tier reveal">
+        <div>
+          <div class="tier-name">The Receptionist</div>
+          <div class="tier-price" style="margin-top:14px">$400<span class="per">/mo</span></div>
+          <div class="tier-setup">+ $500 one-time setup</div>
+        </div>
+        <div class="tier-features">
+          <div class="tier-feature"><span class="k">Agents</span><span class="v">1 AI call agent</span></div>
+          <div class="tier-feature"><span class="k">Dashboard</span><span class="v">Basic — call log, bookings, missed calls</span></div>
+          <div class="tier-best">Best for single-provider practices.</div>
+        </div>
+        <a href="#contact" class="btn btn-ghost">Get Started <span class="arr">→</span></a>
+      </div>
+
+      <div class="tier featured reveal">
+        <div class="tier-flag">Most Popular</div>
+        <div>
+          <div class="tier-name">The Command Center</div>
+          <div class="tier-price" style="margin-top:14px">$900<span class="per">/mo</span></div>
+          <div class="tier-setup">+ $1,500 one-time setup</div>
+        </div>
+        <div class="tier-features">
+          <div class="tier-feature"><span class="k">Agents</span><span class="v">Multiple AI agents + human call ingestion</span></div>
+          <div class="tier-feature"><span class="k">Dashboard</span><span class="v">Advanced — all calls, analytics, peak hours, drop-offs</span></div>
+          <div class="tier-best" style="border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.7)">Best for multi-provider or high-volume practices.</div>
+        </div>
+        <a href="#contact" class="btn btn-gold">Get Started <span class="arr">→</span></a>
+      </div>
+
+      <div class="tier reveal">
+        <div>
+          <div class="tier-name">The Full Stack</div>
+          <div class="tier-price" style="margin-top:14px">$1,500<span class="per">–2,000/mo</span></div>
+          <div class="tier-setup">+ $3,000 one-time setup</div>
+        </div>
+        <div class="tier-features">
+          <div class="tier-feature"><span class="k">Agents</span><span class="v">Full practice communication layer</span></div>
+          <div class="tier-feature"><span class="k">Dashboard</span><span class="v">Fully integrated, new website included</span></div>
+          <div class="tier-best">Best for practices ready for a complete digital upgrade.</div>
+        </div>
+        <a href="#contact" class="btn btn-ghost">Request a Consultation <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== SECURITY ============== -->
+<section id="security" class="security">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">05</span> Security</div>
+      <h2 class="section-title">Built for clinical environments. No shortcuts.</h2>
+    </div>
+    <div class="trust-grid reveal">
+      <div class="trust">
+        <div class="trust-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h4>Designed for clinical data security</h4>
+          <p>Hosted on infrastructure built for protected health information from the ground up. Architecture aligned with HIPAA Security Rule requirements.</p>
+        </div>
+      </div>
+      <div class="trust">
+        <div class="trust-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        </div>
+        <div>
+          <h4>BAA provided with every contract</h4>
+          <p>Business Associate Agreement signed before a single call routes through our system.</p>
+        </div>
+      </div>
+      <div class="trust">
+        <div class="trust-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="6" cy="6" r="1.5" fill="currentColor"/><circle cx="6" cy="12" r="1.5" fill="currentColor"/><circle cx="6" cy="18" r="1.5" fill="currentColor"/></svg>
+        </div>
+        <div>
+          <h4>Zero patient data retained</h4>
+          <p>Patient information is not stored after the session ends. Transcripts purged on a strict schedule.</p>
+        </div>
+      </div>
+      <div class="trust">
+        <div class="trust-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <h4>End-to-end AES-256 encryption</h4>
+          <p>Audio, transcripts, and metadata encrypted in transit and at rest. Keys rotated regularly.</p>
+        </div>
+      </div>
+    </div>
+    <p class="security-quote reveal">"Every provider Galen connects with signs a Business Associate Agreement. Compliance is architecture, not policy."</p>
+  </div>
+</section>
+
+<!-- ============== WHY ARX ============== -->
+<section id="why">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="section-eyebrow"><span class="num">06</span> Why ARX Systems</div>
+      <h2 class="section-title">A direct line to engineers who know clinical environments.</h2>
+    </div>
+    <div class="why-grid">
+      <p class="reveal">Galen is built by ARX Systems — a founder-led team in Miami with deep experience shipping voice and clinical-AI systems for healthcare. <strong>You get a direct line to the engineers who built your stack</strong>, and answers come back in hours, not days.</p>
+      <ul class="why-list reveal">
+        <li>
+          <div class="marker">01</div>
+          <div class="body">Same-day response on every support thread.<em>Shared Slack or Teams channel with the engineering team — not a ticketing queue.</em></div>
+        </li>
+        <li>
+          <div class="marker">02</div>
+          <div class="body">Engineers with hands-on healthcare experience.<em>EHR integrations and clinical voice systems shipped in production.</em></div>
+        </li>
+        <li>
+          <div class="marker">03</div>
+          <div class="body">Configuration changes deployed the same day.<em>New scripts, hours, or routing rules go live in hours, not release cycles.</em></div>
+        </li>
+        <li>
+          <div class="marker">04</div>
+          <div class="body">Pilot partners get founding-tier pricing locked for life.<em>First 30 days free. No credit card. No commitment.</em></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FORM ============== -->
+<section id="contact" class="form-section">
+  <div class="wrap">
+    <div class="form-wrap">
+      <div class="reveal">
+        <div class="section-eyebrow"><span class="num">07</span> Contact</div>
+        <h2 class="section-title">Request your free front desk audit.</h2>
+        <p class="section-lede">Tell us about your practice. We'll show you exactly how many calls you're missing, and what Galen would do about it.</p>
+      </div>
+      <form class="form reveal" id="inquiryForm" novalidate>
+        <div id="formContent">
+          <div class="form-row">
+            <div class="field">
+              <label for="practice">Practice Name</label>
+              <input id="practice" name="practice" type="text" required />
+            </div>
+            <div class="field">
+              <label for="name">Your Name</label>
+              <input id="name" name="name" type="text" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required />
+            </div>
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input id="phone" name="phone" type="tel" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="specialty">Practice Specialty</label>
+              <select id="specialty" name="specialty" required>
+                <option value="">Select…</option>
+                <option>Primary Care / Family Medicine</option>
+                <option>Pediatrics</option>
+                <option>Dermatology</option>
+                <option>Orthopedics</option>
+                <option>Cardiology</option>
+                <option>OB/GYN</option>
+                <option>Dental</option>
+                <option>Ophthalmology</option>
+                <option>Mental Health / Psychiatry</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="volume">Monthly Call Volume</label>
+              <select id="volume" name="volume" required>
+                <option value="">Select…</option>
+                <option>Under 200</option>
+                <option>200–500</option>
+                <option>500+</option>
+              </select>
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <label for="message">Message <span style="text-transform:none;letter-spacing:0;color:var(--muted-2)">(optional)</span></label>
+            <textarea id="message" name="message" rows="4"></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Request Your Free Front Desk Audit <span class="arr">→</span></button>
+          </div>
+          <p class="form-note" id="formNote">We respond within 24 hours. No sales scripts. Just a direct conversation about your practice.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-logo logo">
+        <span class="parent">ARX Systems</span>
+        <span class="product">Galen</span>
+        <div class="foot-info">Miami, FL · © 2026<br/>Galen is a product of ARX Systems.<br/>Additional verticals coming.</div>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="#how">How It Works</a>
+        <a href="#language">Languages</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#security">Security</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="foot-meta">
+        <a href="#" aria-label="LinkedIn">LinkedIn ↗</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>ARX Systems · Miami, FL</span>
+      <span>arx-systems.com</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // --- Nav scroll state ---
+  const nav = document.getElementById('nav');
+  const onScroll = () => {
+    if (window.scrollY > 8) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  };
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // --- Mobile menu ---
+  const mt = document.getElementById('menuToggle');
+  const nm = document.getElementById('navMobile');
+  mt.addEventListener('click', () => {
+    const open = nm.classList.toggle('open');
+    mt.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nm.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nm.classList.remove('open')));
+
+  // --- Reveal on scroll ---
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold: 0.08});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // --- Form with email submission ---
+  const form = document.getElementById('inquiryForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let valid = true;
+    form.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
+    form.querySelectorAll('.err').forEach(n => n.remove());
+    const requireds = ['practice','name','email','phone','specialty','volume'];
+    requireds.forEach(id => {
+      const el = document.getElementById(id);
+      const val = (el.value || '').trim();
+      let err = '';
+      if (!val) err = 'Required';
+      else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)) err = 'Enter a valid email';
+      else if (id === 'phone' && val.replace(/\D/g,'').length < 7) err = 'Enter a valid phone';
+      if (err) {
+        valid = false;
+        const field = el.closest('.field');
+        field.classList.add('error');
+        const n = document.createElement('div');
+        n.className = 'err'; n.textContent = err;
+        field.appendChild(n);
+      }
+    });
+    if (!valid) return;
+
+    const submitBtn = document.getElementById('submitBtn');
+    const formNote = document.getElementById('formNote');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending…';
+    if (formNote) { formNote.style.color = 'var(--muted)'; formNote.textContent = 'We respond within 24 hours. No sales scripts. Just a direct conversation about your practice.'; }
+
+    try {
+      const resp = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          practice: document.getElementById('practice').value.trim(),
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          specialty: document.getElementById('specialty').value.trim(),
+          volume: document.getElementById('volume').value.trim(),
+          message: (document.getElementById('message').value || '').trim(),
+        }),
+      });
+
+      if (resp.ok) {
+        document.getElementById('formContent').innerHTML = `
+          <div class="form-success">
+            <div class="check">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3>Request received.</h3>
+            <p>You'll hear from a member of the ARX team within 24 hours — usually much sooner.</p>
+          </div>
+        `;
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
+        if (formNote) { formNote.style.color = '#b94545'; formNote.textContent = 'Something went wrong. Please email gabrielcespedes777@gmail.com directly.'; }
+      }
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
+      if (formNote) { formNote.style.color = '#b94545'; formNote.textContent = 'Network error. Please try again or email gabrielcespedes777@gmail.com directly.'; }
+    }
+  });
+
+  // --- Dashboard mock ---
+  const mockHTML = `
+    <div class="mock" role="img" aria-label="Galen dashboard preview">
+      <div class="mock-bar">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="url">galen.arx-systems.com / dashboard</div>
+        <div style="width:36px"></div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-card">
+          <div class="label">Calls Today</div>
+          <div class="val" id="kpi1">142</div>
+          <div class="delta">▲ 18% vs last Tue</div>
+        </div>
+        <div class="mock-card">
+          <div class="label">Booked</div>
+          <div class="val" id="kpi2">61</div>
+          <div class="delta">43% conversion</div>
+        </div>
+        <div class="mock-feed">
+          <div class="mock-feed-head">
+            <span>Live Call Feed</span>
+            <span class="live"><span class="pulse"></span> LIVE</span>
+          </div>
+          <div id="feed">
+            <div class="feed-row fresh"><span class="tag ai">AI</span><span><span class="who">M. Alvarez</span> · <span class="reason">New patient — annual physical</span></span><span class="tag booked">Booked</span><time>0:42</time></div>
+            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">D. Wright</span> · <span class="reason">Refill — lisinopril</span></span><span class="tag booked">Routed</span><time>1:08</time></div>
+            <div class="feed-row"><span class="tag human">HUMAN</span><span><span class="who">J. Park</span> · <span class="reason">Insurance question</span></span><span class="tag booked">Resolved</span><time>3:24</time></div>
+            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">R. Singh</span> · <span class="reason">Follow-up — dermatology</span></span><span class="tag booked">Booked</span><time>4:51</time></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('heroMock').innerHTML = mockHTML;
+
+  // Subtle KPI tick
+  let k1 = 142, k2 = 61;
+  setInterval(() => {
+    if (Math.random() < 0.55) { k1 += 1; document.getElementById('kpi1').textContent = k1; }
+    if (Math.random() < 0.32) { k2 += 1; document.getElementById('kpi2').textContent = k2; }
+  }, 2400);
+</script>
+
+</body>
+</html>
