@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Galen — AI Receptionist for Medical Practices · ARX Systems</title>
+<title>ARX Systems — Galen &amp; Custom AI Solutions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -79,6 +79,11 @@
     transition:color .15s ease;
   }
   .nav-links a:hover{color:var(--navy)}
+  /* Ensure btn text colors are not overridden by nav-links a */
+  .nav-links a.btn-primary{color:#fff}
+  .nav-links a.btn-primary:hover{color:#fff}
+  .nav-links a.btn-gold{color:var(--navy)}
+  .nav-links a.btn-gold:hover{color:#fff}
   .btn{
     display:inline-flex;align-items:center;gap:8px;
     height:40px;padding:0 18px;border-radius:var(--radius);
@@ -105,6 +110,68 @@
     .nav-mobile a{display:block;padding:14px 20px;font-size:15px;border-bottom:1px solid var(--line)}
     .nav-mobile .btn{margin:14px 20px;display:flex;justify-content:center}
   }
+
+  /* ---------- Path selector ---------- */
+  .path-section{
+    padding:64px 0 0;
+    border-top:none;
+  }
+  .path-section-header{
+    text-align:center;margin-bottom:36px;
+  }
+  .path-section-header .pre{
+    font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;margin-bottom:14px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .path-section-header h2{
+    font-family:'Newsreader',serif;font-weight:500;
+    font-size:clamp(26px,3.5vw,40px);letter-spacing:-.02em;
+    color:var(--ink);margin:0;
+  }
+  .path-grid{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:20px;max-width:840px;margin:0 auto;
+  }
+  @media (max-width:640px){.path-grid{grid-template-columns:1fr}}
+  .path-card{
+    background:#fff;border:2px solid var(--line);border-radius:14px;
+    padding:32px 28px 28px;cursor:pointer;
+    transition:border-color .18s ease, box-shadow .18s ease, transform .15s ease;
+    position:relative;
+  }
+  .path-card:hover{border-color:var(--line-2);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .path-card.active{border-color:var(--navy);box-shadow:var(--shadow)}
+  .path-card-badge{
+    font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);font-weight:500;margin-bottom:12px;
+    font-family:'JetBrains Mono',monospace;
+    transition:color .15s ease;
+  }
+  .path-card.active .path-card-badge{color:var(--gold-2)}
+  .path-card-title{
+    font-family:'Newsreader',serif;font-size:28px;font-weight:500;
+    color:var(--ink);margin:0 0 8px;letter-spacing:-.01em;
+  }
+  .path-card p{font-size:14px;color:var(--muted);margin:0 0 20px;line-height:1.55}
+  .path-card-indicator{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:500;color:var(--muted-2);
+    transition:color .15s ease;
+  }
+  .path-card.active .path-card-indicator{color:var(--navy)}
+  .path-card-indicator .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--line-2);flex-shrink:0;
+    transition:background .15s ease;
+  }
+  .path-card.active .path-card-indicator .dot{background:var(--navy)}
+  .path-divider{
+    width:1px;background:var(--line);
+    position:absolute;left:50%;top:0;bottom:0;
+    pointer-events:none;
+  }
+  @media (max-width:640px){.path-divider{display:none}}
 
   /* ---------- Hero ---------- */
   .hero{padding:80px 0 100px;position:relative}
@@ -421,7 +488,7 @@
   .why-list .body{font-size:16px;color:var(--ink);line-height:1.5}
   .why-list .body em{display:block;font-style:normal;color:var(--muted);font-size:13px;margin-top:4px}
 
-  /* ---------- Form ---------- */
+  /* ---------- Form (shared) ---------- */
   .form-section{background:var(--bg-2)}
   .form-wrap{
     max-width:680px;margin:0 auto;text-align:center;
@@ -452,7 +519,7 @@
   .field input:focus, .field select:focus, .field textarea:focus{
     border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,22,40,.08);
   }
-  .field.error input, .field.error select{border-color:#b94545;box-shadow:0 0 0 3px rgba(185,69,69,.08)}
+  .field.error input, .field.error select, .field.error textarea{border-color:#b94545;box-shadow:0 0 0 3px rgba(185,69,69,.08)}
   .field .err{font-size:12px;color:#b94545;margin-top:2px}
   .form-submit{margin-top:8px}
   .form-submit .btn{width:100%;justify-content:center}
@@ -508,36 +575,65 @@
 <!-- ============== NAV ============== -->
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
-    <a href="#top" class="logo" aria-label="ARX Systems Galen home">
+    <a href="#top" class="logo" aria-label="ARX Systems home">
       <span class="parent">ARX Systems</span>
-      <span class="product">Galen</span>
+      <span class="product" id="navProduct">Galen</span>
     </a>
     <nav class="nav-links" aria-label="Primary">
-      <a href="#how">How It Works</a>
-      <a href="#language">Languages</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#security">Security</a>
-      <a href="#contact">Contact</a>
-      <a href="#contact" class="btn btn-primary">Request a Demo</a>
+      <a href="#how" id="navHow">How It Works</a>
+      <a href="#pricing" id="navPricing">Pricing</a>
+      <a href="#security" id="navSecurity">Security</a>
+      <a href="#contact" id="navCta" class="btn btn-primary">Request a Demo</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
     </button>
   </div>
   <div class="nav-mobile" id="navMobile">
-    <a href="#how">How It Works</a>
-    <a href="#language">Languages</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#security">Security</a>
-    <a href="#contact">Contact</a>
+    <a href="#how" id="mNavHow">How It Works</a>
+    <a href="#pricing" id="mNavPricing">Pricing</a>
+    <a href="#security" id="mNavSecurity">Security</a>
     <a href="#contact" class="btn btn-primary">Request a Demo</a>
   </div>
 </header>
 
 <a id="top"></a>
 
+<!-- ============== PATH SELECTOR ============== -->
+<div class="path-section">
+  <div class="wrap">
+    <div class="path-section-header reveal">
+      <div class="pre">ARX Systems · Select a product or service</div>
+      <h2>What are you looking for?</h2>
+    </div>
+    <div class="path-grid reveal">
+      <div class="path-card active" id="card-galen" onclick="selectPath('galen')" role="button" tabindex="0">
+        <div class="path-card-badge">AI Receptionist</div>
+        <div class="path-card-title">Galen</div>
+        <p>Automated front desk for medical practices — 24/7 call answering, appointment booking, and a live dashboard of every patient interaction.</p>
+        <div class="path-card-indicator">
+          <span class="dot"></span>
+          <span>View product details</span>
+        </div>
+      </div>
+      <div class="path-card" id="card-custom" onclick="selectPath('custom')" role="button" tabindex="0">
+        <div class="path-card-badge">Bespoke Solution</div>
+        <div class="path-card-title">Custom Project</div>
+        <p>Need something built to spec? We design and deploy custom AI systems for businesses with unique operational requirements.</p>
+        <div class="path-card-indicator">
+          <span class="dot"></span>
+          <span>Start a conversation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============== GALEN PATH ============== -->
+<div id="path-galen">
+
 <!-- ============== HERO ============== -->
-<section class="hero" style="border-top:none;padding-top:80px">
+<section class="hero" style="border-top:1px solid var(--line);padding-top:80px">
   <div class="wrap hero-grid">
     <div class="reveal">
       <div class="eyebrow"><span class="dot"></span> AI Receptionist · Built for Medical Practices</div>
@@ -554,7 +650,7 @@
       </div>
     </div>
     <div class="reveal" id="heroMock">
-      <!-- Dashboard mock injected here by JavaScript -->
+      <!-- Dashboard mock injected by JavaScript -->
     </div>
   </div>
 </section>
@@ -568,7 +664,7 @@
     </div>
     <div class="problem-stats reveal">
       <div class="stat">
-        <div class="num" data-count="67" data-suffix="%">67%</div>
+        <div class="num">67%</div>
         <div class="desc">of patients who reach voicemail don't call back.</div>
       </div>
       <div class="stat">
@@ -816,7 +912,7 @@
   </div>
 </section>
 
-<!-- ============== FORM ============== -->
+<!-- ============== GALEN CONTACT FORM ============== -->
 <section id="contact" class="form-section">
   <div class="wrap">
     <div class="form-wrap">
@@ -825,8 +921,8 @@
         <h2 class="section-title">Request your free front desk audit.</h2>
         <p class="section-lede">Tell us about your practice. We'll show you exactly how many calls you're missing, and what Galen would do about it.</p>
       </div>
-      <form class="form reveal" id="inquiryForm" novalidate>
-        <div id="formContent">
+      <form class="form reveal" id="galenForm" novalidate>
+        <div id="galenFormContent">
           <div class="form-row">
             <div class="field">
               <label for="practice">Practice Name</label>
@@ -879,14 +975,79 @@
             <textarea id="message" name="message" rows="4"></textarea>
           </div>
           <div class="form-submit">
-            <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Request Your Free Front Desk Audit <span class="arr">→</span></button>
+            <button type="submit" id="galenSubmitBtn" class="btn btn-primary btn-lg">Request Your Free Front Desk Audit <span class="arr">→</span></button>
           </div>
-          <p class="form-note" id="formNote">We respond within 24 hours. No sales scripts. Just a direct conversation about your practice.</p>
+          <p class="form-note" id="galenFormNote">We respond within 24 hours. No sales scripts. Just a direct conversation about your practice.</p>
         </div>
       </form>
     </div>
   </div>
 </section>
+
+</div><!-- end #path-galen -->
+
+<!-- ============== CUSTOM PROJECT PATH ============== -->
+<div id="path-custom" style="display:none">
+
+<section id="contact" class="form-section" style="border-top:1px solid var(--line);padding-top:120px">
+  <div class="wrap">
+    <div class="form-wrap" style="max-width:760px">
+      <div class="reveal">
+        <div class="section-eyebrow" style="justify-content:center"><span class="num">—</span> Custom Project</div>
+        <h2 class="section-title" style="text-align:center;margin-left:auto;margin-right:auto">Tell us what you need built.</h2>
+        <p class="section-lede" style="text-align:center;margin-left:auto;margin-right:auto">We design and deploy custom AI systems for businesses with specific operational requirements. Share your situation and we'll respond with a clear scope and timeline.</p>
+      </div>
+      <form class="form reveal" id="customForm" novalidate style="max-width:760px">
+        <div id="customFormContent">
+          <div class="form-row">
+            <div class="field">
+              <label for="cName">Name</label>
+              <input id="cName" name="name" type="text" placeholder="Your full name" required />
+            </div>
+            <div class="field">
+              <label for="cEmail">Email</label>
+              <input id="cEmail" name="email" type="email" placeholder="you@company.com" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="cBusiness">Business</label>
+              <input id="cBusiness" name="business" type="text" placeholder="Company or business name" required />
+            </div>
+            <div class="field">
+              <label for="cWebsite">Website</label>
+              <input id="cWebsite" name="website" type="text" placeholder="yoursite.com" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="cCallVolume">Call Volume</label>
+              <input id="cCallVolume" name="callVolume" type="text" placeholder="e.g. 500 inbound calls/month" required />
+            </div>
+            <div class="field">
+              <label for="cRevenue">Current Revenue</label>
+              <input id="cRevenue" name="revenue" type="text" placeholder="e.g. $2M ARR" required />
+            </div>
+          </div>
+          <div class="field" style="margin-bottom:16px">
+            <label for="cPurpose">Purpose</label>
+            <textarea id="cPurpose" name="purpose" rows="4" placeholder="What do you want this system to do? Describe the goal in plain terms." required></textarea>
+          </div>
+          <div class="field" style="margin-bottom:8px">
+            <label for="cPainPoints">Pain Points</label>
+            <textarea id="cPainPoints" name="painPoints" rows="4" placeholder="What is breaking down today? Where are you losing time, money, or customers?" required></textarea>
+          </div>
+          <div class="form-submit">
+            <button type="submit" id="customSubmitBtn" class="btn btn-primary btn-lg">Submit Project Brief <span class="arr">→</span></button>
+          </div>
+          <p class="form-note" id="customFormNote">We review every submission personally and respond within 24 hours with a clear next step.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+</div><!-- end #path-custom -->
 
 <!-- ============== FOOTER ============== -->
 <footer>
@@ -894,12 +1055,11 @@
     <div class="foot-grid">
       <div class="foot-logo logo">
         <span class="parent">ARX Systems</span>
-        <span class="product">Galen</span>
+        <span class="product" id="footProduct">Galen</span>
         <div class="foot-info">Miami, FL · © 2026<br/>Galen is a product of ARX Systems.<br/>Additional verticals coming.</div>
       </div>
-      <nav class="foot-links" aria-label="Footer">
+      <nav class="foot-links" id="footLinks" aria-label="Footer">
         <a href="#how">How It Works</a>
-        <a href="#language">Languages</a>
         <a href="#pricing">Pricing</a>
         <a href="#security">Security</a>
         <a href="#contact">Contact</a>
@@ -935,6 +1095,57 @@
   });
   nm.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nm.classList.remove('open')));
 
+  // --- Path selector ---
+  function selectPath(path) {
+    // Update cards
+    document.getElementById('card-galen').classList.toggle('active', path === 'galen');
+    document.getElementById('card-custom').classList.toggle('active', path === 'custom');
+
+    // Show/hide content
+    document.getElementById('path-galen').style.display = path === 'galen' ? '' : 'none';
+    document.getElementById('path-custom').style.display = path === 'custom' ? '' : 'none';
+
+    // Update nav
+    const isCustom = path === 'custom';
+    document.getElementById('navProduct').textContent = isCustom ? 'Custom' : 'Galen';
+    document.getElementById('footProduct').textContent = isCustom ? 'Custom Projects' : 'Galen';
+    document.getElementById('navCta').textContent = isCustom ? 'Start a Project' : 'Request a Demo';
+    document.getElementById('navCta').innerHTML = isCustom ? 'Start a Project' : 'Request a Demo';
+
+    // Update footer nav visibility
+    const footLinks = document.getElementById('footLinks');
+    footLinks.innerHTML = isCustom
+      ? '<a href="#contact">Start a Project</a>'
+      : '<a href="#how">How It Works</a><a href="#pricing">Pricing</a><a href="#security">Security</a><a href="#contact">Contact</a>';
+
+    // Update nav secondary links
+    const showGalenLinks = !isCustom;
+    ['navHow','navPricing','navSecurity'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = showGalenLinks ? '' : 'none';
+    });
+    ['mNavHow','mNavPricing','mNavSecurity'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = showGalenLinks ? '' : 'none';
+    });
+
+    // Re-trigger reveal animations for newly visible elements
+    document.querySelectorAll('#path-' + path + ' .reveal:not(.in)').forEach(el => io.observe(el));
+
+    // Scroll to content
+    window.scrollTo({top: document.getElementById('top').offsetTop, behavior: 'smooth'});
+  }
+
+  // Keyboard support for path cards
+  document.querySelectorAll('.path-card').forEach(card => {
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+
   // --- Reveal on scroll ---
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -943,13 +1154,13 @@
   }, {threshold: 0.08});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // --- Form with email submission ---
-  const form = document.getElementById('inquiryForm');
-  form.addEventListener('submit', async (e) => {
+  // --- Galen form submission ---
+  const galenForm = document.getElementById('galenForm');
+  galenForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     let valid = true;
-    form.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
-    form.querySelectorAll('.err').forEach(n => n.remove());
+    galenForm.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
+    galenForm.querySelectorAll('.err').forEach(n => n.remove());
     const requireds = ['practice','name','email','phone','specialty','volume'];
     requireds.forEach(id => {
       const el = document.getElementById(id);
@@ -969,17 +1180,17 @@
     });
     if (!valid) return;
 
-    const submitBtn = document.getElementById('submitBtn');
-    const formNote = document.getElementById('formNote');
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Sending…';
-    if (formNote) { formNote.style.color = 'var(--muted)'; formNote.textContent = 'We respond within 24 hours. No sales scripts. Just a direct conversation about your practice.'; }
+    const btn = document.getElementById('galenSubmitBtn');
+    const note = document.getElementById('galenFormNote');
+    btn.disabled = true;
+    btn.innerHTML = 'Sending…';
 
     try {
       const resp = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          type: 'galen',
           practice: document.getElementById('practice').value.trim(),
           name: document.getElementById('name').value.trim(),
           email: document.getElementById('email').value.trim(),
@@ -989,30 +1200,99 @@
           message: (document.getElementById('message').value || '').trim(),
         }),
       });
-
       if (resp.ok) {
-        document.getElementById('formContent').innerHTML = `
-          <div class="form-success">
-            <div class="check">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <h3>Request received.</h3>
-            <p>You'll hear from a member of the ARX team within 24 hours — usually much sooner.</p>
-          </div>
-        `;
+        document.getElementById('galenFormContent').innerHTML = successHTML('Request received.', "You'll hear from a member of the ARX team within 24 hours — usually much sooner.");
       } else {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
-        if (formNote) { formNote.style.color = '#b94545'; formNote.textContent = 'Something went wrong. Please email gabrielcespedes777@gmail.com directly.'; }
+        btn.disabled = false;
+        btn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
+        if (note) { note.style.color = '#b94545'; note.textContent = 'Something went wrong. Please email gabrielcespedes777@gmail.com directly.'; }
       }
     } catch {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
-      if (formNote) { formNote.style.color = '#b94545'; formNote.textContent = 'Network error. Please try again or email gabrielcespedes777@gmail.com directly.'; }
+      btn.disabled = false;
+      btn.innerHTML = 'Request Your Free Front Desk Audit <span class="arr">→</span>';
+      if (note) { note.style.color = '#b94545'; note.textContent = 'Network error. Please try again or email gabrielcespedes777@gmail.com directly.'; }
     }
   });
 
-  // --- Dashboard mock ---
+  // --- Custom project form submission ---
+  const customForm = document.getElementById('customForm');
+  customForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let valid = true;
+    customForm.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
+    customForm.querySelectorAll('.err').forEach(n => n.remove());
+    const requireds = [
+      {id:'cName', label:'name'},
+      {id:'cEmail', label:'email'},
+      {id:'cBusiness', label:'business'},
+      {id:'cCallVolume', label:'call volume'},
+      {id:'cRevenue', label:'current revenue'},
+      {id:'cPurpose', label:'purpose'},
+      {id:'cPainPoints', label:'pain points'},
+    ];
+    requireds.forEach(({id, label}) => {
+      const el = document.getElementById(id);
+      const val = (el.value || '').trim();
+      let err = '';
+      if (!val) err = 'Required';
+      else if (label === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)) err = 'Enter a valid email';
+      if (err) {
+        valid = false;
+        const field = el.closest('.field');
+        field.classList.add('error');
+        const n = document.createElement('div');
+        n.className = 'err'; n.textContent = err;
+        field.appendChild(n);
+      }
+    });
+    if (!valid) return;
+
+    const btn = document.getElementById('customSubmitBtn');
+    const note = document.getElementById('customFormNote');
+    btn.disabled = true;
+    btn.innerHTML = 'Sending…';
+
+    try {
+      const resp = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'custom',
+          name: document.getElementById('cName').value.trim(),
+          email: document.getElementById('cEmail').value.trim(),
+          business: document.getElementById('cBusiness').value.trim(),
+          website: document.getElementById('cWebsite').value.trim(),
+          callVolume: document.getElementById('cCallVolume').value.trim(),
+          revenue: document.getElementById('cRevenue').value.trim(),
+          purpose: document.getElementById('cPurpose').value.trim(),
+          painPoints: document.getElementById('cPainPoints').value.trim(),
+        }),
+      });
+      if (resp.ok) {
+        document.getElementById('customFormContent').innerHTML = successHTML('Project brief received.', "We review every submission personally and will respond within 24 hours with a clear next step.");
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Project Brief <span class="arr">→</span>';
+        if (note) { note.style.color = '#b94545'; note.textContent = 'Something went wrong. Please email gabrielcespedes777@gmail.com directly.'; }
+      }
+    } catch {
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Project Brief <span class="arr">→</span>';
+      if (note) { note.style.color = '#b94545'; note.textContent = 'Network error. Please try again or email gabrielcespedes777@gmail.com directly.'; }
+    }
+  });
+
+  function successHTML(title, body) {
+    return `<div class="form-success">
+      <div class="check">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>${title}</h3>
+      <p>${body}</p>
+    </div>`;
+  }
+
+  // --- Dashboard mock (Galen path) ---
   const mockHTML = `
     <div class="mock" role="img" aria-label="Galen dashboard preview">
       <div class="mock-bar">
@@ -1051,8 +1331,8 @@
   // Subtle KPI tick
   let k1 = 142, k2 = 61;
   setInterval(() => {
-    if (Math.random() < 0.55) { k1 += 1; document.getElementById('kpi1').textContent = k1; }
-    if (Math.random() < 0.32) { k2 += 1; document.getElementById('kpi2').textContent = k2; }
+    if (Math.random() < 0.55) { k1 += 1; const el = document.getElementById('kpi1'); if (el) el.textContent = k1; }
+    if (Math.random() < 0.32) { k2 += 1; const el = document.getElementById('kpi2'); if (el) el.textContent = k2; }
   }, 2400);
 </script>
 
