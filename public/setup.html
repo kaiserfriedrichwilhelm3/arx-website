@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup · ARX Systems · Galen</title>
+<meta name="description" content="Reserve your spot for Galen — the self-serve setup wizard for medical practices. Your answers save automatically.">
+<link rel="icon" href="/favicon.ico">
+<style>
+  :root{
+    --bg:#F7F6F2;
+    --bg-2:#EFEEE8;
+    --line:#E2DFD5;
+    --line-2:#D8D5C9;
+    --navy:#0A1628;
+    --navy-2:#142238;
+    --gold:#C8A35C;
+    --muted:#6b7280;
+    --ink:#0E1218;
+    --ink-2:#3a3f47;
+    --shadow:0 6px 22px rgba(10,22,40,.07);
+    --shadow-lg:0 12px 32px rgba(10,22,40,.10);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;
+  }
+  ::selection{background:var(--navy);color:#fff}
+  a{color:inherit}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+  /* nav */
+  .nav{background:var(--bg);border-bottom:1px solid var(--line);padding:18px 0;position:sticky;top:0;z-index:10}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.2}
+  .logo .parent{font-size:11px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+  .logo .product{font-size:18px;color:var(--navy);font-weight:600;margin-top:2px}
+  .nav-back{font-size:14px;color:var(--muted);text-decoration:none}
+  .nav-back:hover{color:var(--navy)}
+
+  /* header */
+  main{padding:64px 0 96px}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;color:var(--gold);letter-spacing:.18em;text-transform:uppercase;
+    margin-bottom:14px;font-weight:500;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:44px;line-height:1.1;letter-spacing:-.01em;color:var(--navy);margin:0 0 14px;font-weight:600}
+  h1 em{font-style:italic;color:var(--navy)}
+  .lede{font-size:17px;color:var(--muted);max-width:620px;line-height:1.6;margin:0 0 16px}
+  .resume-banner{
+    background:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:12px 16px;margin:16px 0 0;display:flex;align-items:center;gap:10px;
+    font-size:13px;color:var(--ink-2);
+  }
+  .resume-banner .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;flex-shrink:0}
+  .resume-banner button{
+    margin-left:auto;background:transparent;border:0;color:var(--muted);
+    font-size:12px;cursor:pointer;text-decoration:underline;font-family:inherit;
+  }
+
+  /* form */
+  .form{background:#fff;border:1px solid var(--line);border-radius:12px;padding:40px;box-shadow:var(--shadow);margin-top:32px}
+  @media (max-width:640px){.form{padding:28px 24px}}
+  .section-block{padding-bottom:28px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+  .section-block:last-of-type{border-bottom:0;padding-bottom:8px;margin-bottom:0}
+  .section-block h2{
+    font-family:Georgia,"Times New Roman",serif;font-size:20px;color:var(--navy);
+    font-weight:600;margin:0 0 6px;
+  }
+  .section-block .section-hint{font-size:13px;color:var(--muted);margin:0 0 16px}
+
+  /* tier grid */
+  .tier-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media (max-width:760px){.tier-grid{grid-template-columns:1fr}}
+  .tier-option{
+    border:1px solid var(--line-2);border-radius:8px;padding:16px;
+    cursor:pointer;transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;
+    background:#fff;
+  }
+  .tier-option:hover{border-color:var(--navy);transform:translateY(-2px);box-shadow:var(--shadow)}
+  .tier-option.selected{border-color:var(--gold);box-shadow:0 0 0 2px rgba(200,163,92,.18)}
+  .tier-option h3{
+    font-family:Georgia,"Times New Roman",serif;font-size:16px;color:var(--navy);
+    margin:0 0 4px;font-weight:600;
+  }
+  .tier-option .price{font-size:13px;color:var(--ink);margin:0 0 6px;font-weight:500}
+  .tier-option p:last-child{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+
+  /* fields */
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  @media (max-width:640px){.form-row{grid-template-columns:1fr}}
+  .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .field:last-child{margin-bottom:0}
+  .field label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .field label .req{color:var(--gold)}
+  .field input, .field textarea{
+    font-family:inherit;font-size:15px;color:var(--ink);
+    background:#fff;border:1px solid var(--line-2);border-radius:6px;
+    padding:11px 13px;outline:none;width:100%;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .field textarea{resize:vertical;min-height:96px;line-height:1.55}
+  .field input:focus, .field textarea:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(10,22,40,.08)}
+  .field.error input, .field.error textarea{border-color:#b94545;box-shadow:0 0 0 3px rgba(185,69,69,.08)}
+  .field .err{font-size:12px;color:#b94545;margin-top:2px}
+
+  /* save status */
+  .save-status{
+    display:flex;align-items:center;gap:8px;
+    font-size:12px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    margin:18px 0 0;min-height:18px;
+  }
+  .save-status .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+  .save-status.idle{color:transparent}
+  .save-status.saving .dot{background:var(--muted)}
+  .save-status.saved{color:#1f7a3f}
+  .save-status.saved .dot{background:#1f7a3f}
+
+  /* submit */
+  .form-submit{margin-top:24px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    text-decoration:none;font-size:15px;font-weight:500;
+    padding:13px 24px;border-radius:6px;border:1px solid transparent;cursor:pointer;
+    font-family:inherit;
+    transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
+  }
+  .btn-lg{padding:15px 28px;font-size:16px}
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-gold:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(200,163,92,.25)}
+  .btn-gold:disabled{background:#d6cdb3;cursor:not-allowed;transform:none;box-shadow:none}
+  .form-submit .btn{width:100%}
+
+  /* note */
+  .form-note{margin-top:18px;font-size:13px;color:var(--muted);text-align:center;line-height:1.6}
+
+  /* success */
+  #success{display:none;background:#fff;border:1px solid var(--line);border-radius:12px;padding:48px 40px;box-shadow:var(--shadow);margin-top:32px;text-align:center}
+  #success .check{width:56px;height:56px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+  #success h3{font-family:Georgia,"Times New Roman",serif;font-size:26px;color:var(--navy);margin:0 0 10px;font-weight:600}
+  #success p{color:var(--ink-2);margin:0;font-size:15px;line-height:1.6;max-width:480px;margin-left:auto;margin-right:auto}
+
+  /* footer */
+  .pg-footer{margin-top:48px;padding-top:24px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);text-align:center}
+
+  @media (max-width:640px){
+    h1{font-size:34px}
+    .lede{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="logo" aria-label="ARX Systems home">
+      <span class="parent">ARX Systems</span>
+      <span class="product">Galen</span>
+    </a>
+    <a href="/" class="nav-back">← Back to site</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span> Self-Serve Setup · Early Access</div>
+    <h1>Reserve your spot for <em>Galen.</em></h1>
+    <p class="lede">
+      Tell us a few things. We&rsquo;ll lock in your founding-tier pricing and
+      email you the day the full setup wizard is live to finish onboarding.
+      Your answers save automatically — close the tab and come back any time.
+    </p>
+
+    <div class="resume-banner" id="resumeBanner" style="display:none">
+      <span class="dot"></span>
+      <span><strong>Welcome back.</strong> We loaded your saved progress.</span>
+      <button type="button" id="resetBtn">Start over</button>
+    </div>
+
+    <form id="setupForm" class="form" novalidate>
+      <!-- 1. TIER -->
+      <div class="section-block">
+        <h2>1. Which tier sounds right?</h2>
+        <p class="section-hint">Pick what fits today. You can change it before deploy.</p>
+        <div class="tier-grid" id="tierGrid" role="radiogroup" aria-label="Tier">
+          <div class="tier-option" data-value="starter" role="radio" tabindex="0" aria-checked="false">
+            <h3>The Receptionist</h3>
+            <p class="price">$400/mo · $500 setup</p>
+            <p>Solo or single-provider practices.</p>
+          </div>
+          <div class="tier-option" data-value="pro" role="radio" tabindex="0" aria-checked="false">
+            <h3>The Command Center</h3>
+            <p class="price">$900/mo · $1,500 setup</p>
+            <p>Multi-provider or higher volume.</p>
+          </div>
+          <div class="tier-option" data-value="custom" role="radio" tabindex="0" aria-checked="false">
+            <h3>The Full Stack</h3>
+            <p class="price">Quoted · $3,000 setup</p>
+            <p>Complex setups, custom modules.</p>
+          </div>
+        </div>
+        <input type="hidden" id="tier" name="tier" value="">
+        <div class="err" id="tierErr" style="display:none;font-size:12px;color:#b94545;margin-top:8px">Pick a tier to continue.</div>
+      </div>
+
+      <!-- 2. PRACTICE -->
+      <div class="section-block">
+        <h2>2. About your practice</h2>
+        <p class="section-hint">Helps us show up to the call with context.</p>
+        <div class="form-row">
+          <div class="field">
+            <label for="practice">Practice name <span class="req">*</span></label>
+            <input id="practice" name="practice" autocomplete="organization" required>
+          </div>
+          <div class="field">
+            <label for="specialty">Specialty / type</label>
+            <input id="specialty" name="specialty" placeholder="e.g. Cardiology, Dental, Family Med">
+          </div>
+        </div>
+        <div class="field">
+          <label for="description">What does the receptionist need to know?</label>
+          <textarea id="description" name="description" rows="5" placeholder="Hours, what callers usually want, what to never do, anything specific. The more concrete, the better."></textarea>
+        </div>
+      </div>
+
+      <!-- 3. CONTACT -->
+      <div class="section-block">
+        <h2>3. How we reach you</h2>
+        <p class="section-hint">We&rsquo;ll email you the day the wizard goes live.</p>
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Your name <span class="req">*</span></label>
+            <input id="name" name="name" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="phone">Phone (optional)</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel">
+        </div>
+      </div>
+
+      <div class="save-status idle" id="saveStatus">
+        <span class="dot"></span><span id="saveLabel"></span>
+      </div>
+
+      <div class="form-submit">
+        <button type="submit" class="btn btn-gold btn-lg" id="submitBtn">Reserve my spot →</button>
+      </div>
+      <p class="form-note">Your founding-tier pricing is locked the moment you submit. We&rsquo;ll email you a confirmation immediately.</p>
+    </form>
+
+    <div id="success">
+      <div class="check">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>You&rsquo;re on the list.</h3>
+      <p>We&rsquo;ll email you a confirmation now and reach out the day the full setup wizard goes live. Your founding-tier pricing is locked.</p>
+    </div>
+
+    <div class="pg-footer">ARX Systems &middot; Miami, FL &middot; Self-serve setup launching shortly.</div>
+  </div>
+</main>
+
+<script>
+(function(){
+  const STORAGE_KEY = 'arx-setup-progress-v1';
+  const FIELDS = ['tier','practice','specialty','description','name','email','phone'];
+  const form = document.getElementById('setupForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const tierGrid = document.getElementById('tierGrid');
+  const tierInput = document.getElementById('tier');
+  const tierErr = document.getElementById('tierErr');
+  const saveStatus = document.getElementById('saveStatus');
+  const saveLabel = document.getElementById('saveLabel');
+  const resumeBanner = document.getElementById('resumeBanner');
+  const successPanel = document.getElementById('success');
+  const resetBtn = document.getElementById('resetBtn');
+  let saveTimer = null;
+  let savedFlashTimer = null;
+
+  function readState(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(_){ return null; }
+  }
+  function writeState(state){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(_){}
+  }
+  function clearState(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(_){} }
+
+  function setSaveStatus(state){
+    saveStatus.classList.remove('idle','saving','saved');
+    saveStatus.classList.add(state);
+    saveLabel.textContent = state === 'saving' ? 'Saving…' : state === 'saved' ? 'Saved' : '';
+  }
+
+  function selectTier(value){
+    tierInput.value = value;
+    [...tierGrid.querySelectorAll('.tier-option')].forEach(el => {
+      const isMe = el.getAttribute('data-value') === value;
+      el.classList.toggle('selected', isMe);
+      el.setAttribute('aria-checked', isMe ? 'true' : 'false');
+    });
+    tierErr.style.display = 'none';
+    scheduleSave();
+  }
+
+  function gather(){
+    const out = {};
+    FIELDS.forEach(f => {
+      const el = document.getElementById(f);
+      out[f] = el ? el.value.trim() : '';
+    });
+    return out;
+  }
+
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    setSaveStatus('saving');
+    saveTimer = setTimeout(() => {
+      writeState(gather());
+      setSaveStatus('saved');
+      clearTimeout(savedFlashTimer);
+      savedFlashTimer = setTimeout(() => setSaveStatus('idle'), 1800);
+    }, 300);
+  }
+
+  // Restore from localStorage, falling back to ?tier= URL param.
+  const saved = readState();
+  if(saved){
+    FIELDS.forEach(f => {
+      const el = document.getElementById(f);
+      if(!el) return;
+      if(typeof saved[f] === 'string'){
+        el.value = saved[f];
+        if(f === 'tier' && saved[f]) selectTier(saved[f]);
+      }
+    });
+    if(saved.tier || saved.practice || saved.email){
+      resumeBanner.style.display = 'flex';
+    }
+  } else {
+    const params = new URLSearchParams(location.search);
+    const t = params.get('tier');
+    if(t === 'starter' || t === 'pro' || t === 'custom') selectTier(t);
+  }
+
+  // Tier picker click + keyboard
+  [...tierGrid.querySelectorAll('.tier-option')].forEach(el => {
+    el.addEventListener('click', () => selectTier(el.getAttribute('data-value')));
+    el.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectTier(el.getAttribute('data-value')); }
+    });
+  });
+
+  // Auto-save on every input
+  form.addEventListener('input', scheduleSave);
+
+  // Reset
+  resetBtn.addEventListener('click', () => {
+    if(!confirm('Clear all your saved progress?')) return;
+    clearState();
+    location.reload();
+  });
+
+  // Submit
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    document.querySelectorAll('.field').forEach(f => f.classList.remove('error'));
+    const data = gather();
+    let firstErr = null;
+    if(!data.tier){ tierErr.style.display = 'block'; firstErr = firstErr || tierGrid; }
+    [['practice'],['name'],['email']].forEach(([id]) => {
+      if(!data[id]){
+        const el = document.getElementById(id);
+        el.closest('.field').classList.add('error');
+        firstErr = firstErr || el;
+      }
+    });
+    if(data.email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)){
+      document.getElementById('email').closest('.field').classList.add('error');
+      firstErr = firstErr || document.getElementById('email');
+    }
+    if(firstErr){
+      firstErr.scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+    try{
+      const r = await fetch('/api/setup-interest', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(data),
+      });
+      if(!r.ok){
+        const j = await r.json().catch(() => ({}));
+        throw new Error(j.error || ('HTTP ' + r.status));
+      }
+      // Success: clear local progress, swap UI to success panel
+      clearState();
+      form.style.display = 'none';
+      resumeBanner.style.display = 'none';
+      successPanel.style.display = 'block';
+      successPanel.scrollIntoView({behavior:'smooth', block:'start'});
+    }catch(err){
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Reserve my spot →';
+      alert('Something went wrong: ' + err.message + '\n\nYour answers are saved locally — try again in a moment.');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
