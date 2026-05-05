@@ -585,8 +585,9 @@
       <a href="#top" onclick="selectPath('galen');return false;" id="navGalen" style="display:none">How It Works</a>
       <a href="#pricing" id="navPricing" style="display:none">Pricing</a>
       <a href="#security" id="navSecurity" style="display:none">Security</a>
-      <a href="#contact" id="navRequestDemo" style="display:none">Request a Demo</a>
-      <a href="/setup" class="btn btn-gold" data-cta="start-setup" data-cta-location="nav">Start Setup <span class="arr">→</span></a>
+      <a href="#top" onclick="selectPath('galen');return false;" id="navCtaGalen" class="btn btn-primary" style="display:none">Request a Demo</a>
+      <a href="#top" onclick="selectPath('custom');return false;" id="navCtaCustom" class="btn btn-primary" style="display:none">Start a Project</a>
+      <a href="#top" onclick="selectPath('galen');return false;" id="navCtaDefault" class="btn btn-primary">Get Started</a>
     </nav>
     <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
@@ -598,8 +599,7 @@
     <a href="#top" onclick="selectPath('galen');return false;" id="mNavHow" style="display:none">How It Works</a>
     <a href="#pricing" id="mNavPricing" style="display:none">Pricing</a>
     <a href="#security" id="mNavSecurity" style="display:none">Security</a>
-    <a href="#contact" id="mNavCta" style="display:none">Request a Demo</a>
-    <a href="/setup" class="btn btn-gold" data-cta="start-setup" data-cta-location="nav-mobile" style="margin:14px 20px;display:flex;justify-content:center">Start Setup →</a>
+    <a href="#contact" id="mNavCta" class="btn btn-primary" style="display:none">Request a Demo</a>
   </div>
 </header>
 
@@ -663,8 +663,8 @@
       <h1 class="hero-title">We fix key problems with <em>revolutions in technology.</em></h1>
       <p class="hero-sub">ARX Systems builds AI systems that absorb the operational weight your team shouldn't carry manually — starting with the highest-leverage bottlenecks in each industry we enter.</p>
       <div class="hero-ctas">
-        <a href="/setup" class="btn btn-gold btn-lg" data-cta="start-setup" data-cta-location="hero-about">Start Setup <span class="arr">→</span></a>
-        <a href="#top" onclick="selectPath('galen');return false;" class="btn btn-ghost btn-lg">Explore Galen ↓</a>
+        <a href="#top" onclick="selectPath('galen');return false;" class="btn btn-primary btn-lg">Explore Galen <span class="arr">→</span></a>
+        <a href="#top" onclick="selectPath('custom');return false;" class="btn btn-ghost btn-lg">Custom Project</a>
       </div>
     </div>
   </div>
@@ -925,10 +925,9 @@
       <h1 class="hero-title">Your front desk, <em>answered.</em><br/>Every call, every time.</h1>
       <p class="hero-sub">Galen is an AI call agent built exclusively for medical practices. It books appointments, handles patient inquiries, and gives your team a live dashboard of every call — human and AI.</p>
       <div class="hero-ctas">
-        <a href="/setup" class="btn btn-gold btn-lg" data-cta="start-setup" data-cta-location="hero-galen">Start Setup <span class="arr">→</span></a>
+        <a href="#contact" class="btn btn-primary btn-lg">Request a Demo <span class="arr">→</span></a>
         <a href="#how" class="btn btn-ghost btn-lg">See How It Works ↓</a>
       </div>
-      <a href="#contact" class="cta-secondary-link" style="display:inline-block;margin-top:8px;font-size:12px;color:#666;text-decoration:underline">or request a demo</a>
       <div class="hero-meta">
         <div><strong>Zero-Retention</strong>Architecture</div>
         <div><strong>BAA</strong>Signed with every contract</div>
@@ -1083,8 +1082,7 @@
           <div class="tier-feature"><span class="k">Dashboard</span><span class="v">Basic — call log, bookings, missed calls</span></div>
           <div class="tier-best">Best for single-provider practices.</div>
         </div>
-        <a href="/setup?tier=starter" class="btn btn-gold" data-cta="start-setup" data-cta-location="pricing-starter">Start Setup <span class="arr">→</span></a>
-        <a href="#contact" class="cta-secondary-link" style="display:block;margin-top:10px;text-align:center;font-size:11px;color:#666;text-decoration:underline">or request a demo first</a>
+        <a href="#contact" class="btn btn-ghost">Get Started <span class="arr">→</span></a>
       </div>
 
       <div class="tier featured reveal">
@@ -1099,8 +1097,7 @@
           <div class="tier-feature"><span class="k">Dashboard</span><span class="v">Advanced — all calls, analytics, peak hours, drop-offs</span></div>
           <div class="tier-best" style="border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.7)">Best for multi-provider or high-volume practices.</div>
         </div>
-        <a href="/setup?tier=pro" class="btn btn-gold" data-cta="start-setup" data-cta-location="pricing-pro">Start Setup <span class="arr">→</span></a>
-        <a href="#contact" class="cta-secondary-link" style="display:block;margin-top:10px;text-align:center;font-size:11px;color:rgba(255,255,255,.6);text-decoration:underline">or request a demo first</a>
+        <a href="#contact" class="btn btn-gold">Get Started <span class="arr">→</span></a>
       </div>
 
       <div class="tier reveal">
@@ -1117,7 +1114,6 @@
         <a href="#contact" class="btn btn-ghost">Request a Consultation <span class="arr">→</span></a>
       </div>
     </div>
-    <p style="text-align:center;font-size:13px;color:#666;margin:40px 0 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace">Setup takes 5 minutes. No card required until deploy.</p>
   </div>
 </section>
 
@@ -1197,10 +1193,6 @@
           <div class="body">Pilot partners get founding-tier pricing locked for life.<em>First 30 days free. No credit card. No commitment.</em></div>
         </li>
       </ul>
-      <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:48px">
-        <a href="/setup" class="btn btn-gold btn-lg" data-cta="start-setup" data-cta-location="footer">Start Setup <span class="arr">→</span></a>
-        <a href="#contact" class="btn btn-ghost btn-lg">Request a Demo</a>
-      </div>
     </div>
   </div>
 </section>
@@ -1422,7 +1414,9 @@
       navGalen: showGalen,
       navPricing: showGalen,
       navSecurity: showGalen,
-      navRequestDemo: showGalen,
+      navCtaGalen: showGalen,
+      navCtaCustom: showCustom,
+      navCtaDefault: showDefault,
     };
     Object.entries(navIds).forEach(([id, show]) => {
       const el = document.getElementById(id);
@@ -1443,7 +1437,7 @@
       } else if (showCustom) {
         footLinks.innerHTML = '<a href="#contact">Start a Project</a>';
       } else {
-        footLinks.innerHTML = '<a href="#top" onclick="selectPath(\'galen\');return false;">Galen</a><a href="#top" onclick="selectPath(\'custom\');return false;">Custom Project</a><a href="/setup" data-cta="start-setup" data-cta-location="footer-nav">Start Setup</a>';
+        footLinks.innerHTML = '<a href="#top" onclick="selectPath(\'galen\');return false;">Galen</a><a href="#top" onclick="selectPath(\'custom\');return false;">Custom Project</a>';
       }
     }
 
