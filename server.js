@@ -51,7 +51,9 @@ function emailShell(tag, name, tableRows, blockLabel, blockContent) {
 }
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+// `extensions: ['html']` lets `/setup` resolve to public/setup.html without
+// the .html suffix in the URL. Same trick if we add /pricing, /security, etc.
+app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
 app.post('/api/contact', async (req, res) => {
   const ip =
