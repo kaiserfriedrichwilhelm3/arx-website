@@ -5,8 +5,9 @@
  * No component duplicates a value, redefines a token locally, or
  * re-imports this file. Loaded once via global.css in BaseLayout.astro.
  *
- * This commit lands color, typography, spacing, and layout tokens.
- * Radii, borders, and motion arrive in the next commit.
+ * Token groups: color, typography, spacing, layout, radii, borders,
+ * motion. No shadow tokens — depth on this site comes from spacing
+ * and contrast, not from raised cards.
  */
 
 :root {
@@ -64,4 +65,20 @@
   /* ──── layout ─────────────────────────────────────────────────────── */
   --container-max:   1200px;  /* outer container (nav, footer, grids) */
   --container-prose:  680px;  /* reading column (paragraphs)          */
+
+  /* ──── radii ──────────────────────────────────────────────────────── */
+  --radius-sm: 2px;   /* form fields, kicker pills          */
+  --radius-md: 4px;   /* buttons                            */
+  --radius-lg: 8px;   /* image frames, occasional containers */
+
+  /* ──── borders ────────────────────────────────────────────────────── */
+  --border-hairline: 1px solid var(--line);
+
+  /* ──── motion ─────────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);     /* entrances, hover */
+  --ease-in-out: cubic-bezier(0.4,  0, 0.2, 1);     /* state transitions */
+
+  --motion-fast: 150ms;   /* color/opacity hover         */
+  --motion-base: 250ms;   /* panel open, menu reveal     */
+  --motion-slow: 400ms;   /* major transitions           */
 }
