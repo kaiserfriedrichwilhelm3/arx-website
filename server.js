@@ -1,232 +1,30 @@
+// ARX Systems Express wrapper for the v2 Astro build.
+//   1. Serves dist/ (Astro static output) at site root.
+//   2. Mounts /api/contact and /api/setup-interest, both ported verbatim
+//      from the pre-rebuild server.js into server/routes/*. Behavior is
+//      identical to the endpoints live on production today.
+//
+// extensions:['html'] preserves /setup → dist/setup.html (Astro copies
+// public/setup.html through unchanged), and lets future passthrough
+// HTML files (if any) resolve without the .html suffix.
+//
+// In production, `npm prune --omit=dev` runs after `astro build`, so
+// astro is not present in node_modules at runtime. This file only
+// requires express + the routes — both production dependencies.
+
 const express = require('express');
-const { Resend } = require('resend');
 const path = require('path');
+
+const { contactHandler } = require('./server/routes/contact');
+const { setupInterestHandler } = require('./server/routes/setup-interest');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'gabrielcespedes777@gmail.com';
-
-// In-memory rate limiter: 5 requests per hour per IP
-const store = new Map();
-const WINDOW_MS = 60 * 60 * 1000;
-const MAX_REQ = 5;
-
-function checkRateLimit(ip) {
-  const now = Date.now();
-  const entry = store.get(ip);
-  if (!entry || now - entry.windowStart > WINDOW_MS) {
-    store.set(ip, { count: 1, windowStart: now });
-    return true;
-  }
-  if (entry.count >= MAX_REQ) return false;
-  entry.count++;
-  return true;
-}
-
-function row(label, value) {
-  if (!value) return '';
-  return `<tr><td style="padding:6px 0;color:#6b7280;font-size:13px;width:160px;vertical-align:top">${label}</td><td style="padding:6px 0;font-size:13px;color:#0E1218">${value}</td></tr>`;
-}
-
-function emailShell(tag, name, tableRows, blockLabel, blockContent) {
-  return `
-    <div style="font-family:monospace;max-width:560px;margin:0 auto;background:#F7F6F2;color:#0E1218;padding:32px;border-radius:8px;border:1px solid #E2DFD5;">
-      <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:16px;">
-        ARX Systems — ${tag}
-      </div>
-      <h2 style="font-family:Georgia,serif;font-size:22px;color:#0E1218;margin:0 0 24px;">${name}</h2>
-      <table style="width:100%;border-collapse:collapse;margin-bottom:${blockContent ? '24px' : '0'};">
-        ${tableRows}
-      </table>
-      ${blockContent ? `
-      <div style="background:#fff;border-left:3px solid #C8A35C;padding:16px;border-radius:4px;margin-bottom:8px;">
-        <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:8px;">${blockLabel}</div>
-        <div style="font-size:14px;color:#0E1218;line-height:1.6;white-space:pre-wrap">${blockContent}</div>
-      </div>` : ''}
-      <div style="font-size:10px;color:#9aa3ad;margin-top:24px;">
-        Submitted ${new Date().toISOString()} · Reply-To: ${name}
-      </div>
-    </div>
-  `;
-}
 
 app.use(express.json());
-// `extensions: ['html']` lets `/setup` resolve to public/setup.html without
-// the .html suffix in the URL. Same trick if we add /pricing, /security, etc.
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
+app.use(express.static(path.join(__dirname, 'dist'), { extensions: ['html'] }));
 
-app.post('/api/contact', async (req, res) => {
-  const ip =
-    ((req.headers['x-forwarded-for'] || '') + '').split(',')[0].trim() ||
-    req.socket.remoteAddress ||
-    'unknown';
-
-  if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
-  }
-
-  const { type } = req.body || {};
-  let subject, html;
-
-  if (type === 'custom') {
-    const { name, email, business, website, callVolume, revenue, purpose, painPoints } = req.body;
-    if (!name || !email || !business || !callVolume || !revenue || !purpose || !painPoints) {
-      return res.status(400).json({ error: 'All required fields must be filled.' });
-    }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email address.' });
-    }
-    subject = `[Custom Project] ${name} — ${business}`;
-    const tableRows = [
-      row('Email', `<a href="mailto:${email}" style="color:#0A1628">${email}</a>`),
-      row('Business', business),
-      row('Website', website),
-      row('Call Volume', callVolume),
-      row('Current Revenue', revenue),
-    ].join('');
-    const combined = `PURPOSE\n${purpose}\n\nPAIN POINTS\n${painPoints}`;
-    html = emailShell('Custom Project Inquiry', name, tableRows, 'Brief', combined);
-  } else {
-    // Galen form (default)
-    const { name, email, practice, phone, specialty, volume, message } = req.body;
-    if (!name || !email || !practice || !phone || !specialty || !volume) {
-      return res.status(400).json({ error: 'All required fields must be filled.' });
-    }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-      return res.status(400).json({ error: 'Invalid email address.' });
-    }
-    subject = `[Galen Inquiry] ${name} — ${practice}`;
-    const tableRows = [
-      row('Email', `<a href="mailto:${email}" style="color:#0A1628">${email}</a>`),
-      row('Practice', practice),
-      row('Phone', phone),
-      row('Specialty', specialty),
-      row('Call Volume', volume),
-    ].join('');
-    html = emailShell('Galen Inquiry', name, tableRows, 'Message', message || null);
-  }
-
-  const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-  const replyTo = req.body.email;
-
-  if (!resend) {
-    console.log(`[contact:${type || 'galen'}] No RESEND_API_KEY — logging:`, req.body);
-    return res.status(200).json({ ok: true });
-  }
-
-  try {
-    const { error } = await resend.emails.send({
-      from: 'ARX Systems <onboarding@resend.dev>',
-      to: CONTACT_EMAIL,
-      replyTo,
-      subject,
-      html,
-    });
-    if (error) throw new Error(error.message);
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error('[contact] Resend error:', err);
-    return res.status(500).json({ error: 'Failed to send. Please email gabrielcespedes777@gmail.com directly.' });
-  }
-});
-
-// /api/setup-interest — interim setup-wizard placeholder endpoint.
-// Captures the partial config a visitor builds on /setup, emails it to the
-// founder, and emails a confirmation back to the visitor. Lives until the
-// full Next.js portal (sibling repo arx-portal) is deployed and proxied at
-// /setup/*. Same Resend + rate-limit pattern as /api/contact.
-const TIER_LABEL = {
-  starter: 'The Receptionist ($400/mo + $500 setup)',
-  pro: 'The Command Center ($900/mo + $1,500 setup)',
-  custom: 'The Full Stack (Quoted + $3,000 setup)',
-};
-
-app.post('/api/setup-interest', async (req, res) => {
-  const ip =
-    ((req.headers['x-forwarded-for'] || '') + '').split(',')[0].trim() ||
-    req.socket.remoteAddress ||
-    'unknown';
-
-  if (!checkRateLimit(ip)) {
-    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
-  }
-
-  const { tier, practice, specialty, description, name, email, phone } = req.body || {};
-  if (!tier || !practice || !name || !email) {
-    return res.status(400).json({ error: 'Missing required fields.' });
-  }
-  if (!TIER_LABEL[tier]) {
-    return res.status(400).json({ error: 'Invalid tier.' });
-  }
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return res.status(400).json({ error: 'Invalid email address.' });
-  }
-
-  const tierLabel = TIER_LABEL[tier];
-
-  const founderRows = [
-    row('Name', name),
-    row('Email', `<a href="mailto:${email}" style="color:#0A1628">${email}</a>`),
-    row('Phone', phone),
-    row('Practice', practice),
-    row('Specialty', specialty),
-    row('Tier', tierLabel),
-  ].join('');
-  const founderHtml = emailShell(
-    'Setup Interest',
-    name,
-    founderRows,
-    description ? 'Description' : '',
-    description || '',
-  );
-
-  const userHtml = `
-    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;background:#F7F6F2;color:#0E1218;padding:32px;border-radius:8px;border:1px solid #E2DFD5;">
-      <div style="font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:0.18em;margin-bottom:16px;">ARX Systems · Galen</div>
-      <h2 style="font-family:Georgia,serif;font-size:24px;color:#0A1628;margin:0 0 16px;font-weight:600;">You&rsquo;re on the list.</h2>
-      <p style="font-size:15px;line-height:1.6;color:#3a3f47;margin:0 0 16px;">Hi ${name},</p>
-      <p style="font-size:15px;line-height:1.6;color:#3a3f47;margin:0 0 16px;">Thanks for reserving your spot. Your founding-tier pricing for <strong>${tierLabel}</strong> is locked. We&rsquo;ll email you the day the full setup wizard is live so you can finish onboarding and deploy your phone number.</p>
-      <p style="font-size:15px;line-height:1.6;color:#3a3f47;margin:0 0 16px;">If anything changes about your practice in the meantime — hours, services, anything — just reply to this email and we&rsquo;ll update your record.</p>
-      <p style="font-size:14px;color:#6b7280;margin:24px 0 0;">— The ARX Systems team</p>
-    </div>
-  `;
-
-  const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
-
-  if (!resend) {
-    console.log(`[setup-interest] No RESEND_API_KEY — logging:`, req.body);
-    return res.status(200).json({ ok: true });
-  }
-
-  try {
-    const founderResult = await resend.emails.send({
-      from: 'ARX Systems <onboarding@resend.dev>',
-      to: CONTACT_EMAIL,
-      replyTo: email,
-      subject: `[Setup Interest · ${tier}] ${name} — ${practice}`,
-      html: founderHtml,
-    });
-    if (founderResult.error) throw new Error(founderResult.error.message);
-
-    // Confirmation to the visitor — best-effort, never block on failure
-    // (the founder already has the lead).
-    try {
-      const userResult = await resend.emails.send({
-        from: 'ARX Systems <onboarding@resend.dev>',
-        to: email,
-        subject: 'Your Galen spot is reserved',
-        html: userHtml,
-      });
-      if (userResult.error) console.error('[setup-interest] confirmation failed:', userResult.error);
-    } catch (confErr) {
-      console.error('[setup-interest] confirmation send threw:', confErr);
-    }
-
-    return res.status(200).json({ ok: true });
-  } catch (err) {
-    console.error('[setup-interest] Resend error:', err);
-    return res.status(500).json({ error: 'Failed to send. Please email gabrielcespedes777@gmail.com directly.' });
-  }
-});
+app.post('/api/contact', contactHandler);
+app.post('/api/setup-interest', setupInterestHandler);
 
 app.listen(PORT, () => console.log(`ARX Systems → http://localhost:${PORT}`));
