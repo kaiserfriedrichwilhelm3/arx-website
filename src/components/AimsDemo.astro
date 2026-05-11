@@ -218,6 +218,10 @@ const modules = [
 <style>
   .aims {
     padding-block: var(--space-7);
+    scroll-margin-top: var(--space-5);  /* sticky nav clearance for anchor jumps */
+  }
+  @media (min-width: 768px) {
+    .aims { padding-block: var(--space-8); }
   }
   .aims-inner {
     max-width: var(--container-max);

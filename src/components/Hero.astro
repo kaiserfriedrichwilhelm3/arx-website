@@ -56,6 +56,9 @@ import StatCard from "./StatCard.astro";
 <style>
   .hero {
     min-height: 100vh;
+    /* small-viewport-height — accounts for mobile URL bar without
+     * the layout pop when the bar hides/shows on scroll */
+    min-height: 100svh;
     display: flex;
     align-items: center;
     padding-block: var(--space-7);
