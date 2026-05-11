@@ -1,0 +1,35 @@
+/*
+ * src/styles/global.css — sitewide CSS entry point.
+ *
+ * Loaded exactly once, from BaseLayout.astro. Import order is locked:
+ *   1. reset.css   — normalize browser defaults (token-free)
+ *   2. tokens.css  — :root custom properties
+ *   3. (fonts.css) — @font-face declarations, lands in Pass 1
+ *   4. body defaults (this file, below) — consume tokens
+ *
+ * Components do NOT @import any of these. Tokens cascade through the
+ * DOM into Astro scoped styles via :root custom properties.
+ */
+
+@import "./reset.css";
+@import "./tokens.css";
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-base);
+}
+
+/* Reduced motion — sitewide hard rule. Neutralizes every animation
+ * and transition. Components do not need to check the media query
+ * themselves. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
