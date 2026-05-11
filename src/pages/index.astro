@@ -1,16 +1,8 @@
 ---
-// Pass 0 scaffold placeholder. The real homepage is built in Pass 1.
-// Nav + Footer wire in via BaseLayout in commit (e); design tokens
-// arrive in commits (c)/(d); component primitives in (g)–(j).
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ARX Systems</title>
-  </head>
-  <body>
-    <p>v2 scaffold — under construction.</p>
-  </body>
-</html>
+<BaseLayout title="ARX Systems">
+  <p style="padding: var(--space-7) var(--space-4); max-width: var(--container-prose); margin-inline: auto;">
+    v2 scaffold — under construction. The homepage builds in Pass 1.
+  </p>
+</BaseLayout>
