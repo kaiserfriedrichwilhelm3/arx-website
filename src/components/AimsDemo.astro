@@ -120,11 +120,14 @@ const modules = [
     text-align: left;
     padding: var(--space-4);
     border: 1px solid var(--line);
-    background: transparent;
+    background-color: transparent;
     border-radius: var(--radius-md);
     cursor: pointer;
     min-height: 160px;
     font-family: inherit;
+    transition:
+      border-color     200ms var(--ease-out),
+      background-color 200ms var(--ease-out);
   }
   .module:focus-visible {
     outline: 2px solid var(--accent);
@@ -139,7 +142,10 @@ const modules = [
     height: 8px;
     border-radius: 50%;
     border: 1px solid var(--line);
-    background: transparent;
+    background-color: transparent;
+    transition:
+      border-color     250ms var(--ease-out),
+      background-color 250ms var(--ease-out);
   }
 
   .module-name {
@@ -151,6 +157,7 @@ const modules = [
     letter-spacing: -0.01em;
     margin: 0;
     padding-right: var(--space-5);  /* room for the dot */
+    transition: color 150ms var(--ease-out);
   }
 
   .module-desc {
@@ -161,6 +168,9 @@ const modules = [
     margin: 0;
     opacity: 0;
     transform: translateY(4px);
+    transition:
+      opacity   300ms var(--ease-out) 100ms,
+      transform 300ms var(--ease-out) 100ms;
   }
 
   /* ── active state ────────────────────────────────────────────── */
@@ -170,7 +180,8 @@ const modules = [
   }
   .module[data-active="true"] .module-dot {
     border-color: var(--accent);
-    background: var(--accent);
+    background-color: var(--accent);
+    animation: aims-pulse 1.4s ease-in-out infinite;
   }
   .module[data-active="true"] .module-name {
     color: var(--ink);
@@ -178,6 +189,28 @@ const modules = [
   .module[data-active="true"] .module-desc {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Pulse: 1.0 → 1.15 → 1.0 scale, 1.0 → 0.7 → 1.0 opacity. Continuous
+   * while the module is active. CSS-only; not JS-driven. */
+  @keyframes aims-pulse {
+    0%, 100% { transform: scale(1);    opacity: 1; }
+    50%      { transform: scale(1.15); opacity: 0.7; }
+  }
+
+  /* Reduced motion: every choreographed transition collapses to
+   * instant; pulse disabled. State changes still happen, just
+   * without animation. */
+  @media (prefers-reduced-motion: reduce) {
+    .module,
+    .module-dot,
+    .module-name,
+    .module-desc {
+      transition: none;
+    }
+    .module[data-active="true"] .module-dot {
+      animation: none;
+    }
   }
 
   /* aria-live region is visually hidden but readable by AT */
