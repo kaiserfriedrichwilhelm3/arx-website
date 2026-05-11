@@ -86,8 +86,22 @@ const modules = [
    * aria-live region is the single announcement vector on activation
    * change — prevents AT double-announce.
    *
-   * Hover/click takeover and keyboard interactivity arrive in the
-   * next commit.
+   * Interaction model:
+   *   - Mouse hover (pointerenter, pointerType=mouse) → PERMANENT
+   *     takeover. Auto-play stops for the session. The hovered
+   *     module becomes active. When the user mouses away, the last
+   *     hovered module stays active.
+   *   - Click / tap → PERMANENT takeover (same as hover, also covers
+   *     mobile and pen).
+   *   - Enter / Space on a focused module → fires click → PERMANENT
+   *     takeover.
+   *   - Keyboard Tab focus (without commit key) → TEMPORARY pause.
+   *     Auto-play resumes when focus leaves the grid, unless takeover
+   *     has been triggered.
+   *
+   * The keyboard distinction (focus = pause, Enter/Space = takeover)
+   * lets a keyboard user explore the demo without locking it on the
+   * first card they Tab through.
    */
   (() => {
     const grid = document.querySelector(".aims-grid");
@@ -105,6 +119,7 @@ const modules = [
     let firstTimeoutId: number | null = null;
     let gapTimeoutId: number | null = null;
     let inView = false;
+    let takeover = false;   // permanent once set; auto-play never restarts
 
     function setActive(idx: number) {
       modules.forEach((m, i) => {
@@ -130,7 +145,7 @@ const modules = [
     }
 
     function start() {
-      if (intervalId || firstTimeoutId || reduced.matches) return;
+      if (intervalId || firstTimeoutId || reduced.matches || takeover) return;
       // Module 0 is already active (markup). Hold for HOLD_MS, then start
       // ticking every HOLD_MS + GAP_MS.
       firstTimeoutId = window.setTimeout(() => {
@@ -162,6 +177,40 @@ const modules = [
     reduced.addEventListener("change", () => {
       if (reduced.matches) stop();
       else if (inView) start();
+    });
+
+    // Permanent takeover: stops auto-play for the session and pins the
+    // active module to whatever the user interacted with last.
+    function takeOver(idx: number) {
+      takeover = true;
+      stop();
+      // Cancel any in-flight gap timeout that would override our pick.
+      if (gapTimeoutId) { clearTimeout(gapTimeoutId); gapTimeoutId = null; }
+      activeIdx = idx;
+      setActive(idx);
+    }
+
+    modules.forEach((m, i) => {
+      // Mouse hover → permanent takeover. pointerType filter excludes
+      // touch-emitted pointerenter (we want tap, not touch-hover).
+      m.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") takeOver(i);
+      });
+      // click handles tap (mobile), click (mouse), Enter/Space (keyboard
+      // on a focused button — browsers translate these to click).
+      m.addEventListener("click", () => takeOver(i));
+    });
+
+    // Keyboard focus pauses auto-play TEMPORARILY (unlike hover). Resumes
+    // on blur unless takeover has been triggered by Enter/Space. focusin/
+    // focusout on the grid lets focus move between cards without flicker.
+    grid.addEventListener("focusin", () => { if (!takeover) stop(); });
+    grid.addEventListener("focusout", (e) => {
+      // Only resume when focus leaves the grid entirely, not when moving
+      // from card to card. relatedTarget = the element receiving focus.
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (next && grid.contains(next)) return;
+      if (!takeover && inView) start();
     });
   })();
 </script>
