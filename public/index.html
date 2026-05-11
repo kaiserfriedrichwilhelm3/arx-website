@@ -648,6 +648,13 @@
     .home-hero-headline .cursor.blink{animation:none}
     .home-hero-bg{display:none}
   }
+
+  /* ---------- Path selector (now section 2) — hover refresh ---------- */
+  .path-card{cursor:pointer;transition:border-color 200ms ease, background 200ms ease, transform 200ms ease, box-shadow 200ms ease}
+  .path-card:hover{border-color:var(--gold);background:var(--bg-2);transform:scale(1.01);box-shadow:var(--shadow-lg)}
+  @media (prefers-reduced-motion:reduce){
+    .path-card:hover{transform:none}
+  }
 </style>
 </head>
 <body>
@@ -717,8 +724,8 @@
 <div class="path-section">
   <div class="wrap">
     <div class="path-section-header reveal">
-      <div class="pre">ARX Systems · Miami, FL</div>
-      <h2>Where would you like to go?</h2>
+      <div class="pre">02 · Navigate</div>
+      <h2>Choose your path.</h2>
     </div>
     <div class="path-grid reveal" style="grid-template-columns:1fr 1fr;max-width:880px">
       <div class="path-card" id="card-about" onclick="selectPath('about')" role="button" tabindex="0">
