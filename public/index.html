@@ -568,6 +568,93 @@
   @media (prefers-reduced-motion:reduce){
     .reveal{opacity:1;transform:none;transition:none}
   }
+
+  /* ---------- Homepage hero (always visible, sitewide) ---------- */
+  .home-hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:96px 0 64px;
+    overflow:hidden;
+    background:var(--bg);
+  }
+  .home-hero-bg{
+    position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(560px circle at var(--mx,50%) var(--my,50%),
+                                rgba(200,163,92,0.10), transparent 62%);
+    opacity:0; transition:opacity 500ms ease;
+  }
+  .home-hero.glow-on .home-hero-bg{opacity:1}
+  .home-hero-inner{
+    position:relative;max-width:880px;margin:0 auto;padding:0 32px;text-align:center;
+  }
+  .home-hero-kicker{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);
+    margin-bottom:32px;
+  }
+  .home-hero-headline{
+    font-family:'Newsreader',Georgia,serif;
+    font-size:96px;line-height:1.05;font-weight:500;letter-spacing:-0.02em;
+    color:var(--ink);margin:0 0 28px;
+  }
+  .home-hero-headline .accent{color:var(--gold);display:inline-block}
+  .home-hero-headline .cursor{
+    display:inline-block;color:var(--gold);font-weight:400;
+    width:0.06em;margin-left:0.04em;
+    transform:translateY(-0.06em);
+  }
+  .home-hero-headline .cursor.blink{animation:cursorBlink 700ms steps(2) infinite}
+  .home-hero-sub{
+    font-family:'Inter',sans-serif;font-size:18px;line-height:1.55;color:var(--muted);
+    max-width:640px;margin:0 auto 40px;
+    opacity:0; animation:heroFadeIn 600ms ease-out 250ms forwards;
+  }
+  .home-hero-ctas{
+    display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px;
+    opacity:0; animation:heroFadeIn 600ms ease-out 400ms forwards;
+  }
+  .home-hero-stats{
+    display:flex;gap:56px;justify-content:center;flex-wrap:wrap;
+    opacity:0; animation:heroFadeIn 600ms ease-out 550ms forwards;
+  }
+  .home-hero-stat{text-align:center;min-width:120px}
+  .home-hero-stat-value{
+    font-family:'Newsreader',serif;font-size:36px;font-weight:500;
+    color:var(--ink);line-height:1.1;margin-bottom:4px;
+    font-variant-numeric:tabular-nums;
+  }
+  .home-hero-stat-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);
+  }
+  @keyframes heroFadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes cursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @media (max-width:900px){
+    .home-hero-headline{font-size:56px;line-height:1.08}
+    .home-hero{min-height:auto;padding:80px 0 64px}
+  }
+  @media (max-width:600px){
+    .home-hero-headline{font-size:40px;line-height:1.1}
+    .home-hero-sub{font-size:16px}
+    .home-hero-ctas{gap:12px}
+    .home-hero-stats{gap:32px}
+    .home-hero-stat-value{font-size:28px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .home-hero-sub, .home-hero-ctas, .home-hero-stats{
+      animation:none !important; opacity:1 !important;
+    }
+    .home-hero-headline .cursor.blink{animation:none}
+    .home-hero-bg{display:none}
+  }
+
+  /* ---------- Path selector (now section 2) — hover refresh ---------- */
+  .path-card{cursor:pointer;transition:border-color 200ms ease, background 200ms ease, transform 200ms ease, box-shadow 200ms ease}
+  .path-card:hover{border-color:var(--gold);background:var(--bg-2);transform:scale(1.01);box-shadow:var(--shadow-lg)}
+  @media (prefers-reduced-motion:reduce){
+    .path-card:hover{transform:none}
+  }
 </style>
 </head>
 <body>
@@ -605,12 +692,40 @@
 
 <a id="top"></a>
 
+<!-- ============== HOMEPAGE HERO ============== -->
+<section class="home-hero" id="home-hero" aria-label="ARX Systems intro">
+  <div class="home-hero-bg" aria-hidden="true"></div>
+  <div class="home-hero-inner">
+    <div class="home-hero-kicker">ARX Systems · Miami, FL · Founder-Led</div>
+    <h1 class="home-hero-headline">Your front desk, <span class="accent" id="hero-typed"><span class="cursor blink" aria-hidden="true">|</span></span></h1>
+    <p class="home-hero-sub">ARX Systems builds AI receptionists for medical practices and businesses where missed calls become lost revenue. 24/7 answering, instant booking, full transparency.</p>
+    <div class="home-hero-ctas">
+      <a href="#top" onclick="selectPath('galen');return false;" class="btn btn-gold btn-lg">Explore Galen <span class="arr">→</span></a>
+      <a href="#how" onclick="selectPath('galen');setTimeout(function(){var el=document.getElementById('how');if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},220);return false;" class="btn btn-ghost btn-lg">How It Works</a>
+    </div>
+    <div class="home-hero-stats">
+      <div class="home-hero-stat">
+        <div class="home-hero-stat-value">24/7</div>
+        <div class="home-hero-stat-label">Always answered</div>
+      </div>
+      <div class="home-hero-stat">
+        <div class="home-hero-stat-value" data-counter-target="35" data-counter-suffix="+">0+</div>
+        <div class="home-hero-stat-label">Languages</div>
+      </div>
+      <div class="home-hero-stat">
+        <div class="home-hero-stat-value">Zero-Retention</div>
+        <div class="home-hero-stat-label">Architecture</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============== PATH SELECTOR ============== -->
 <div class="path-section">
   <div class="wrap">
     <div class="path-section-header reveal">
-      <div class="pre">ARX Systems · Miami, FL</div>
-      <h2>Where would you like to go?</h2>
+      <div class="pre">02 · Navigate</div>
+      <h2>Choose your path.</h2>
     </div>
     <div class="path-grid reveal" style="grid-template-columns:1fr 1fr;max-width:880px">
       <div class="path-card" id="card-about" onclick="selectPath('about')" role="button" tabindex="0">
@@ -919,8 +1034,8 @@
 
 <!-- ============== HERO ============== -->
 <section class="hero" style="border-top:1px solid var(--line);padding-top:80px">
-  <div class="wrap hero-grid">
-    <div class="reveal">
+  <div class="wrap">
+    <div class="reveal" style="max-width:760px">
       <div class="eyebrow"><span class="dot"></span> AI Receptionist · Built for Medical Practices</div>
       <h1 class="hero-title">Your front desk, <em>answered.</em><br/>Every call, every time.</h1>
       <p class="hero-sub">Galen is an AI call agent built exclusively for medical practices. It books appointments, handles patient inquiries, and gives your team a live dashboard of every call — human and AI.</p>
@@ -933,9 +1048,6 @@
         <div><strong>BAA</strong>Executed before any clinical deployment</div>
         <div><strong>24/7</strong>Always answered</div>
       </div>
-    </div>
-    <div class="reveal" id="heroMock">
-      <!-- Dashboard mock injected by JavaScript -->
     </div>
   </div>
 </section>
@@ -1350,14 +1462,15 @@
         <a href="#contact">Contact</a>
       </nav>
       <div class="foot-meta">
-        <a href="#" aria-label="LinkedIn">LinkedIn ↗</a>
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
+        <!-- TODO: replace with /privacy page when drafted -->
+        <a href="mailto:info@arxsystems.org?subject=Privacy%20Inquiry">Privacy</a>
+        <!-- TODO: replace with /terms page when drafted -->
+        <a href="mailto:info@arxsystems.org?subject=Terms%20Inquiry">Terms</a>
       </div>
     </div>
     <div class="foot-bottom">
       <span>ARX Systems · Miami, FL</span>
-      <span>arx-systems.com</span>
+      <span>arxsystems.org</span>
     </div>
   </div>
 </footer>
@@ -1601,48 +1714,81 @@
     </div>`;
   }
 
-  // --- Dashboard mock (Galen path) ---
-  const mockHTML = `
-    <div class="mock" role="img" aria-label="Galen dashboard preview">
-      <div class="mock-bar">
-        <div class="dots"><span></span><span></span><span></span></div>
-        <div class="url">galen.arx-systems.com / dashboard</div>
-        <div style="width:36px"></div>
-      </div>
-      <div class="mock-body">
-        <div class="mock-card">
-          <div class="label">Calls Today</div>
-          <div class="val" id="kpi1">142</div>
-          <div class="delta">▲ 18% vs last Tue</div>
-        </div>
-        <div class="mock-card">
-          <div class="label">Booked</div>
-          <div class="val" id="kpi2">61</div>
-          <div class="delta">43% conversion</div>
-        </div>
-        <div class="mock-feed">
-          <div class="mock-feed-head">
-            <span>Live Call Feed</span>
-            <span class="live"><span class="pulse"></span> LIVE</span>
-          </div>
-          <div id="feed">
-            <div class="feed-row fresh"><span class="tag ai">AI</span><span><span class="who">M. Alvarez</span> · <span class="reason">New patient — annual physical</span></span><span class="tag booked">Booked</span><time>0:42</time></div>
-            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">D. Wright</span> · <span class="reason">Refill — lisinopril</span></span><span class="tag booked">Routed</span><time>1:08</time></div>
-            <div class="feed-row"><span class="tag human">HUMAN</span><span><span class="who">J. Park</span> · <span class="reason">Insurance question</span></span><span class="tag booked">Resolved</span><time>3:24</time></div>
-            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">R. Singh</span> · <span class="reason">Follow-up — dermatology</span></span><span class="tag booked">Booked</span><time>4:51</time></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('heroMock').innerHTML = mockHTML;
 
-  // Subtle KPI tick
-  let k1 = 142, k2 = 61;
-  setInterval(() => {
-    if (Math.random() < 0.55) { k1 += 1; const el = document.getElementById('kpi1'); if (el) el.textContent = k1; }
-    if (Math.random() < 0.32) { k2 += 1; const el = document.getElementById('kpi2'); if (el) el.textContent = k2; }
-  }, 2400);
+
+  // ---------- Homepage hero motion ----------
+  (function homeHero(){
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Typewriter signature moment — "answered." types in after rest of headline visible
+    const typed = document.getElementById('hero-typed');
+    if (typed) {
+      if (reduce) {
+        typed.textContent = 'answered.';
+      } else {
+        const word = 'answered.';
+        let i = 0;
+        const charDelay = 80;
+        const startDelay = 700;
+        const cursorMarkup = '<span class="cursor blink" aria-hidden="true">|</span>';
+        setTimeout(function tick(){
+          if (i < word.length) {
+            typed.innerHTML = word.substring(0, i+1) + cursorMarkup;
+            i++;
+            setTimeout(tick, charDelay);
+          } else {
+            typed.innerHTML = word + cursorMarkup;
+            setTimeout(function(){ typed.textContent = word; }, 2000);
+          }
+        }, startDelay);
+      }
+    }
+
+    // Animated stat counters — fire once on viewport entry, ease-out cubic
+    const counters = document.querySelectorAll('[data-counter-target]');
+    if (counters.length) {
+      const counterObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+          counterObs.unobserve(el);
+          const target = parseInt(el.dataset.counterTarget, 10);
+          const suffix = el.dataset.counterSuffix || '';
+          if (reduce || isNaN(target)) { el.textContent = target + suffix; return; }
+          const duration = 1400;
+          const start = performance.now();
+          (function frame(now){
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = Math.round(target * eased) + suffix;
+            if (t < 1) requestAnimationFrame(frame);
+          })(performance.now());
+        });
+      }, {threshold: 0.5});
+      counters.forEach(function(el){ counterObs.observe(el); });
+    }
+
+    // Mouse-tracked gradient glow — desktop hover only, RAF-throttled
+    const heroEl = document.getElementById('home-hero');
+    if (heroEl && !reduce && window.matchMedia('(hover: hover)').matches) {
+      let pending = false, px = 50, py = 50;
+      heroEl.addEventListener('mousemove', function(e){
+        const r = heroEl.getBoundingClientRect();
+        px = ((e.clientX - r.left) / r.width) * 100;
+        py = ((e.clientY - r.top)  / r.height) * 100;
+        if (!pending) {
+          pending = true;
+          requestAnimationFrame(function(){
+            heroEl.style.setProperty('--mx', px + '%');
+            heroEl.style.setProperty('--my', py + '%');
+            pending = false;
+          });
+        }
+      });
+      heroEl.addEventListener('mouseenter', function(){ heroEl.classList.add('glow-on'); });
+      heroEl.addEventListener('mouseleave', function(){ heroEl.classList.remove('glow-on'); });
+    }
+  })();
 </script>
 
 </body>
