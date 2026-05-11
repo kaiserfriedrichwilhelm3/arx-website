@@ -4,7 +4,7 @@
  * Loaded exactly once, from BaseLayout.astro. Import order is locked:
  *   1. reset.css   — normalize browser defaults (token-free)
  *   2. tokens.css  — :root custom properties
- *   3. (fonts.css) — @font-face declarations, lands in Pass 1
+ *   3. fonts.css   — @font-face declarations (font-display: swap)
  *   4. body defaults (this file, below) — consume tokens
  *
  * Components do NOT @import any of these. Tokens cascade through the
@@ -13,6 +13,7 @@
 
 @import "./reset.css";
 @import "./tokens.css";
+@import "./fonts.css";
 
 body {
   background: var(--bg);

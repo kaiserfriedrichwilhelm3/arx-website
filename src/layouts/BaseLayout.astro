@@ -3,8 +3,8 @@
  * BaseLayout.astro — sitewide page shell.
  *
  * Mounts: <html><head><body> + global.css + Nav + <slot> for page
- * content + Footer. Font preload links land in Pass 1 when fonts.css
- * and self-hosted .woff2 files arrive.
+ * content + Footer. Inter + JetBrains Mono are preloaded (largest
+ * text area). Fraunces FOUTs in against the Georgia fallback.
  *
  * Every page in src/pages/*.astro should wrap its content in this
  * layout. Pages pass title (required), description (optional),
@@ -38,6 +38,8 @@ const {
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="/arx-mark.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="preload" href="/fonts/body/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/mono/JetBrainsMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <title>{title}</title>
   </head>
   <body>
