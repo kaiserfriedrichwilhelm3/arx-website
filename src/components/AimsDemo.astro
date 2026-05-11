@@ -1,0 +1,185 @@
+---
+/*
+ * AimsDemo.astro — the architecture-demonstrating section.
+ *
+ * Six module cards in a 3×2 grid (desktop), 2×3 (tablet), 1×6 (mobile).
+ * Each card is a <button> with two states: active and inactive.
+ * Module 1 (Reception) is active by default — this is also the
+ * reduced-motion default per the brief.
+ *
+ * Activation choreography (CSS transitions) lands in the next commit.
+ * Auto-play + interactivity (JS) lands in subsequent commits. This
+ * commit ships the static layout: states are defined in CSS via
+ * [data-active] attribute, but transitions are instant.
+ *
+ * Active-background tint: rgba(200, 163, 92, 0.05) used inline.
+ * Decision NOT to tokenize: used in exactly one place across the
+ * whole site; tokenizing a single-use value is premature abstraction.
+ *
+ * Inline rationale per the brief: the description is always in the
+ * DOM (opacity-hidden when inactive) so card heights stay stable
+ * across activation. aria-hidden on the inactive description excludes
+ * it from AT; an aria-live region announces the active module's
+ * description on activation change (wired in commit 6).
+ */
+import Kicker from "./Kicker.astro";
+
+const modules = [
+  { id: "reception", name: "Reception", desc: "Answers every call. 24/7. Across every major language." },
+  { id: "scheduling", name: "Scheduling", desc: "Books, reschedules, and confirms appointments without staff input." },
+  { id: "intake", name: "Intake", desc: "Collects patient information before the visit. EHR-ready." },
+  { id: "insurance", name: "Insurance", desc: "Verifies coverage and benefits before booking." },
+  { id: "triage", name: "Triage", desc: "Routes urgent calls correctly. Emergency vs. routine, in seconds." },
+  { id: "followup", name: "Follow-up", desc: "Confirms appointments. Sends reminders. Handles no-shows." },
+];
+---
+<section id="aims-demo" class="aims" aria-labelledby="aims-heading">
+  <div class="aims-inner">
+    <header class="aims-header">
+      <Kicker>02 · Architecture</Kicker>
+      <h2 id="aims-heading" class="aims-heading">AIMS — modular by design.</h2>
+      <p class="aims-lede">
+        Activate the capabilities your practice needs. Add more as you grow.
+        Every module is a focused agent built on our shared AIMS core.
+      </p>
+    </header>
+
+    <div class="aims-grid" role="group" aria-label="AIMS modules">
+      {modules.map((m, i) => (
+        <button
+          class="module"
+          type="button"
+          data-id={m.id}
+          data-active={i === 0 ? "true" : "false"}
+          aria-pressed={i === 0 ? "true" : "false"}
+        >
+          <span class="module-dot" aria-hidden="true"></span>
+          <h3 class="module-name">{m.name}</h3>
+          <p class="module-desc" aria-hidden={i === 0 ? "false" : "true"}>{m.desc}</p>
+        </button>
+      ))}
+    </div>
+
+    <div class="aims-live sr-only" aria-live="polite" aria-atomic="true" data-aims-live>
+      Reception. Answers every call. 24/7. Across every major language.
+    </div>
+  </div>
+</section>
+
+<style>
+  .aims {
+    padding-block: var(--space-7);
+  }
+  .aims-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+  .aims-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    max-width: var(--container-prose);
+  }
+  .aims-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .aims-lede {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    max-width: 540px;
+  }
+
+  .aims-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  @media (min-width: 768px) {
+    .aims-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .aims-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .module {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: left;
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    background: transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    min-height: 160px;
+    font-family: inherit;
+  }
+  .module:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .module-dot {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: transparent;
+  }
+
+  .module-name {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding-right: var(--space-5);  /* room for the dot */
+  }
+
+  .module-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  /* ── active state ────────────────────────────────────────────── */
+  .module[data-active="true"] {
+    border-color: var(--accent);
+    background: rgba(200, 163, 92, 0.05);
+  }
+  .module[data-active="true"] .module-dot {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+  .module[data-active="true"] .module-name {
+    color: var(--ink);
+  }
+  .module[data-active="true"] .module-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* aria-live region is visually hidden but readable by AT */
+  .aims-live { /* sr-only inherited; no extra styles */ }
+</style>
