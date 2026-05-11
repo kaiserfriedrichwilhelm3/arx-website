@@ -89,7 +89,7 @@ import StatCard from "./StatCard.astro";
   .hero-headline-lead { color: var(--ink); }
   .hero-headline-accent {
     position: relative;
-    color: var(--accent);
+    color: var(--accent-text);  /* text → AA-compliant variant */
     display: inline-block;
   }
   .hero-headline-accent::after {
@@ -99,7 +99,7 @@ import StatCard from "./StatCard.astro";
     right: 0;
     bottom: 0.05em;
     height: 1px;
-    background: var(--accent);
+    background: var(--accent);  /* ornament → original brass */
     transform: scaleX(0);
     transform-origin: left center;
     animation: underline-grow 800ms cubic-bezier(0.16, 1, 0.3, 1) 700ms forwards;
