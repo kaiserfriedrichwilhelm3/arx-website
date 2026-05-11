@@ -1,0 +1,77 @@
+---
+/*
+ * WhyArx.astro — three-point value-prop block.
+ *
+ * Three points (medical-first, modular not monolithic, zero-retention).
+ * Each: --text-h3 headline + --text-body body. Three-column on
+ * desktop, stacks to one column on mobile.
+ *
+ * Uses Section primitive for the kicker + heading + section-padding.
+ * The grid is the body content.
+ */
+import Section from "./Section.astro";
+
+const points = [
+  {
+    headline: "Medical-first.",
+    body: "Not retrofitted from a generic assistant. AIMS was built around the workflows of real practices, from the first line of code.",
+  },
+  {
+    headline: "Modular, not monolithic.",
+    body: "Activate only the modules your practice needs. Add more as the work grows. Nothing you don't use gets in the way.",
+  },
+  {
+    headline: "Zero-retention by default.",
+    body: "Patient information is processed and discarded. We retain no PHI. Your data never trains a model.",
+  },
+];
+---
+<Section
+  id="why-arx"
+  kicker="03 · Why ARX"
+  heading="Built for the work medical practices actually do."
+>
+  <div class="why-grid">
+    {points.map((p) => (
+      <div class="why-point">
+        <h3 class="why-headline">{p.headline}</h3>
+        <p class="why-body">{p.body}</p>
+      </div>
+    ))}
+  </div>
+</Section>
+
+<style>
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  @media (min-width: 768px) {
+    .why-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+  }
+  .why-point {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .why-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .why-body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+  }
+</style>
