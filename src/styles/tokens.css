@@ -11,13 +11,37 @@
  */
 
 :root {
-  /* ──── color ──────────────────────────────────────────────────────── */
+  /* ──── color ──────────────────────────────────────────────────────── *
+   * ACCENT — ornament vs text (READ BEFORE REACHING FOR A TOKEN):
+   *
+   *   --accent (#C8A35C, 2.19:1 vs --bg)
+   *     ORNAMENT ONLY. Use for non-text marks that carry no semantic
+   *     content on their own: borders, status dots, section rules,
+   *     focus outlines, the underline-grow under the hero headline,
+   *     QuoteCard's left rule, AIMS module active border/dot fill,
+   *     accent-bg-tint backgrounds. Contrast does not apply — the
+   *     element has no text content of its own.
+   *
+   *   --accent-text (#7A5F2A, 5.55:1 vs --bg)
+   *     TEXT ONLY. Use for any text rendered in the accent family:
+   *     kickers (accent variant), the hero headline accent word
+   *     "answered.", any future accent-colored copy. Passes WCAG AA
+   *     for body text (4.5:1) and large text (3:1) with headroom.
+   *
+   *   --accent-deep (#9A7C3D, 3.65:1 vs --bg)
+   *     HOVER/ACTIVE state for accent ornament. Passes AA for large
+   *     text only; do not use for body text.
+   *
+   * If you find yourself coloring text with --accent, that is the bug —
+   * reach for --accent-text. The Pass 1 / WCAG AA gate depends on it.
+   * ──────────────────────────────────────────────────────────────────── */
   --bg:           #F7F6F2;
   --ink:          #0E1218;
   --muted:        #5A5F66;
   --line:         #E2DFD5;
   --accent:       #C8A35C;
   --accent-deep:  #9A7C3D;
+  --accent-text:  #7A5F2A;
   --error:        #A8453A;
 
   /* ──── typography ─────────────────────────────────────────────────── */
