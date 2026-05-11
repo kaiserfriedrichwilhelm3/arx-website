@@ -1,111 +1,84 @@
-# ARX Systems — Project Memory (CLAUDE.md)
-# Last updated: 2026-04-14 (v6)
+# ARX Systems Marketing Site — CLAUDE.md
 
-## PRODUCT TRUTH
-Pre-launch. Nothing deployed to any client.
-Write as: "Here is what we are building. Here is what it will do.
-Join early — before public launch."
+Project memory for Claude Code working on this repo. Keep this file accurate; stale memory has cost real money here before.
 
-## BRAND
-  ARX Systems → Company (Founder-led, Miami FL)
-  AIMS → Artificial Intelligence Management System (general business)
-  Galen → Clinical implementation of AIMS (medical practices)
-  Atlas → Real estate implementation of AIMS (coming soon, teaser only)
+## Stack
 
-  "AIVIS" → DELETED. Never appears anywhere.
-  "HIPAA-compliant / HIPAA-ready" → DELETED. No compliance page exists.
-    Replace with: "Built with zero-retention architecture"
-                  "Designed for clinical data security"
-                  (Never claim compliance without a BAA page)
+- Node.js (≥20.9) + Express 4
+- One static HTML file at `public/index.html` (~81KB) with inlined CSS and JS
+- Resend API for transactional email (server-side only)
+- Hosted on Railway, auto-deploys from `main`
 
-## SITE ARCHITECTURE
-  /       → Landing selector (choose AIMS or Galen)
-  /aims   → AIMS full product page (general business)
-  /galen  → Galen full product page (clinical medicine)
+**No React. No Next.js. No bundler. No TypeScript.** If you find any doc claiming otherwise, that doc is wrong and should be corrected. The repo was a Next.js app earlier in its life; commits `b145a7c` (feb 2026) and `fa0959f` removed the framework. Stray Next.js icons in `public/` (`next.svg`, `vercel.svg`, `file.svg`, `globe.svg`, `window.svg`) and any `pages/` references in tooling are dead leftovers and safe to delete.
 
-## BANNED PHRASES (Zero Tolerance)
-  ✗ "AIVIS" anywhere
-  ✗ "Deploy" on any CTA
-  ✗ "Live in 48 hours" / any deployment timeline
-  ✗ "Available for Immediate Deployment"
-  ✗ "Cespedes Cardiology" as an active partner
-  ✗ "In Active Clinical Development"
-  ✗ "EHR Write-Back (In-Testing)"
-  ✗ "HIPAA-compliant" / "HIPAA-ready" / "HIPAA Architecture"
-  ✗ Any hard stat presented as a proven result
-  ✗ "Direct Founder access" in pricing tiers
-  ✗ "In Development" on arm/module cards
-    → Use: "Alpha Stage · Limited Access"
+## File map
 
-## CORRECT CTA LANGUAGE
-  Primary:   "Apply for Early Access" / "Join the Alpha"
-  Galen:     "Inquire About Galen" / "Request Galen Access"
-  Neutral:   "Learn More" / "Explore" / "See How It Works"
-  Never:     "Deploy" / "Buy Now" / "Sign Up" / "Subscribe"
+```
+arx-website/
+├── server.js                  # Express — 2 POST endpoints + static middleware
+├── public/
+│   ├── index.html             # Entire marketing site (4 paths: about / partners / galen / custom)
+│   ├── setup.html             # Standalone "reserve your spot" form — currently unlinked from homepage
+│   ├── favicon.ico
+│   ├── arx-mark.svg
+│   └── {next,vercel,...}.svg  # dead Next.js scaffold leftovers
+├── package.json               # express + resend only
+├── railway.toml               # nixpacks builder, `npm start` startCommand
+├── nixpacks.toml              # nodejs_20 phase
+├── .node-version              # 20.19.0
+├── AGENTS.md
+├── CLAUDE.md                  # this file
+└── README.md
+```
 
-## DESIGN SYSTEM
+## Forms and endpoints
 
-Colors (CSS custom properties — NEVER hardcode hex in JSX):
-  --obsidian:         #0A0A0A
-  --surface:          #111111
-  --surface-2:        #161616
-  --border:           rgba(250,250,250,0.08)
-  --border-gold:      rgba(212,175,55,0.3)
-  --border-galen:     rgba(74,158,255,0.25)
-  --white:            #FAFAFA
-  --muted:            #666666
-  --muted-2:          #444444
-  --gold:             #D4AF37   AIMS accent
-  --gold-muted:       rgba(212,175,55,0.12)
-  --galen:            #4A9EFF   Galen accent
-  --galen-muted:      rgba(74,158,255,0.12)
-  --danger:           #FF4444
-  --success:          #22C55E
-  --warning:          #F59E0B   in-development status dots
+| Endpoint | Triggered by | Behavior |
+|---|---|---|
+| `POST /api/contact` | Galen contact form (Galen path) **and** Custom Project form (Custom path) — discriminated by `type: "galen"` vs `type: "custom"` in body | Validates required fields + email format, builds an HTML email, sends to `CONTACT_EMAIL` via Resend, rate-limited 5/hour per IP. |
+| `POST /api/setup-interest` | `public/setup.html` form (unlinked from homepage but still reachable via direct URL) | Validates tier + practice + name + email, emails founder + sends visitor a confirmation. Same rate-limit window as `/api/contact`. |
 
-Typography:
-  NOTE: next/font/google causes 403 at build time in Railway sandbox.
-  Fonts loaded via CDN <link> in _document.tsx.
-  CSS vars: --font-serif, --font-mono set in _document.tsx <style> block.
-  FORBIDDEN: Inter, Roboto, Arial, system-ui, sans-serif
+Static middleware uses `{ extensions: ['html'] }` so `/setup` resolves to `public/setup.html` without the suffix.
 
-Borders: 1px only. No box-shadow. Glassmorphism: Nav only.
-Radius: 8px cards (--radius-card) | 4px badges (--radius-badge)
-Anchor offset: scroll-margin-top 80px on all [id] elements
+## Environment variables
 
-## ANIMATION
-  Library: motion/react v12 — import from "motion/react" ONLY
-  AIMS Spring: { type:'spring', stiffness:80, damping:18, mass:1.2 }
-  Reduced motion: useReducedMotion() in every animated component
+| Name | Required | Notes |
+|---|---|---|
+| `RESEND_API_KEY` | Yes in production | If unset, the server logs payloads to stdout — useful in local dev, dangerous in prod (silent dropped emails). |
+| `CONTACT_EMAIL` | No | Founder's inbox; defaults to `gabrielcespedes777@gmail.com`. |
+| `PORT` | No | Defaults to 3000. Railway sets this automatically. |
 
-## MODAL / FORM FIX (CRITICAL)
-  AIMSForm and GalenForm each include their own overlay.
-  Overlay: position:fixed; inset:0; display:flex;
-           align-items:center; justify-content:center; z-index:9999
-  Panel: flex child of overlay — centered by flexbox
-  NO position:absolute on panel. NO explicit top/left centering.
+## Deploy
 
-## ALPHA STAGE LANGUAGE
-  Never on module/arm cards: "In Development"
-  Always: "Alpha Stage · Limited Access"
-  Rationale: "Alpha" signals exclusive early access.
-             "Development" signals it might not work.
+Push to `main` → Railway auto-deploys via nixpacks. Domain `arxsystems.org` points at the Railway service. The current ephemeral URL is `arx-website-production.up.railway.app`. There is no staging environment — `main` is production.
 
-## INTEGRATION TILES
-  Each tile is its own DOM element — NEVER a concatenated string.
-  <span className="integration-tile">SF</span>  ← correct
-  "SFHBZDGSQKSL"  ← never again
+## Reveal animations (gotcha)
 
-## CODING STANDARDS
-  1. No TypeScript any
-  2. All colors via CSS vars — never hex in JSX
-  3. CDN fonts via _document.tsx (Railway blocks next/font/google)
-  4. Inline SVG only
-  5. Pages Router — NOT App Router
-  6. 'use client' on every interactive component
-  7. TypeScript interface for every component's props
-  8. No HTML form tags — div containers + onClick handlers
-  9. scroll-margin-top via [id] global rule in globals.css
-  10. Status dots: var(--warning) orange — NOT green
-  11. Integration tiles: individual DOM elements, never concatenated string
-  12. No dropdowns in forms — typed text inputs only
+`.reveal` elements fade in via an IntersectionObserver (threshold `0.08`) in the inline `<script>`. On first load, anything below the fold is invisible until scrolled into view. If you screenshot the page right after navigation, sections will look blank — that's a render quirk, not a bug. Don't add `display:none` to a `.reveal` element unless you also remove the class.
+
+## Path selector
+
+The site is one HTML file with four "paths" pre-rendered inside it:
+
+```
+about → partners → galen → custom
+```
+
+`selectPath(name)` toggles `display` on each `#path-{name}` div and rewrites nav + footer link visibility. Default visible path on load is `about`. If you add a fifth path, also update the `paths` array at the top of `selectPath`, the `labels`/`footLabels` maps, and the path-card grid in the path selector.
+
+## What NOT to touch without asking
+
+Copy changes in the following areas carry legal, financial, or strategic weight. Pause and surface the proposed edit before pushing:
+
+1. **Pricing tiers** — `The Receptionist $400`, `The Command Center $900`, `The Full Stack $1,500–2,000`, and their setup fees. Changing a number here without aligning the portal (`kaiserfriedrichwilhelm3/arx-portal`, `lib/catalog.ts`) and the spec docs (`~/Downloads/ARX_Receptionist_Modular_Build_Spec.docx`) creates a contradiction a prospect's lawyer will catch.
+2. **BAA / HIPAA copy.** As of 2026-05-06, every BAA reference uses forward-looking *"required before clinical deployment"* language (commit `cc524a9`). Do **not** revert to present-tense fulfillment claims (*"signed with every contract"*, *"executed before a single call routes"*) until a lawyer-drafted BAA template is actually on file.
+3. **Anything in the Security or "Why ARX Systems" sections** that asserts compliance, certifications, or operational guarantees (zero-retention, 24/7 answered, BAA-backed).
+4. **Clinical-pilot / partners section** copy referencing Dr. Edgardo M. Cespedes or other named providers. The current framing is deliberate.
+5. **The banned-phrases list** in `~/Downloads/AIMS_CLAUDE_CODE_PROMPT_v6.md` — project-wide constraints (e.g. *"Cespedes Cardiology as an active partner"*, *"HIPAA-compliant"*, *"Deploy" on any CTA*). These apply here even though the file lives elsewhere.
+
+## Conventions
+
+- **No build step.** Don't add Webpack/Vite/esbuild/Next. The point of this repo is that it boots in ~50ms.
+- **No third-party scripts in `public/index.html`.** Strong privacy posture is part of the medical brand promise.
+- **All colors / fonts as CSS custom properties** (`--navy`, `--gold`, etc.) — never hardcode hex.
+- **Inline SVG only** for icons. No icon-font CDNs.

@@ -1,40 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# arx-website
 
-## Getting Started
+Marketing site for ARX Systems — [arxsystems.org](https://arxsystems.org).
 
-First, run the development server:
+## Stack
+
+Node.js + Express, single static HTML file at `public/index.html`. No build step, no framework.
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm start
+# → http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The server reads `RESEND_API_KEY` from the environment for transactional email. Without it, contact-form submissions log payloads to stdout instead of sending — useful in local dev, do not run prod that way.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxx npm start
+```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Files worth knowing about
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+| Path | What it is |
+|---|---|
+| `public/index.html` | The entire marketing site — four "paths" (about / partners / galen / custom) toggled by inline JS |
+| `public/setup.html` | Standalone "reserve your spot" form (auto-saves to localStorage, submits to `/api/setup-interest`) |
+| `server.js` | Express server: static middleware + `POST /api/contact` + `POST /api/setup-interest` |
+| `railway.toml`, `nixpacks.toml` | Railway deploy config (nixpacks builder, `npm start` start command) |
+| `CLAUDE.md` | Conventions, gotchas, and the list of copy areas that need approval before edits |
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy
 
-## Learn More
+Push to `main` → Railway auto-deploys. Site is at [arxsystems.org](https://arxsystems.org). There is no staging branch — `main` is live.
 
-To learn more about Next.js, take a look at the following resources:
+## Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
+| Name | Required | Default |
+|---|---|---|
+| `RESEND_API_KEY` | Yes in production | unset → logs to stdout |
+| `CONTACT_EMAIL` | No | `gabrielcespedes777@gmail.com` |
+| `PORT` | No | `3000` (Railway sets this) |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Before editing copy
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+See `CLAUDE.md` for the list of areas where edits need approval (pricing tiers, BAA/HIPAA claims, clinical-pilot framing). Everything else is fair game.
