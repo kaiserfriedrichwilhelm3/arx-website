@@ -1,0 +1,161 @@
+---
+/*
+ * FormField.astro — label + control + optional error.
+ *
+ * Supports three controls via `as` prop:
+ *   "input"     (default) — text/email/tel/etc., set via `type`
+ *   "textarea"  multiline; min-height 8em, resize: vertical
+ *   "select"    options array; first option is the disabled "Select…"
+ *               placeholder
+ *
+ * Error state: pass `error` as a string; the control gets a red border,
+ * the error <p> renders below the control with id={field-name}-error,
+ * and aria-invalid + aria-describedby wire the control to the message.
+ *
+ * Required state: pass `required`. Native `required` attribute is set
+ * AND a visible "*" glyph appears next to the label (aria-hidden, since
+ * the semantic load is carried by the required attribute + aria-required).
+ *
+ * Per the accent contrast rule: error color is --error (5.5:1 AA pass),
+ * NOT --accent. Focus ring is --accent (decorative outline).
+ */
+interface Props {
+  name: string;
+  label: string;
+  as?: "input" | "textarea" | "select";
+  type?: string;
+  required?: boolean;
+  value?: string;
+  placeholder?: string;
+  options?: string[];
+  error?: string;
+  autocomplete?: string;
+}
+const {
+  name,
+  label,
+  as = "input",
+  type = "text",
+  required = false,
+  value = "",
+  placeholder,
+  options = [],
+  error,
+  autocomplete,
+} = Astro.props;
+const id  = `field-${name}`;
+const eid = `${id}-error`;
+---
+<div class:list={["field", error && "field-has-error"]}>
+  <label for={id} class="field-label">
+    {label}
+    {required && <span class="field-req" aria-hidden="true">*</span>}
+  </label>
+
+  {as === "input" && (
+    <input
+      id={id}
+      name={name}
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      required={required}
+      autocomplete={autocomplete}
+      class="field-control"
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? eid : undefined}
+      aria-required={required ? "true" : undefined}
+    />
+  )}
+  {as === "textarea" && (
+    <textarea
+      id={id}
+      name={name}
+      placeholder={placeholder}
+      required={required}
+      rows="4"
+      class="field-control field-textarea"
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? eid : undefined}
+      aria-required={required ? "true" : undefined}
+    >{value}</textarea>
+  )}
+  {as === "select" && (
+    <select
+      id={id}
+      name={name}
+      required={required}
+      class="field-control field-select"
+      aria-invalid={error ? "true" : undefined}
+      aria-describedby={error ? eid : undefined}
+      aria-required={required ? "true" : undefined}
+    >
+      <option value="" disabled selected={!value}>Select…</option>
+      {options.map((opt) => (
+        <option value={opt} selected={opt === value}>{opt}</option>
+      ))}
+    </select>
+  )}
+
+  {error && <p id={eid} class="field-msg">{error}</p>}
+</div>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .field-label {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .field-req { color: var(--muted); margin-left: 2px; }
+
+  .field-control {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--ink);
+    background: var(--bg);
+    border: var(--border-hairline);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2) var(--space-3);
+    width: 100%;
+    transition: border-color var(--motion-fast) var(--ease-out);
+  }
+  .field-control::placeholder { color: var(--muted); opacity: 1; }
+  .field-control:hover  { border-color: var(--muted); }
+  .field-control:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: var(--ink);
+  }
+
+  .field-textarea { resize: vertical; min-height: 8em; }
+
+  .field-select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg,  transparent 50%, var(--ink) 50%),
+      linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position:
+      calc(100% - 18px) calc(50% - 3px),
+      calc(100% - 12px) calc(50% - 3px);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    padding-right: var(--space-5);
+  }
+
+  .field-has-error .field-control { border-color: var(--error); }
+  .field-msg {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--error);
+    margin: 0;
+  }
+</style>
