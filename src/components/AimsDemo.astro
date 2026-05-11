@@ -55,7 +55,7 @@ const modules = [
         >
           <span class="module-dot" aria-hidden="true"></span>
           <h3 class="module-name">{m.name}</h3>
-          <p class="module-desc" aria-hidden={i === 0 ? "false" : "true"}>{m.desc}</p>
+          <p class="module-desc" aria-hidden="true">{m.desc}</p>
         </button>
       ))}
     </div>
@@ -65,6 +65,106 @@ const modules = [
     </div>
   </div>
 </section>
+
+<script>
+  /*
+   * AIMS demo auto-play.
+   *
+   * Rotation: each module holds active for 2400ms. Between modules,
+   * the previous deactivates (300ms transition), then 300ms later the
+   * next activates (300ms transition). No overlap in active state.
+   *
+   * Gating:
+   *   - IntersectionObserver (50% threshold): start when the grid is
+   *     in view, stop when scrolled out.
+   *   - visibilitychange: stop when the tab is backgrounded; resume
+   *     if the grid is still in view when the tab returns.
+   *   - prefers-reduced-motion: never starts; if the preference
+   *     flips at runtime, currently-running auto-play stops.
+   *
+   * Module-card descriptions are kept aria-hidden="true" always. The
+   * aria-live region is the single announcement vector on activation
+   * change — prevents AT double-announce.
+   *
+   * Hover/click takeover and keyboard interactivity arrive in the
+   * next commit.
+   */
+  (() => {
+    const grid = document.querySelector(".aims-grid");
+    if (!grid) return;
+    const modules = Array.from(grid.querySelectorAll<HTMLButtonElement>(".module"));
+    if (!modules.length) return;
+    const live = document.querySelector<HTMLElement>("[data-aims-live]");
+
+    const HOLD_MS = 2400;
+    const GAP_MS  = 300;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let activeIdx     = 0;     // module 0 (Reception) is the initial active per markup
+    let intervalId: number | null = null;
+    let firstTimeoutId: number | null = null;
+    let gapTimeoutId: number | null = null;
+    let inView = false;
+
+    function setActive(idx: number) {
+      modules.forEach((m, i) => {
+        const on = i === idx;
+        m.setAttribute("data-active", on ? "true" : "false");
+        m.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (idx >= 0 && idx < modules.length && live) {
+        const name = modules[idx].querySelector(".module-name")?.textContent?.trim() || "";
+        const desc = modules[idx].querySelector(".module-desc")?.textContent?.trim() || "";
+        live.textContent = `${name}. ${desc}`;
+      }
+    }
+
+    function tick() {
+      // Deactivate everything for the gap, then activate the next one.
+      setActive(-1);
+      gapTimeoutId = window.setTimeout(() => {
+        gapTimeoutId = null;
+        activeIdx = (activeIdx + 1) % modules.length;
+        setActive(activeIdx);
+      }, GAP_MS);
+    }
+
+    function start() {
+      if (intervalId || firstTimeoutId || reduced.matches) return;
+      // Module 0 is already active (markup). Hold for HOLD_MS, then start
+      // ticking every HOLD_MS + GAP_MS.
+      firstTimeoutId = window.setTimeout(() => {
+        firstTimeoutId = null;
+        tick();
+        intervalId = window.setInterval(tick, HOLD_MS + GAP_MS);
+      }, HOLD_MS);
+    }
+
+    function stop() {
+      if (firstTimeoutId) { clearTimeout(firstTimeoutId); firstTimeoutId = null; }
+      if (gapTimeoutId)   { clearTimeout(gapTimeoutId);   gapTimeoutId = null;   }
+      if (intervalId)     { clearInterval(intervalId);    intervalId = null;     }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        inView = entry.isIntersecting;
+        if (inView) start(); else stop();
+      }
+    }, { threshold: 0.5 });
+    observer.observe(grid);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else if (inView) start();
+    });
+
+    reduced.addEventListener("change", () => {
+      if (reduced.matches) stop();
+      else if (inView) start();
+    });
+  })();
+</script>
 
 <style>
   .aims {
