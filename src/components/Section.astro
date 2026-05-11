@@ -1,0 +1,110 @@
+---
+/*
+ * Section.astro — content section with consistent vertical padding,
+ * optional kicker, optional heading. Two width modes via `prose` prop:
+ * default uses --container-max (1200px); prose=true switches to
+ * --container-prose (680px) for editorial reading width.
+ *
+ * ID HANDLING (per Pass 0 review):
+ * When `heading` is provided, the section is rendered as a labelled
+ * landmark via aria-labelledby pointing at the heading. The heading
+ * needs a stable id for this to work. If the page author passes `id`
+ * explicitly, that wins. If not, we generate a random id via
+ * crypto.randomUUID() so two heading-bearing Sections on the same page
+ * never collide. This avoids the duplicate-"section-h" bug the earlier
+ * version of this component had.
+ *
+ * Pass an explicit id when you need a stable anchor (e.g. for in-page
+ * navigation: `<a href="#how-it-works">`).
+ *
+ * Responsive gutters (20 / 32 / 48px) are hardcoded in this component
+ * for Pass 0 because no other component uses them. If Passes 1–4
+ * need shared gutters, extract --gutter-mobile / --gutter-tablet /
+ * --gutter-desktop tokens then.
+ */
+import Kicker from "./Kicker.astro";
+
+interface Props {
+  kicker?: string;
+  heading?: string;
+  headingLevel?: "h1" | "h2";
+  prose?: boolean;
+  id?: string;
+}
+const {
+  kicker,
+  heading,
+  headingLevel = "h2",
+  prose = false,
+  id,
+} = Astro.props;
+
+// Generate a stable id whenever a heading is present and the page
+// author didn't supply one. Build-time UUIDs are stable within a
+// single page render.
+const sectionId = id ?? (heading ? `section-${crypto.randomUUID().slice(0, 8)}` : undefined);
+const headingId = heading ? `${sectionId}-h` : undefined;
+const HeadingTag = headingLevel;
+---
+<section
+  class="section"
+  id={sectionId}
+  aria-labelledby={headingId}
+>
+  <div class:list={["section-inner", prose && "section-inner-prose"]}>
+    {(kicker || heading) && (
+      <header class="section-header">
+        {kicker && <Kicker>{kicker}</Kicker>}
+        {heading && (
+          <HeadingTag id={headingId} class="section-heading">
+            {heading}
+          </HeadingTag>
+        )}
+      </header>
+    )}
+    <div class="section-body"><slot /></div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--space-7);
+  }
+  .section-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+  .section-inner-prose { max-width: var(--container-prose); }
+
+  .section-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  h1.section-heading {
+    font-size: var(--text-h1);
+    line-height: var(--leading-snug);
+  }
+  h2.section-heading {
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+  }
+
+  @media (min-width: 768px) {
+    .section { padding-block: var(--space-8); }
+    .section-inner { padding-inline: 48px; }
+  }
+  @media (max-width: 479px) {
+    .section-inner { padding-inline: 20px; }
+  }
+</style>
