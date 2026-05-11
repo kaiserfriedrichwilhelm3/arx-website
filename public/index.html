@@ -919,8 +919,8 @@
 
 <!-- ============== HERO ============== -->
 <section class="hero" style="border-top:1px solid var(--line);padding-top:80px">
-  <div class="wrap hero-grid">
-    <div class="reveal">
+  <div class="wrap">
+    <div class="reveal" style="max-width:760px">
       <div class="eyebrow"><span class="dot"></span> AI Receptionist · Built for Medical Practices</div>
       <h1 class="hero-title">Your front desk, <em>answered.</em><br/>Every call, every time.</h1>
       <p class="hero-sub">Galen is an AI call agent built exclusively for medical practices. It books appointments, handles patient inquiries, and gives your team a live dashboard of every call — human and AI.</p>
@@ -933,9 +933,6 @@
         <div><strong>BAA</strong>Executed before any clinical deployment</div>
         <div><strong>24/7</strong>Always answered</div>
       </div>
-    </div>
-    <div class="reveal" id="heroMock">
-      <!-- Dashboard mock injected by JavaScript -->
     </div>
   </div>
 </section>
@@ -1601,48 +1598,6 @@
     </div>`;
   }
 
-  // --- Dashboard mock (Galen path) ---
-  const mockHTML = `
-    <div class="mock" role="img" aria-label="Galen dashboard preview">
-      <div class="mock-bar">
-        <div class="dots"><span></span><span></span><span></span></div>
-        <div class="url">galen.arx-systems.com / dashboard</div>
-        <div style="width:36px"></div>
-      </div>
-      <div class="mock-body">
-        <div class="mock-card">
-          <div class="label">Calls Today</div>
-          <div class="val" id="kpi1">142</div>
-          <div class="delta">▲ 18% vs last Tue</div>
-        </div>
-        <div class="mock-card">
-          <div class="label">Booked</div>
-          <div class="val" id="kpi2">61</div>
-          <div class="delta">43% conversion</div>
-        </div>
-        <div class="mock-feed">
-          <div class="mock-feed-head">
-            <span>Live Call Feed</span>
-            <span class="live"><span class="pulse"></span> LIVE</span>
-          </div>
-          <div id="feed">
-            <div class="feed-row fresh"><span class="tag ai">AI</span><span><span class="who">M. Alvarez</span> · <span class="reason">New patient — annual physical</span></span><span class="tag booked">Booked</span><time>0:42</time></div>
-            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">D. Wright</span> · <span class="reason">Refill — lisinopril</span></span><span class="tag booked">Routed</span><time>1:08</time></div>
-            <div class="feed-row"><span class="tag human">HUMAN</span><span><span class="who">J. Park</span> · <span class="reason">Insurance question</span></span><span class="tag booked">Resolved</span><time>3:24</time></div>
-            <div class="feed-row"><span class="tag ai">AI</span><span><span class="who">R. Singh</span> · <span class="reason">Follow-up — dermatology</span></span><span class="tag booked">Booked</span><time>4:51</time></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('heroMock').innerHTML = mockHTML;
-
-  // Subtle KPI tick
-  let k1 = 142, k2 = 61;
-  setInterval(() => {
-    if (Math.random() < 0.55) { k1 += 1; const el = document.getElementById('kpi1'); if (el) el.textContent = k1; }
-    if (Math.random() < 0.32) { k2 += 1; const el = document.getElementById('kpi2'); if (el) el.textContent = k2; }
-  }, 2400);
 </script>
 
 </body>
