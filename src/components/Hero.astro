@@ -1,0 +1,166 @@
+---
+/*
+ * Hero.astro — homepage hero section.
+ *
+ * 100vh on desktop, centered content stack. Layout:
+ *   kicker → headline (with accent split on "answered.") → subhead
+ *   → CTA pair → trust signals row (3 StatCards).
+ *
+ * Entrance choreography (one-time, on page load):
+ *   kicker     0ms delay  600ms ease-out (translateY 20→0)
+ *   headline   100ms      600ms
+ *   subhead    200ms      600ms
+ *   CTAs       300ms      600ms
+ *   stats      400ms      600ms
+ *   underline  700ms      800ms (scaleX 0→1 under "answered.")
+ *
+ * Per the PR #8 hero regression note: animations start at opacity:1
+ * with translateY(20px) and animate to translateY(0). The headline
+ * must paint immediately — never use opacity:0 as the initial state.
+ *
+ * Reduced motion: all entrance animations disabled; underline shown
+ * at scaleX(1) statically.
+ */
+import Kicker from "./Kicker.astro";
+import Button from "./Button.astro";
+import StatCard from "./StatCard.astro";
+---
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-inner">
+    <div class="hero-stack">
+      <div class="hero-kicker">
+        <Kicker>ARX Systems · Miami, FL · Founder-led</Kicker>
+      </div>
+      <h1 id="hero-heading" class="hero-headline">
+        <span class="hero-headline-lead">Your front desk, </span><span class="hero-headline-accent">answered.</span>
+      </h1>
+      <p class="hero-subhead">
+        ARX Systems builds AI receptionists for medical practices.
+        24/7 answering, instant booking, multilingual by default.
+        Powered by AIMS — our modular architecture you customize
+        with a click.
+      </p>
+      <div class="hero-ctas">
+        <Button variant="primary" href="/contact">Get Started</Button>
+        <Button variant="secondary" href="#aims-demo">Watch the Demo</Button>
+      </div>
+      <div class="hero-stats">
+        <StatCard value="24/7" label="Always answered" />
+        <StatCard value="Every major" label="Language supported" />
+        <StatCard value="Zero" label="Patient data retained" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-block: var(--space-7);
+  }
+  .hero-inner {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+  .hero-stack {
+    max-width: var(--container-prose);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    line-height: var(--leading-tight);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0;
+    margin-top: var(--space-3);
+  }
+  .hero-headline-lead { color: var(--ink); }
+  .hero-headline-accent {
+    position: relative;
+    color: var(--accent);
+    display: inline-block;
+  }
+  .hero-headline-accent::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.05em;
+    height: 1px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: underline-grow 800ms cubic-bezier(0.16, 1, 0.3, 1) 700ms forwards;
+  }
+
+  .hero-subhead {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0;
+    margin-top: var(--space-3);
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
+    flex-wrap: wrap;
+  }
+  .hero-stats > * { flex: 1 1 0; min-width: 140px; }
+
+  /* Entrance animations — opacity:1 throughout per the PR #8 note;
+   * only transform animates. The headline paints immediately. */
+  .hero-kicker, .hero-headline, .hero-subhead, .hero-ctas, .hero-stats {
+    animation: hero-rise 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-kicker   { animation-delay:   0ms; }
+  .hero-headline { animation-delay: 100ms; }
+  .hero-subhead  { animation-delay: 200ms; }
+  .hero-ctas     { animation-delay: 300ms; }
+  .hero-stats    { animation-delay: 400ms; }
+
+  @keyframes hero-rise {
+    from { opacity: 1; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes underline-grow {
+    to { transform: scaleX(1); }
+  }
+
+  @media (max-width: 479px) {
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+    .hero-ctas :global(.btn) { width: 100%; }
+    .hero-stats { flex-direction: column; gap: var(--space-4); }
+  }
+
+  /* Reduced motion — hard rule. Entrance and underline disabled;
+   * underline rendered statically at full width. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-kicker, .hero-headline, .hero-subhead, .hero-ctas, .hero-stats {
+      animation: none;
+    }
+    .hero-headline-accent::after {
+      transform: scaleX(1);
+      animation: none;
+    }
+  }
+</style>
