@@ -3,8 +3,8 @@
  * BaseLayout.astro — sitewide page shell.
  *
  * Mounts: <html><head><body> + global.css + Nav + <slot> for page
- * content. Footer is added in commit (f). Font preload links land
- * in Pass 1 when fonts.css and self-hosted .woff2 files arrive.
+ * content + Footer. Font preload links land in Pass 1 when fonts.css
+ * and self-hosted .woff2 files arrive.
  *
  * Every page in src/pages/*.astro should wrap its content in this
  * layout. Pages pass title (required), description (optional),
@@ -12,6 +12,7 @@
  */
 import "../styles/global.css";
 import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
@@ -44,5 +45,6 @@ const {
     <main id="main">
       <slot />
     </main>
+    <Footer />
   </body>
 </html>
