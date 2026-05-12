@@ -1,0 +1,83 @@
+---
+/*
+ * GalenIcon.astro — single SVG component for the six module icons.
+ *
+ * All icons share: 48×48 viewBox, currentColor stroke (set via parent
+ * CSS color), 2px stroke width, round line caps and joins, fill: none
+ * except where deliberate (calendar's appointment cell).
+ *
+ * Pass color="var(--ink)" or any other CSS color via the `color` prop
+ * to control the line color. Size defaults to 48px but can be
+ * overridden via `size` prop.
+ *
+ * The set is line-art and minimal. Stroke weight constant across all
+ * six so they sit together as a coherent visual family.
+ */
+interface Props {
+  name: "reception" | "scheduling" | "intake" | "insurance" | "triage" | "followup";
+  size?: number;
+  color?: string;
+  decorative?: boolean;
+}
+const { name, size = 48, color = "var(--ink)", decorative = true } = Astro.props;
+const titles = {
+  reception:  "Reception",
+  scheduling: "Scheduling",
+  intake:     "Intake",
+  insurance:  "Insurance",
+  triage:     "Triage",
+  followup:   "Follow-up",
+};
+---
+<svg
+  class="g-icon"
+  viewBox="0 0 48 48"
+  width={size}
+  height={size}
+  fill="none"
+  stroke={color}
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role={decorative ? "presentation" : "img"}
+  aria-hidden={decorative ? "true" : undefined}
+  aria-label={decorative ? undefined : titles[name]}
+>
+  {name === "reception" && (
+    <path d="M14 6 h6 l4 10 l-5 3 a18 18 0 0 0 10 10 l3 -5 l10 4 v6 a4 4 0 0 1 -4 4 h-2 a30 30 0 0 1 -26 -26 v-2 a4 4 0 0 1 4 -4 z" />
+  )}
+  {name === "scheduling" && (
+    <>
+      <rect x="6" y="10" width="36" height="32" rx="2" />
+      <line x1="6"  y1="18" x2="42" y2="18" />
+      <line x1="14" y1="6"  x2="14" y2="12" />
+      <line x1="34" y1="6"  x2="34" y2="12" />
+      <rect x="20" y="24" width="8" height="6" fill={color} stroke="none" />
+    </>
+  )}
+  {name === "intake" && (
+    <>
+      <path d="M10 6 h20 l10 10 v26 h-30 z" />
+      <path d="M30 6 v10 h10" />
+      <line x1="16" y1="22" x2="34" y2="22" />
+      <line x1="16" y1="28" x2="34" y2="28" />
+      <line x1="16" y1="34" x2="28" y2="34" />
+    </>
+  )}
+  {name === "insurance" && (
+    <path d="M24 6 l-14 4 v12 c0 10, 6 18, 14 22 c8 -4, 14 -12, 14 -22 v-12 z" />
+  )}
+  {name === "triage" && (
+    <polyline points="6 24, 14 24, 18 14, 22 34, 28 18, 32 24, 42 24" />
+  )}
+  {name === "followup" && (
+    <>
+      <path d="M40 24 a16 16 0 1 1 -7 -13" />
+      <polyline points="33 5, 33 12, 40 12" />
+    </>
+  )}
+</svg>
+
+<style>
+  .g-icon { display: block; }
+</style>
