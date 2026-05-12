@@ -1,0 +1,62 @@
+---
+/*
+ * GalenClosingCTA.astro — final section before the footer on /galen.
+ *
+ * Pattern parallels the homepage's ClosingCTA: centered, prose-width,
+ * single primary button → /contact. Copy is Galen-specific.
+ *
+ * Built standalone rather than refactoring ClosingCTA into a props-
+ * driven component because we are deliberately not touching Pass 1
+ * code in Pass 2.
+ */
+import Button from "./Button.astro";
+---
+<section class="gclose">
+  <div class="gclose-inner">
+    <h2 class="gclose-heading">See what Galen could do for your practice.</h2>
+    <p class="gclose-body">
+      We pilot Galen with a small number of practices each quarter.
+      Tell us about your front-desk volume and call patterns — we'll
+      respond within 48 hours.
+    </p>
+    <div class="gclose-cta">
+      <Button variant="primary" href="/contact">Get Started</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gclose {
+    padding-block: var(--space-7) var(--space-8);
+  }
+  .gclose-inner {
+    max-width: var(--container-prose);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .gclose-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .gclose-body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    max-width: 520px;
+  }
+  .gclose-cta {
+    margin-top: var(--space-3);
+  }
+</style>
