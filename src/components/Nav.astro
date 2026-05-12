@@ -192,7 +192,7 @@ const isActive = (href: string) =>
     color: var(--ink);
     text-decoration: none;
   }
-  .nav-menu a[aria-current="page"] { color: var(--accent-deep); }
+  .nav-menu a[aria-current="page"] { color: var(--accent-text); }
 
   @media (min-width: 768px) {
     .nav-toggle { display: none; }
@@ -214,7 +214,7 @@ const isActive = (href: string) =>
       font-size: var(--text-small);
       line-height: var(--leading-base);
     }
-    .nav-menu a:hover { color: var(--accent-deep); }
+    .nav-menu a:hover { color: var(--accent-text); }
   }
 
   :global(html.nav-locked) { overflow: hidden; }
