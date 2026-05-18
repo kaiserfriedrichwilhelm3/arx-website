@@ -48,3 +48,6 @@ next-env.d.ts
 business.html
 medical.html
 pricing.html
+
+# private content (never commit the strategy memo)
+/private/

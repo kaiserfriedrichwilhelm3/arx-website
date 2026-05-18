@@ -1,40 +1,124 @@
-/*
- * src/styles/global.css — sitewide CSS entry point.
- *
- * Loaded exactly once, from BaseLayout.astro. Import order is locked:
- *   1. reset.css   — normalize browser defaults (token-free)
- *   2. tokens.css  — :root custom properties
- *   3. fonts.css   — @font-face declarations (font-display: swap)
- *   4. body defaults (this file, below) — consume tokens
- *
- * Components do NOT @import any of these. Tokens cascade through the
- * DOM into Astro scoped styles via :root custom properties.
- */
+@import './tokens.css';
+@import './fonts.css';
+@import './reset.css';
 
-@import "./reset.css";
-@import "./tokens.css";
-@import "./fonts.css";
-
-html {
-  scroll-behavior: smooth;
-}
-
+html { scroll-behavior: smooth; }
 body {
-  background: var(--bg);
+  font-family: var(--font-sans);
+  font-size: var(--t-base);
+  line-height: var(--lh-base);
   color: var(--ink);
-  font-family: var(--font-body);
-  font-size: var(--text-body);
-  line-height: var(--leading-base);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss01", "cv11";
 }
 
-/* Reduced motion — sitewide hard rule. Neutralizes every animation
- * and transition. Components do not need to check the media query
- * themselves. */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+::selection { background: var(--forest); color: var(--paper); }
+
+/* --- Containers --- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--pad-x); }
+.wrap-prose { max-width: var(--maxw-prose); margin: 0 auto; padding-inline: var(--pad-x); }
+
+/* --- Type primitives --- */
+.serif { font-family: var(--font-serif); font-optical-sizing: auto; }
+.mono  { font-family: var(--font-mono); }
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--forest);
+  font-weight: 500;
+}
+.eyebrow-muted { color: var(--muted); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: var(--track-tight);
+  color: var(--ink);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-h1); }
+h2 { font-size: var(--t-h2); line-height: var(--lh-snug); }
+h3 { font-size: var(--t-h3); line-height: var(--lh-snug); }
+em { font-style: italic; }
+
+p { color: var(--ink-2); line-height: var(--lh-base); text-wrap: pretty; }
+.lede { font-size: var(--t-lede); line-height: var(--lh-loose); color: var(--ink); }
+.muted { color: var(--muted); }
+
+a.inline { color: var(--ink); text-decoration: underline; text-decoration-color: var(--forest); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+a.inline:hover { text-decoration-color: var(--ink); }
+
+/* --- Section number marker (§ 01) --- */
+.section-marker {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex; align-items: center; gap: 12px;
+}
+.section-marker::before {
+  content: ""; display: inline-block; width: 28px; height: 1px; background: var(--rule-strong);
+}
+
+/* --- Buttons (one primary CTA pattern) --- */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 46px; padding: 0 22px;
+  font-family: var(--font-sans); font-size: var(--t-small); font-weight: 500;
+  letter-spacing: 0.01em;
+  border-radius: 2px;
+  transition: background var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+  min-height: 44px;
+}
+.btn-primary {
+  background: var(--forest); color: var(--paper); border: 1px solid var(--forest);
+}
+.btn-primary:hover { background: var(--forest-deep); border-color: var(--forest-deep); }
+.btn-ghost {
+  background: transparent; color: var(--ink); border: 1px solid var(--rule-strong);
+}
+.btn-ghost:hover { border-color: var(--ink); }
+.btn .arr { font-family: var(--font-mono); font-size: 14px; transition: transform var(--dur-fast) var(--ease-out); }
+.btn:hover .arr { transform: translateX(3px); }
+
+/* --- Rules --- */
+.rule { height: 1px; background: var(--rule); border: 0; }
+.rule-strong { height: 1px; background: var(--rule-strong); border: 0; }
+
+/* --- Reveal-on-scroll (preserved from V0). Skipped under reduced motion. --- */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out); }
+.reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+/* --- Section spacing --- */
+section { padding-block: clamp(64px, 9vw, 120px); }
+section.tight { padding-block: clamp(40px, 6vw, 72px); }
+
+/* --- Status pill ("Live in reference" / "In deployment") --- */
+.status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: var(--t-micro);
+  letter-spacing: var(--track-mono); text-transform: uppercase;
+  color: var(--muted);
+}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule-strong); }
+.status-live .status-dot { background: var(--forest); }
+.status-live { color: var(--forest); }
+
+/* --- View Transitions --- */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--dur-med);
+    animation-timing-function: var(--ease-out);
   }
 }

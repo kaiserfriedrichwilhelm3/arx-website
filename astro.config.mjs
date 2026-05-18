@@ -1,14 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 
-// ARX Systems marketing site — Astro static build.
-// Output is plain HTML in dist/, served by server.js (Express) in production.
-// The Express wrapper also handles /api/contact and /api/setup-interest;
-// Astro is build-time only and is pruned from production after build.
 export default defineConfig({
   output: 'static',
-  build: {
-    format: 'directory',
-  },
+  build: { format: 'directory' },
   trailingSlash: 'ignore',
+  integrations: [mdx()],
+  prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
+  // No <Image /> usage; skip sharp to avoid native build on Railway.
+  image: { service: { entrypoint: 'astro/assets/services/noop' } },
 });

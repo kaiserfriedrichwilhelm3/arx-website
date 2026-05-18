@@ -1,0 +1,54 @@
+/*
+ * src/styles/reset.css — minimal modern reset.
+ *
+ * Normalizes browser defaults. Does NOT reference any design tokens
+ * (--*). This file is a pure normalizer and is loaded before tokens.css
+ * in global.css. Swap or replace without coordinating with the design
+ * system.
+ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+a { color: inherit; }
+
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+
+ul, ol { list-style: none; padding: 0; }
+
+/* sr-only — used by Footer's labelledby heading and any other
+ * visually-hidden but screen-reader-readable content. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

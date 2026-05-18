@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const pillars = (await getCollection('pillars')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="The Method" description="The Cespedes Method — five pillars of operating infrastructure for specialty physician practices.">
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow reveal">§ 03 — The Cespedes Method</p>
+      <h1 class="serif reveal">Five pillars. One system. <em>Installed in order.</em></h1>
+      <p class="lede reveal">
+        The Method is a sequence, not a feature list. Each pillar is the visible surface of a piece of
+        medical-grade infrastructure underneath. The sequence is deliberate: every pillar
+        depends on the data and routing established by the ones before it.
+      </p>
+      <p class="status reveal" style="margin-top: 24px;">
+        <span class="status-dot"></span>Pillar I live in the reference deployment. Pillars II–V in deployment.
+      </p>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="list">
+    <div class="wrap">
+      <ol class="pillars">
+        {pillars.map(p => (
+          <li class="row reveal">
+            <a href={`/method/${p.slug}`} class="row-link">
+              <div class="row-meta">
+                <span class="mono num">Pillar {p.data.number}</span>
+                <span class={`status ${p.data.status === 'live' ? 'status-live' : ''}`}>
+                  <span class="status-dot"></span>{p.data.statusLabel}
+                </span>
+              </div>
+              <h2 class="serif row-title" style={`view-transition-name: pillar-${p.slug}`}>{p.data.title}</h2>
+              <p class="row-sub">{p.data.subtitle}</p>
+              <p class="row-summary">{p.data.summary}</p>
+              <span class="row-cta mono">Read the pillar <span class="arr">→</span></span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .head { padding-top: clamp(80px, 12vw, 120px); padding-bottom: clamp(48px, 8vw, 80px); }
+  .head h1 { font-size: var(--t-h1); margin-top: 20px; max-width: 18ch; }
+  .head h1 em { color: var(--forest); }
+  .head .lede { max-width: 60ch; margin-top: 28px; }
+  .pillars { border-top: 1px solid var(--rule); }
+  .row { border-bottom: 1px solid var(--rule); }
+  .row-link {
+    display: grid; grid-template-columns: 1fr; gap: 14px;
+    padding: 40px 0;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .row-link:hover { background: linear-gradient(to right, var(--paper-deep) 0, transparent 70%); }
+  .row-meta { display: flex; align-items: center; gap: 18px; }
+  .num { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); }
+  .row-title { font-size: clamp(36px, 5vw, 56px); letter-spacing: var(--track-tight); }
+  .row-sub { font-family: var(--font-serif); font-style: italic; font-size: var(--t-lede); color: var(--ink); max-width: 50ch; }
+  .row-summary { max-width: 70ch; }
+  .row-cta { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--forest); margin-top: 8px; }
+  .row-cta .arr { display: inline-block; transition: transform var(--dur-fast) var(--ease-out); }
+  .row-link:hover .row-cta .arr { transform: translateX(4px); }
+</style>

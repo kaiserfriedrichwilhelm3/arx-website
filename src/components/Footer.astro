@@ -1,113 +1,38 @@
 ---
-/*
- * Footer.astro — site footer.
- *
- * Five items per Pass 0 brief: Contact, Security, [practice],
- * [LinkedIn when ready], copyright. LinkedIn is opt-in via prop —
- * omitted when the URL is not provided.
- *
- * Defaults:
- *   practiceName  "Cespedes Cardiology"
- *   practiceUrl   "https://cespedescardiology.com"
- *   linkedInUrl   undefined (LinkedIn link not rendered)
- *
- * Override per-page if needed; sitewide override goes in BaseLayout's
- * <Footer ... /> invocation.
- */
-interface Props {
-  practiceName?: string;
-  practiceUrl?: string;
-  linkedInUrl?: string;
-}
-const {
-  practiceName = "Cespedes Cardiology",
-  practiceUrl  = "https://cespedescardiology.com",
-  linkedInUrl,
-} = Astro.props;
-
 const year = new Date().getFullYear();
 ---
-<footer class="footer" aria-labelledby="footer-heading">
-  <h2 id="footer-heading" class="sr-only">Site footer</h2>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <span class="footer-mark">ARX Systems</span>
-      <span class="footer-copy">© {year} ARX Systems LLC</span>
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <p class="serif name">ARX Systems</p>
+      <p class="mono tag">Miami, Florida · By application only</p>
     </div>
-    <ul class="footer-links">
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="/security">Security</a></li>
-      <li><a href={practiceUrl} target="_blank" rel="noopener noreferrer">{practiceName}</a></li>
-      {linkedInUrl && (
-        <li><a href={linkedInUrl} target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-      )}
-    </ul>
+    <nav class="col" aria-label="Footer">
+      <ul>
+        <li><a href="/method">The Method</a></li>
+        <li><a href="/authorship">Authorship</a></li>
+        <li><a href="/engagement">Engagement</a></li>
+        <li><a href="/memo">Memo</a></li>
+        <li><a href="/apply">Apply</a></li>
+      </ul>
+    </nav>
+    <div class="col">
+      <p class="muted small">For questions outside the application process: <a class="inline" href="mailto:gabrielcespedes777@gmail.com">gabrielcespedes777@gmail.com</a>.</p>
+      <p class="muted small">&copy; {year} ARX Systems. The Cespedes Method&nbsp;<sup>SM</sup> is co-developed with Edgardo&nbsp;M. Cespedes, MD.</p>
+    </div>
   </div>
 </footer>
-
 <style>
-  .footer {
-    border-top: var(--border-hairline);
-    padding: var(--space-6) 0;
-    margin-top: var(--space-8);
-  }
-  .footer-inner {
-    max-width: var(--container-max);
-    margin-inline: auto;
-    padding: 0 var(--space-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-  .footer-brand {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-  .footer-mark {
-    font-family: var(--font-display);
-    font-size: var(--text-h3);
-    line-height: var(--leading-snug);
-    color: var(--ink);
-    font-weight: 500;
-  }
-  .footer-copy {
-    font-family: var(--font-mono);
-    font-size: var(--text-micro);
-    line-height: var(--leading-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-  }
-  .footer-links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-4);
-  }
-  .footer-links a {
-    font-family: var(--font-body);
-    font-size: var(--text-small);
-    line-height: var(--leading-base);
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color var(--motion-fast) var(--ease-out);
-  }
-  .footer-links a:hover { border-bottom-color: var(--accent); }
-  .footer-links a:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  @media (min-width: 768px) {
-    .footer-inner {
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
+  .footer { border-top: 1px solid var(--rule); padding-block: 56px; margin-top: clamp(64px, 9vw, 120px); }
+  .footer-inner { display: grid; grid-template-columns: 1.1fr 1fr 1.2fr; gap: 48px; align-items: start; }
+  .col ul { display: flex; flex-direction: column; gap: 10px; }
+  .col a { font-size: var(--t-small); color: var(--ink-2); }
+  .col a:hover { color: var(--ink); }
+  .name { font-size: 20px; color: var(--ink); }
+  .tag { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .small { font-size: var(--t-small); line-height: var(--lh-base); margin-top: 6px; }
+  .small + .small { margin-top: 16px; }
+  @media (max-width: 760px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
   }
 </style>

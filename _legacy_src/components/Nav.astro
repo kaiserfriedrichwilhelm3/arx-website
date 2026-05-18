@@ -1,0 +1,221 @@
+---
+/*
+ * Nav.astro — sticky primary navigation.
+ *
+ * Mobile: hamburger button reveals a full-bleed overlay menu.
+ * Desktop (≥768px): links inline, hamburger hidden.
+ *
+ * NO-JS NOTE: the mobile overlay is JavaScript-dependent. If JS fails
+ * to load, the hamburger does nothing and the menu stays hidden.
+ * This is acceptable for a B2B medical-AI marketing site where the
+ * JS payload is tiny and the failure rate is effectively zero. Do
+ * not "fix" this by adding a CSS-only fallback — review concluded it
+ * isn't worth the duplicate-state complexity.
+ *
+ * Accessibility:
+ *   - Skip-link first DOM node, focusable, targets #main.
+ *   - aria-expanded reflects state. aria-controls points at menu id.
+ *   - aria-current="page" marks the active route.
+ *   - ESC closes the overlay and returns focus to the toggle.
+ *   - Body scroll locked while overlay is open.
+ */
+interface Props { currentPath: string; }
+const { currentPath } = Astro.props;
+
+const links = [
+  { href: "/galen",    label: "Galen" },
+  { href: "/security", label: "Security" },
+  { href: "/contact",  label: "Contact" },
+];
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+---
+<a href="#main" class="skip-link">Skip to content</a>
+
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">ARX Systems</a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label="Menu"
+    >
+      <span class="nav-toggle-bar" aria-hidden="true"></span>
+      <span class="nav-toggle-bar" aria-hidden="true"></span>
+    </button>
+
+    <ul id="nav-menu" class="nav-menu" data-state="closed">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            aria-current={isActive(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".nav-toggle");
+  const menu   = document.getElementById("nav-menu");
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      menu.dataset.state = open ? "open" : "closed";
+      document.documentElement.classList.toggle("nav-locked", open);
+    };
+    toggle.addEventListener("click", () =>
+      setOpen(toggle.getAttribute("aria-expanded") !== "true")
+    );
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    menu.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => setOpen(false))
+    );
+  }
+</script>
+
+<style>
+  .skip-link {
+    position: absolute;
+    inset-inline-start: var(--space-3);
+    inset-block-start: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--ink);
+    color: var(--bg);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    transform: translateY(-200%);
+    transition: transform var(--motion-fast) var(--ease-out);
+    z-index: 100;
+  }
+  .skip-link:focus-visible { transform: translateY(0); }
+
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: var(--border-hairline);
+  }
+  .nav-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding: var(--space-3) var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .nav-toggle {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: var(--space-2);
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 5px;
+    color: var(--ink);
+  }
+  .nav-toggle-bar {
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform var(--motion-fast) var(--ease-out);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:first-child {
+    transform: translateY(3.25px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] .nav-toggle-bar:last-child {
+    transform: translateY(-3.25px) rotate(-45deg);
+  }
+  .nav-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  .nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-menu[data-state="closed"] {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    padding: var(--space-7) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    transform: translateY(-100%);
+    transition: transform var(--motion-base) var(--ease-out);
+    pointer-events: none;
+  }
+  .nav-menu[data-state="open"] {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    padding: var(--space-7) var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .nav-menu a {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-menu a[aria-current="page"] { color: var(--accent-text); }
+
+  @media (min-width: 768px) {
+    .nav-toggle { display: none; }
+    .nav-menu,
+    .nav-menu[data-state="closed"],
+    .nav-menu[data-state="open"] {
+      position: static;
+      inset: auto;
+      background: transparent;
+      padding: 0;
+      transform: none;
+      display: flex;
+      flex-direction: row;
+      gap: var(--space-5);
+      pointer-events: auto;
+    }
+    .nav-menu a {
+      font-family: var(--font-body);
+      font-size: var(--text-small);
+      line-height: var(--leading-base);
+    }
+    .nav-menu a:hover { color: var(--accent-text); }
+  }
+
+  :global(html.nav-locked) { overflow: hidden; }
+</style>

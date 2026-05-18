@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Strategy Memo" description="Request the private ARX Systems strategy memo. Covers The Cespedes Method, pricing, data architecture, and the working arrangement with Dr. Cespedes.">
+  <section class="head">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">Memo</p>
+      </header>
+      <div class="col-body">
+        <h1 class="serif reveal">The private strategy memo.</h1>
+        <p class="lede reveal">
+          A nine-page document covering The Cespedes Method in detail: clinical authorship,
+          engagement structure, pricing, data architecture, the working arrangement with Dr. Cespedes,
+          and the operating thesis behind the firm. Sent by email after a one-line review.
+          Not a marketing PDF.
+        </p>
+        <p class="muted small reveal">
+          We send the memo to physicians, practice managers, and a small number of college admissions readers
+          and early-stage investors who have asked for it. It is not public, not because the contents are sensitive
+          to ARX, but because it is written to people who already know what an EHR is.
+        </p>
+
+        <form id="memo-form" class="form reveal" autocomplete="off" novalidate>
+          <label class="field">
+            <span class="lbl mono">Name</span>
+            <input name="name" required maxlength="120" />
+          </label>
+          <label class="field">
+            <span class="lbl mono">Practice or organization</span>
+            <input name="practice" required maxlength="160" />
+          </label>
+          <label class="field">
+            <span class="lbl mono">Email</span>
+            <input name="email" type="email" required maxlength="200" />
+          </label>
+          <label class="field">
+            <span class="lbl mono">One line on why you're asking</span>
+            <input name="reason" maxlength="240" placeholder="Optional. A sentence helps us route quickly." />
+          </label>
+          <button class="btn btn-primary" type="submit">Request the memo <span class="arr">→</span></button>
+          <p class="form-note muted small" id="memo-note" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .head { padding-top: clamp(80px, 12vw, 120px); padding-bottom: clamp(80px, 10vw, 120px); }
+  .two-col { display: grid; grid-template-columns: 200px 1fr; gap: 80px; align-items: start; }
+  .col-mark { position: sticky; top: 96px; }
+  .col-body > * + * { margin-top: 24px; }
+  .col-body h1 { font-size: var(--t-h1); max-width: 16ch; }
+  .small { font-size: var(--t-small); }
+
+  .form { display: flex; flex-direction: column; gap: 18px; margin-top: 40px; max-width: 480px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .lbl { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--ink-2); }
+  .field input {
+    height: 46px; padding: 0 14px; background: var(--white);
+    border: 1px solid var(--rule-strong); border-radius: 2px;
+    font-size: var(--t-base); color: var(--ink);
+  }
+  .field input:focus { border-color: var(--forest); outline: none; }
+  .form button { align-self: flex-start; margin-top: 8px; }
+  .form-note { min-height: 1.2em; }
+  .form-note.is-ok { color: var(--forest); }
+  .form-note.is-err { color: #a83232; }
+  @media (max-width: 880px) {
+    .two-col { grid-template-columns: 1fr; gap: 24px; }
+    .col-mark { position: static; }
+  }
+</style>
+<script>
+  const setupMemo = () => {
+    const form = document.getElementById('memo-form') as HTMLFormElement | null;
+    const note = document.getElementById('memo-note');
+    if (!form || !note) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form));
+      note.className = 'form-note muted small';
+      note.textContent = 'Sending...';
+      try {
+        const res = await fetch('/api/memo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          form.reset();
+          note.className = 'form-note small is-ok';
+          note.textContent = 'Received. The memo is on its way to your inbox.';
+        } else {
+          const body = await res.json().catch(() => ({}));
+          note.className = 'form-note small is-err';
+          note.textContent = body.error || 'Something went wrong. Email gabrielcespedes777@gmail.com directly.';
+        }
+      } catch {
+        note.className = 'form-note small is-err';
+        note.textContent = 'Network error. Try again, or email gabrielcespedes777@gmail.com directly.';
+      }
+    });
+  };
+  document.addEventListener('astro:page-load', setupMemo);
+</script>

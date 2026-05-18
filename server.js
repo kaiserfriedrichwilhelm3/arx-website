@@ -17,13 +17,18 @@ const path = require('path');
 
 const { contactHandler } = require('./server/routes/contact');
 const { setupInterestHandler } = require('./server/routes/setup-interest');
+const { memoHandler } = require('./server/routes/memo');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: '64kb' }));
 app.use(express.static(path.join(__dirname, 'dist'), { extensions: ['html'] }));
 
+// v2 (editorial site)
+app.post('/api/memo', memoHandler);
+
+// v1 (Galen-era) endpoints — kept until DNS cutover so legacy traffic does not 404.
 app.post('/api/contact', contactHandler);
 app.post('/api/setup-interest', setupInterestHandler);
 

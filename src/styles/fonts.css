@@ -1,39 +1,27 @@
-/*
- * src/styles/fonts.css — self-hosted variable web fonts.
- *
- * All three @font-face declarations use font-display: swap so text
- * renders immediately in the fallback stack (Georgia / system-ui /
- * ui-monospace) and swaps to the web font once it loads. CLS during
- * swap is absorbed by the fluid type scale + the fallback metrics
- * (close-x-height pairings selected in tokens.css).
- *
- * Files live under public/fonts/, served by Astro at /fonts/* in
- * production. Variable axis ranges below match the files shipped.
- *
- * Inter and JetBrains Mono are <link rel="preload"> in BaseLayout
- * because they cover the largest text area on every page. Fraunces
- * is allowed to FOUT in against its Georgia fallback.
- */
+/* Self-hosted variable fonts. No CDN, no FOUT risk from third-party DNS. */
 
 @font-face {
-  font-family: "Fraunces";
-  src: url("/fonts/display/Fraunces-Variable.woff2") format("woff2-variations");
+  font-family: 'Fraunces';
+  src: url('/fonts/display/Fraunces-Variable.woff2') format('woff2-variations'),
+       url('/fonts/display/Fraunces-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/body/Inter-Variable.woff2') format('woff2-variations'),
+       url('/fonts/body/Inter-Variable.woff2') format('woff2');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Inter";
-  src: url("/fonts/body/Inter-Variable.woff2") format("woff2-variations");
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/mono/JetBrainsMono-Variable.woff2") format("woff2-variations");
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/mono/JetBrainsMono-Variable.woff2') format('woff2-variations'),
+       url('/fonts/mono/JetBrainsMono-Variable.woff2') format('woff2');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;

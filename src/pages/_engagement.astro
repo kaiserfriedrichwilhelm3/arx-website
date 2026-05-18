@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const weeks = [
+  { range: 'Weeks 1–2', heading: 'Discovery & scope', body: 'Two configuration interviews with the physician and the practice manager. EHR and phone-system audit. Mapping the current call mix, intake flow, and referral patterns. Output: a written scope of work with fixed pricing, an installation calendar, and the configuration file that will drive every pillar.' },
+  { range: 'Weeks 3–6', heading: 'Build & stage', body: 'Voice and Storefront stand up against a staging phone line and a staging URL — no patient sees them yet. The Intake question set is drafted in English and Spanish and reviewed with the physician. The Scribe SOAP template is built against the practice\'s existing note conventions. Funnel dashboard wired against the EHR\'s reporting API.' },
+  { range: 'Weeks 7–10', heading: 'Cutover', body: 'Voice goes live on the practice\'s main number. Storefront publishes. Intake and Scribe enter a two-week supervised window where every output is reviewed by a member of the ARX team before it lands in the EHR. Funnel dashboard comes online. Daily check-ins for the first ten business days.' },
+  { range: 'Weeks 11–12', heading: 'Runbook & hand-off', body: 'The practice manager is trained on the runbook. Escalation paths and on-call contacts are documented. Quarterly cadence is set with the physician. ARX moves to business-hours support and a weekly digest. The system is owned by the practice; we are the line they call when something needs to change.' },
+];
+
+const faqs = [
+  { q: 'Who is this for?', a: 'Independent specialty physician practices in the United States. Single-physician or small group, owned and operated by the clinician. Not for hospital systems, not for primary care networks, not for groups of more than three providers in this quarter\'s capacity.' },
+  { q: 'What does it cost?', a: 'Pricing is fixed in writing at the end of the discovery phase, before any build work begins. It is not published on the public site because the engagement is configured per practice. Pricing, terms, and the scope template are covered in the private memo.' },
+  { q: 'Who owns the data?', a: 'The practice. All patient data flows through systems controlled by the practice. ARX has no patient data in its own retention. PHI is purged from system memory immediately after EHR write-back. The full data architecture is in the memo.' },
+  { q: 'What happens if you go out of business?', a: 'Every component runs on infrastructure the practice has access to under its own credentials. The Storefront source code is the practice\'s. The Voice configuration is exportable. The runbook is the practice\'s document. If ARX disappears, the system continues running until the practice chooses to replace it.' },
+  { q: 'Why "by application only"?', a: 'ARX is operated by a single founder and a small team. Capacity is three to five practices per quarter. We turn away practices we are not the right fit for, and we tell them so on the intake call. The application step is how we keep the engagement honest on both sides.' },
+];
+---
+<BaseLayout title="Engagement" description="The Method installation runs 8–12 weeks. Two visits, one bill. Written scope before any build work begins.">
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow reveal">§ 04 — Engagement</p>
+      <h1 class="serif reveal">Eight to twelve weeks. Two visits. One bill.</h1>
+      <p class="lede reveal">
+        A Method installation runs eight to twelve weeks from the signed scope of work to the runbook hand-off.
+        Pricing is fixed in writing before any build work begins. The engagement is configured per practice;
+        the calendar below is the typical shape.
+      </p>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section>
+    <div class="wrap">
+      <h2 class="serif section-h reveal">Calendar</h2>
+      <ol class="weeks">
+        {weeks.map(w => (
+          <li class="week reveal">
+            <span class="mono week-range">{w.range}</span>
+            <div class="week-body">
+              <h3 class="serif">{w.heading}</h3>
+              <p>{w.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section>
+    <div class="wrap">
+      <h2 class="serif section-h reveal">Frequently asked</h2>
+      <ul class="faqs">
+        {faqs.map(f => (
+          <li class="faq reveal">
+            <h3 class="serif">{f.q}</h3>
+            <p>{f.a}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="cta reveal" style="margin-top: 64px;">
+        <a href="/apply" class="btn btn-primary">Book an intake call <span class="arr">→</span></a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .head { padding-top: clamp(80px, 12vw, 120px); padding-bottom: clamp(40px, 6vw, 64px); }
+  .head h1 { font-size: var(--t-h1); margin-top: 18px; max-width: 18ch; }
+  .head .lede { max-width: 60ch; margin-top: 28px; }
+  .section-h { font-size: var(--t-h2); margin-bottom: 40px; }
+  .weeks { border-top: 1px solid var(--rule); }
+  .week { display: grid; grid-template-columns: 160px 1fr; gap: 40px; padding: 32px 0; border-bottom: 1px solid var(--rule); }
+  .week-range { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--forest); padding-top: 8px; }
+  .week h3 { font-size: var(--t-h3); }
+  .week p { font-size: var(--t-lede); line-height: var(--lh-loose); margin-top: 12px; max-width: 70ch; }
+  .faqs { border-top: 1px solid var(--rule); }
+  .faq { padding: 28px 0; border-bottom: 1px solid var(--rule); }
+  .faq h3 { font-size: var(--t-h3); }
+  .faq p { font-size: var(--t-base); line-height: var(--lh-base); margin-top: 10px; max-width: 70ch; }
+  @media (max-width: 720px) {
+    .week { grid-template-columns: 1fr; gap: 8px; }
+  }
+</style>
