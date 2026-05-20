@@ -1,12 +1,13 @@
 // ARX Systems Express wrapper for the v2 Astro build.
 //   1. Serves dist/ (Astro static output) at site root.
-//   2. Mounts /api/contact and /api/setup-interest, both ported verbatim
-//      from the pre-rebuild server.js into server/routes/*. Behavior is
-//      identical to the endpoints live on production today.
+//   2. Mounts /api/memo (v2 editorial site) and /api/contact (legacy, kept
+//      until DNS cutover so any in-flight v1 traffic does not 404).
 //
-// extensions:['html'] preserves /setup → dist/setup.html (Astro copies
-// public/setup.html through unchanged), and lets future passthrough
-// HTML files (if any) resolve without the .html suffix.
+// The Galen-era /setup form and its /api/setup-interest endpoint were removed
+// — they contradicted the current position (no pricing, no "reserve a tier").
+//
+// extensions:['html'] lets any future passthrough HTML files (if any) resolve
+// without the .html suffix.
 //
 // In production, `npm prune --omit=dev` runs after `astro build`, so
 // astro is not present in node_modules at runtime. This file only
@@ -16,7 +17,6 @@ const express = require('express');
 const path = require('path');
 
 const { contactHandler } = require('./server/routes/contact');
-const { setupInterestHandler } = require('./server/routes/setup-interest');
 const { memoHandler } = require('./server/routes/memo');
 
 const app = express();
@@ -28,8 +28,7 @@ app.use(express.static(path.join(__dirname, 'dist'), { extensions: ['html'] }));
 // v2 (editorial site)
 app.post('/api/memo', memoHandler);
 
-// v1 (Galen-era) endpoints — kept until DNS cutover so legacy traffic does not 404.
+// v1 (Galen-era) contact endpoint — kept until DNS cutover so legacy traffic does not 404.
 app.post('/api/contact', contactHandler);
-app.post('/api/setup-interest', setupInterestHandler);
 
 app.listen(PORT, () => console.log(`ARX Systems → http://localhost:${PORT}`));
