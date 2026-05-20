@@ -1,0 +1,371 @@
+---
+/*
+ * AimsDemo.astro — the architecture-demonstrating section.
+ *
+ * Six module cards in a 3×2 grid (desktop), 2×3 (tablet), 1×6 (mobile).
+ * Each card is a <button> with two states: active and inactive.
+ * Module 1 (Reception) is active by default — this is also the
+ * reduced-motion default per the brief.
+ *
+ * Activation choreography (CSS transitions) lands in the next commit.
+ * Auto-play + interactivity (JS) lands in subsequent commits. This
+ * commit ships the static layout: states are defined in CSS via
+ * [data-active] attribute, but transitions are instant.
+ *
+ * Active-background tint: rgba(200, 163, 92, 0.05) used inline.
+ * Decision NOT to tokenize: used in exactly one place across the
+ * whole site; tokenizing a single-use value is premature abstraction.
+ *
+ * Inline rationale per the brief: the description is always in the
+ * DOM (opacity-hidden when inactive) so card heights stay stable
+ * across activation. aria-hidden on the inactive description excludes
+ * it from AT; an aria-live region announces the active module's
+ * description on activation change (wired in commit 6).
+ */
+import Kicker from "./Kicker.astro";
+
+const modules = [
+  { id: "reception", name: "Reception", desc: "Answers every call. 24/7. Across every major language." },
+  { id: "scheduling", name: "Scheduling", desc: "Books, reschedules, and confirms appointments without staff input." },
+  { id: "intake", name: "Intake", desc: "Collects patient information before the visit. EHR-ready." },
+  { id: "insurance", name: "Insurance", desc: "Verifies coverage and benefits before booking." },
+  { id: "triage", name: "Triage", desc: "Routes urgent calls correctly. Emergency vs. routine, in seconds." },
+  { id: "followup", name: "Follow-up", desc: "Confirms appointments. Sends reminders. Handles no-shows." },
+];
+---
+<section id="aims-demo" class="aims" aria-labelledby="aims-heading">
+  <div class="aims-inner">
+    <header class="aims-header">
+      <Kicker>02 · Architecture</Kicker>
+      <h2 id="aims-heading" class="aims-heading">AIMS — modular by design.</h2>
+      <p class="aims-lede">
+        Activate the capabilities your practice needs. Add more as you grow.
+        Every module is a focused agent built on our shared AIMS core.
+      </p>
+    </header>
+
+    <div class="aims-grid" role="group" aria-label="AIMS modules">
+      {modules.map((m, i) => (
+        <button
+          class="module"
+          type="button"
+          data-id={m.id}
+          data-active={i === 0 ? "true" : "false"}
+          aria-pressed={i === 0 ? "true" : "false"}
+        >
+          <span class="module-dot" aria-hidden="true"></span>
+          <h3 class="module-name">{m.name}</h3>
+          <p class="module-desc" aria-hidden="true">{m.desc}</p>
+        </button>
+      ))}
+    </div>
+
+    <div class="aims-live sr-only" aria-live="polite" aria-atomic="true" data-aims-live>
+      Reception. Answers every call. 24/7. Across every major language.
+    </div>
+  </div>
+</section>
+
+<script>
+  /*
+   * AIMS demo auto-play.
+   *
+   * Rotation: each module holds active for 2400ms. Between modules,
+   * the previous deactivates (300ms transition), then 300ms later the
+   * next activates (300ms transition). No overlap in active state.
+   *
+   * Gating:
+   *   - IntersectionObserver (50% threshold): start when the grid is
+   *     in view, stop when scrolled out.
+   *   - visibilitychange: stop when the tab is backgrounded; resume
+   *     if the grid is still in view when the tab returns.
+   *   - prefers-reduced-motion: never starts; if the preference
+   *     flips at runtime, currently-running auto-play stops.
+   *
+   * Module-card descriptions are kept aria-hidden="true" always. The
+   * aria-live region is the single announcement vector on activation
+   * change — prevents AT double-announce.
+   *
+   * Interaction model:
+   *   - Mouse hover (pointerenter, pointerType=mouse) → PERMANENT
+   *     takeover. Auto-play stops for the session. The hovered
+   *     module becomes active. When the user mouses away, the last
+   *     hovered module stays active.
+   *   - Click / tap → PERMANENT takeover (same as hover, also covers
+   *     mobile and pen).
+   *   - Enter / Space on a focused module → fires click → PERMANENT
+   *     takeover.
+   *   - Keyboard Tab focus (without commit key) → TEMPORARY pause.
+   *     Auto-play resumes when focus leaves the grid, unless takeover
+   *     has been triggered.
+   *
+   * The keyboard distinction (focus = pause, Enter/Space = takeover)
+   * lets a keyboard user explore the demo without locking it on the
+   * first card they Tab through.
+   */
+  (() => {
+    const grid = document.querySelector(".aims-grid");
+    if (!grid) return;
+    const modules = Array.from(grid.querySelectorAll<HTMLButtonElement>(".module"));
+    if (!modules.length) return;
+    const live = document.querySelector<HTMLElement>("[data-aims-live]");
+
+    const HOLD_MS = 2400;
+    const GAP_MS  = 300;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    let activeIdx     = 0;     // module 0 (Reception) is the initial active per markup
+    let intervalId: number | null = null;
+    let firstTimeoutId: number | null = null;
+    let gapTimeoutId: number | null = null;
+    let inView = false;
+    let takeover = false;   // permanent once set; auto-play never restarts
+
+    function setActive(idx: number) {
+      modules.forEach((m, i) => {
+        const on = i === idx;
+        m.setAttribute("data-active", on ? "true" : "false");
+        m.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (idx >= 0 && idx < modules.length && live) {
+        const name = modules[idx].querySelector(".module-name")?.textContent?.trim() || "";
+        const desc = modules[idx].querySelector(".module-desc")?.textContent?.trim() || "";
+        live.textContent = `${name}. ${desc}`;
+      }
+    }
+
+    function tick() {
+      // Deactivate everything for the gap, then activate the next one.
+      setActive(-1);
+      gapTimeoutId = window.setTimeout(() => {
+        gapTimeoutId = null;
+        activeIdx = (activeIdx + 1) % modules.length;
+        setActive(activeIdx);
+      }, GAP_MS);
+    }
+
+    function start() {
+      if (intervalId || firstTimeoutId || reduced.matches || takeover) return;
+      // Module 0 is already active (markup). Hold for HOLD_MS, then start
+      // ticking every HOLD_MS + GAP_MS.
+      firstTimeoutId = window.setTimeout(() => {
+        firstTimeoutId = null;
+        tick();
+        intervalId = window.setInterval(tick, HOLD_MS + GAP_MS);
+      }, HOLD_MS);
+    }
+
+    function stop() {
+      if (firstTimeoutId) { clearTimeout(firstTimeoutId); firstTimeoutId = null; }
+      if (gapTimeoutId)   { clearTimeout(gapTimeoutId);   gapTimeoutId = null;   }
+      if (intervalId)     { clearInterval(intervalId);    intervalId = null;     }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        inView = entry.isIntersecting;
+        if (inView) start(); else stop();
+      }
+    }, { threshold: 0.5 });
+    observer.observe(grid);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else if (inView) start();
+    });
+
+    reduced.addEventListener("change", () => {
+      if (reduced.matches) stop();
+      else if (inView) start();
+    });
+
+    // Permanent takeover: stops auto-play for the session and pins the
+    // active module to whatever the user interacted with last.
+    function takeOver(idx: number) {
+      takeover = true;
+      stop();
+      // Cancel any in-flight gap timeout that would override our pick.
+      if (gapTimeoutId) { clearTimeout(gapTimeoutId); gapTimeoutId = null; }
+      activeIdx = idx;
+      setActive(idx);
+    }
+
+    modules.forEach((m, i) => {
+      // Mouse hover → permanent takeover. pointerType filter excludes
+      // touch-emitted pointerenter (we want tap, not touch-hover).
+      m.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") takeOver(i);
+      });
+      // click handles tap (mobile), click (mouse), Enter/Space (keyboard
+      // on a focused button — browsers translate these to click).
+      m.addEventListener("click", () => takeOver(i));
+    });
+
+    // Keyboard focus pauses auto-play TEMPORARILY (unlike hover). Resumes
+    // on blur unless takeover has been triggered by Enter/Space. focusin/
+    // focusout on the grid lets focus move between cards without flicker.
+    grid.addEventListener("focusin", () => { if (!takeover) stop(); });
+    grid.addEventListener("focusout", (e) => {
+      // Only resume when focus leaves the grid entirely, not when moving
+      // from card to card. relatedTarget = the element receiving focus.
+      const next = (e as FocusEvent).relatedTarget as Node | null;
+      if (next && grid.contains(next)) return;
+      if (!takeover && inView) start();
+    });
+  })();
+</script>
+
+<style>
+  .aims {
+    padding-block: var(--space-7);
+    scroll-margin-top: var(--space-5);  /* sticky nav clearance for anchor jumps */
+  }
+  @media (min-width: 768px) {
+    .aims { padding-block: var(--space-8); }
+  }
+  .aims-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+  .aims-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    max-width: var(--container-prose);
+  }
+  .aims-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .aims-lede {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    max-width: 540px;
+  }
+
+  .aims-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  @media (min-width: 768px) {
+    .aims-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1024px) {
+    .aims-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .module {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: left;
+    padding: var(--space-4);
+    border: 1px solid var(--line);
+    background-color: transparent;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    min-height: 160px;
+    font-family: inherit;
+    transition:
+      border-color     200ms var(--ease-out),
+      background-color 200ms var(--ease-out);
+  }
+  .module:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .module-dot {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background-color: transparent;
+    transition:
+      border-color     250ms var(--ease-out),
+      background-color 250ms var(--ease-out);
+  }
+
+  .module-name {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding-right: var(--space-5);  /* room for the dot */
+    transition: color 150ms var(--ease-out);
+  }
+
+  .module-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity   300ms var(--ease-out) 100ms,
+      transform 300ms var(--ease-out) 100ms;
+  }
+
+  /* ── active state ────────────────────────────────────────────── */
+  .module[data-active="true"] {
+    border-color: var(--accent);
+    background: rgba(200, 163, 92, 0.05);
+  }
+  .module[data-active="true"] .module-dot {
+    border-color: var(--accent);
+    background-color: var(--accent);
+    animation: aims-pulse 1.4s ease-in-out infinite;
+  }
+  .module[data-active="true"] .module-name {
+    color: var(--ink);
+  }
+  .module[data-active="true"] .module-desc {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Pulse: 1.0 → 1.15 → 1.0 scale, 1.0 → 0.7 → 1.0 opacity. Continuous
+   * while the module is active. CSS-only; not JS-driven. */
+  @keyframes aims-pulse {
+    0%, 100% { transform: scale(1);    opacity: 1; }
+    50%      { transform: scale(1.15); opacity: 0.7; }
+  }
+
+  /* Reduced motion: every choreographed transition collapses to
+   * instant; pulse disabled. State changes still happen, just
+   * without animation. */
+  @media (prefers-reduced-motion: reduce) {
+    .module,
+    .module-dot,
+    .module-name,
+    .module-desc {
+      transition: none;
+    }
+    .module[data-active="true"] .module-dot {
+      animation: none;
+    }
+  }
+
+  /* aria-live region is visually hidden but readable by AT */
+  .aims-live { /* sr-only inherited; no extra styles */ }
+</style>

@@ -1,0 +1,100 @@
+---
+const links = [
+  { href: '/method',     label: 'Method' },
+  { href: '/authorship', label: 'Authorship' },
+  { href: '/engagement', label: 'Engagement' },
+  { href: '/memo',       label: 'Memo' },
+];
+const current = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="nav-brand" aria-label="ARX Systems — home">
+      <span class="brand-name serif">ARX Systems</span>
+      <span class="brand-tag mono">Miami · By application</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+      <span></span><span></span>
+    </button>
+    <nav id="nav-menu" class="nav-menu" data-state="closed" aria-label="Primary">
+      <ul>
+        {links.map(l => (
+          <li>
+            <a href={l.href} class:list={[{ 'is-current': current === l.href || current.startsWith(l.href + '/') }]}>{l.label}</a>
+          </li>
+        ))}
+        <li><a href="/apply" class="btn btn-primary nav-cta">Book an intake call <span class="arr">→</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in oklab, var(--paper) 88%, transparent);
+    backdrop-filter: saturate(140%) blur(10px);
+    -webkit-backdrop-filter: saturate(140%) blur(10px);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+  .nav-brand { display: flex; flex-direction: column; gap: 2px; line-height: 1; }
+  .brand-name { font-size: 20px; letter-spacing: var(--track-tight); color: var(--ink); }
+  .brand-tag { font-size: 10px; letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); }
+  .nav-menu ul { display: flex; align-items: center; gap: 28px; }
+  .nav-menu a {
+    font-size: var(--t-small); color: var(--ink-2); font-weight: 450;
+    padding: 6px 0; border-bottom: 1px solid transparent;
+    transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .nav-menu a:hover { color: var(--ink); }
+  .nav-menu a.is-current { color: var(--ink); border-bottom-color: var(--forest); }
+  .nav-cta { font-size: var(--t-small); height: 40px; padding: 0 16px; }
+  .nav-cta:hover { color: var(--paper); }
+  .nav-cta.is-current { border-bottom: 1px solid var(--forest); }
+  .nav-toggle { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; border: 1px solid var(--rule-strong); border-radius: 2px; flex-direction: column; gap: 5px; }
+  .nav-toggle span { width: 18px; height: 1.5px; background: var(--ink); }
+
+  @media (max-width: 880px) {
+    .nav-toggle { display: flex; }
+    .nav-menu {
+      position: absolute; left: 0; right: 0; top: 72px;
+      background: var(--paper); border-top: 1px solid var(--rule);
+      display: none; padding: 16px 0;
+    }
+    .nav-menu[data-state="open"] { display: block; }
+    .nav-menu ul { flex-direction: column; align-items: stretch; gap: 0; padding-inline: var(--pad-x); }
+    .nav-menu li { border-bottom: 1px solid var(--rule); }
+    .nav-menu li:last-child { border-bottom: 0; padding-top: 16px; }
+    .nav-menu a { display: block; padding: 16px 0; font-size: var(--t-base); }
+    .nav-cta { display: inline-flex; }
+  }
+</style>
+<script>
+  const setupNav = () => {
+    const toggle = document.querySelector('.nav-toggle');
+    const menu = document.getElementById('nav-menu');
+    if (!toggle || !menu) return;
+    const set = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('data-state', open ? 'open' : 'closed');
+    };
+    toggle.addEventListener('click', () => set(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        set(false); (toggle as HTMLElement).focus();
+      }
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => set(false)));
+    // Border-on-scroll
+    const onScroll = () => {
+      document.querySelector('.nav')?.classList.toggle('scrolled', window.scrollY > 4);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  };
+  document.addEventListener('astro:page-load', setupNav);
+</script>
+<style is:global>
+  .nav.scrolled { border-bottom-color: var(--rule); }
+</style>

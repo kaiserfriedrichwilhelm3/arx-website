@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Authorship" description="The Cespedes Method is co-developed with Edgardo M. Cespedes, MD — a board-certified cardiologist in private practice in Miami.">
+  <section class="head">
+    <div class="wrap">
+      <p class="eyebrow reveal">§ 02 — Authorship</p>
+      <h1 class="serif reveal">Co-developed with a practicing specialist.</h1>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section>
+    <div class="wrap two-col">
+      <aside class="col-mark">
+        <div class="portrait reveal">
+          <!-- Placeholder portrait. Founder will drop a real photograph at /public/portraits/cespedes.jpg. -->
+          <div class="portrait-frame" aria-hidden="true">
+            <span class="mono portrait-tag">Portrait pending</span>
+          </div>
+          <p class="caption mono">Edgardo&nbsp;M. Cespedes,&nbsp;MD</p>
+        </div>
+      </aside>
+      <div class="col-body">
+        <h2 class="serif reveal">The clinical author of the Method.</h2>
+        <p class="lede reveal">
+          Edgardo&nbsp;M. Cespedes,&nbsp;MD is a board-certified cardiologist in private practice in Miami.
+          Board-certified in Cardiovascular Disease and Internal Medicine. Over three decades of clinical practice.
+          A native of Nicaragua and a long-standing member of the South Florida specialty community.
+        </p>
+        <p class="reveal">
+          Dr. Cespedes is the clinical author of The Cespedes Method. His practice is the reference deployment —
+          the live setting against which every clinical decision in the system is reviewed before it ships
+          to any other practice. He is the supervising clinician for the bilingual triage protocol,
+          the structure of every SOAP template, the criteria for emergency escalation, and the boundary
+          between what the system handles autonomously and what is routed to a human.
+        </p>
+        <h3 class="serif reveal">The working arrangement</h3>
+        <p class="reveal">
+          ARX builds the system. Dr. Cespedes reviews and approves the clinical contract — the rules
+          the system operates by — and signs every clinical document the system produces. Patient safety
+          and clinical liability remain with the licensed physician. The Method does not remove the doctor
+          from clinical decisions; it removes the doctor from administrative ones.
+        </p>
+        <h3 class="serif reveal">Why this matters for prospective practices</h3>
+        <p class="reveal">
+          A specialty practice taking on operating infrastructure built by a vendor with no clinical authorship
+          inherits the vendor's judgment about what a SOAP note should contain, when a refill is reasonable,
+          and what constitutes an emergency. With ARX, that judgment came from a working cardiologist
+          before any line of production code shipped. We are willing to put that detail in writing.
+          The private memo covers it. <a href="/memo" class="inline">Request the memo&nbsp;→</a>
+        </p>
+        <h3 class="serif reveal">Credentials</h3>
+        <ul class="credentials reveal">
+          <li><span class="mono lbl">Board certification</span><p>Cardiovascular Disease · Internal Medicine</p></li>
+          <li><span class="mono lbl">Practice</span><p>Cespedes Cardiology — Miami, Florida · <a class="inline" href="https://edgardocespedesmd.com/" target="_blank" rel="noopener">edgardocespedesmd.com&nbsp;↗</a></p></li>
+          <li><span class="mono lbl">Languages</span><p>English · Spanish (native)</p></li>
+          <li><span class="mono lbl">Tenure</span><p>30+ years in private specialty practice in South Florida</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .head { padding-top: clamp(80px, 12vw, 120px); padding-bottom: clamp(40px, 6vw, 64px); }
+  .head h1 { font-size: var(--t-h1); margin-top: 18px; max-width: 18ch; }
+  .two-col { display: grid; grid-template-columns: 280px 1fr; gap: 64px; align-items: start; }
+  .col-mark { position: sticky; top: 96px; }
+  .col-body > * + * { margin-top: 24px; }
+  .col-body h2 { font-size: var(--t-h2); }
+  .col-body h3 { font-size: var(--t-h3); margin-top: 40px; }
+  .col-body p { font-size: var(--t-lede); line-height: var(--lh-loose); }
+
+  .portrait-frame {
+    aspect-ratio: 4 / 5; background: var(--paper-deep);
+    border: 1px solid var(--rule-strong); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .portrait-tag { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); }
+  .caption { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); margin-top: 12px; text-align: center; }
+
+  .credentials { border-top: 1px solid var(--rule); }
+  .credentials li { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .credentials .lbl { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--forest); padding-top: 4px; }
+  .credentials p { font-size: var(--t-base); line-height: var(--lh-base); color: var(--ink); }
+
+  @media (max-width: 880px) {
+    .two-col { grid-template-columns: 1fr; gap: 32px; }
+    .col-mark { position: static; max-width: 260px; }
+    .credentials li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>

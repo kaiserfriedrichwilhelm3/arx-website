@@ -1,0 +1,108 @@
+/*
+ * src/styles/tokens.css — ARX Systems design tokens.
+ *
+ * Single source of truth. Every component consumes via var(--token).
+ * No component duplicates a value, redefines a token locally, or
+ * re-imports this file. Loaded once via global.css in BaseLayout.astro.
+ *
+ * Token groups: color, typography, spacing, layout, radii, borders,
+ * motion. No shadow tokens — depth on this site comes from spacing
+ * and contrast, not from raised cards.
+ */
+
+:root {
+  /* ──── color ──────────────────────────────────────────────────────── *
+   * ACCENT — ornament vs text (READ BEFORE REACHING FOR A TOKEN):
+   *
+   *   --accent (#C8A35C, 2.19:1 vs --bg)
+   *     ORNAMENT ONLY. Use for non-text marks that carry no semantic
+   *     content on their own: borders, status dots, section rules,
+   *     focus outlines, the underline-grow under the hero headline,
+   *     QuoteCard's left rule, AIMS module active border/dot fill,
+   *     accent-bg-tint backgrounds. Contrast does not apply — the
+   *     element has no text content of its own.
+   *
+   *   --accent-text (#7A5F2A, 5.55:1 vs --bg)
+   *     TEXT ONLY. Use for any text rendered in the accent family:
+   *     kickers (accent variant), the hero headline accent word
+   *     "answered.", any future accent-colored copy. Passes WCAG AA
+   *     for body text (4.5:1) and large text (3:1) with headroom.
+   *
+   *   --accent-deep (#9A7C3D, 3.65:1 vs --bg)
+   *     HOVER/ACTIVE state for accent ornament. Passes AA for large
+   *     text only; do not use for body text.
+   *
+   * If you find yourself coloring text with --accent, that is the bug —
+   * reach for --accent-text. The Pass 1 / WCAG AA gate depends on it.
+   * ──────────────────────────────────────────────────────────────────── */
+  --bg:           #F7F6F2;
+  --ink:          #0E1218;
+  --muted:        #5A5F66;
+  --line:         #E2DFD5;
+  --accent:       #C8A35C;
+  --accent-deep:  #9A7C3D;
+  --accent-text:  #7A5F2A;
+  --error:        #A8453A;
+
+  /* ──── typography ─────────────────────────────────────────────────── */
+  /*
+   * Family stacks list the intended self-hosted family first, then
+   * progressively older fallbacks. fonts.css (with @font-face for the
+   * .woff2 files) lands in Pass 1; until then browsers render with the
+   * second name in each stack (Georgia / system-ui / ui-monospace),
+   * which is intentional — system fallbacks read tastefully for the
+   * empty Pass 0 scaffold and avoid font-swap CLS.
+   */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Type scale — fluid via clamp(). Mobile → desktop interpolation
+   * built in; no breakpoint switches needed in components. */
+  --text-hero:    clamp(2.5rem,  5vw + 1rem, 4.5rem);     /* 40 → 72 */
+  --text-h1:      clamp(2rem,    3vw + 1rem, 3.5rem);     /* 32 → 56 */
+  --text-h2:      clamp(1.5rem,  2vw + 0.75rem, 2.25rem); /* 24 → 36 */
+  --text-h3:      clamp(1.25rem, 0.5vw + 1rem, 1.375rem); /* 20 → 22 */
+  --text-body:    clamp(1rem,    0.1vw + 0.95rem, 1.0625rem); /* 16 → 17 */
+  --text-small:   0.875rem;
+  --text-micro:   0.75rem;
+
+  /* Leading — paired explicitly per usage. See pairing table in
+   * Section 4 docs. Components set font-size and line-height as
+   * separate declarations. */
+  --leading-tight: 1.05;   /* --text-hero                */
+  --leading-snug:  1.2;    /* --text-h1, --text-h2, h3   */
+  --leading-base:  1.6;    /* --text-body, --text-small  */
+  --leading-loose: 1.8;    /* long-form prose (optional) */
+  --leading-mono:  1.4;    /* --text-micro (mono)        */
+
+  /* ──── spacing (base-4 modular) ───────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+  --space-7: 96px;
+  --space-8: 144px;
+
+  /* ──── layout ─────────────────────────────────────────────────────── */
+  --container-max:   1200px;  /* outer container (nav, footer, grids) */
+  --container-prose:  680px;  /* reading column (paragraphs)          */
+
+  /* ──── radii ──────────────────────────────────────────────────────── */
+  --radius-sm: 2px;   /* form fields, kicker pills          */
+  --radius-md: 4px;   /* buttons                            */
+  --radius-lg: 8px;   /* image frames, occasional containers */
+
+  /* ──── borders ────────────────────────────────────────────────────── */
+  --border-hairline: 1px solid var(--line);
+
+  /* ──── motion ─────────────────────────────────────────────────────── */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);     /* entrances, hover */
+  --ease-in-out: cubic-bezier(0.4,  0, 0.2, 1);     /* state transitions */
+
+  --motion-fast: 150ms;   /* color/opacity hover         */
+  --motion-base: 250ms;   /* panel open, menu reveal     */
+  --motion-slow: 400ms;   /* major transitions           */
+}

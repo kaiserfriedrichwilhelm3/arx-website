@@ -1,0 +1,185 @@
+---
+/*
+ * GalenModuleGrid.astro — six-module content grid.
+ *
+ * This is NOT the AIMS demo. No auto-play, no hover takeover, no
+ * status dots, no pulse. Static content cards intended for scan-
+ * and-compare reading: icon → name → description → hairline → spec.
+ * Subtle hover: border shifts to --accent over 300ms; nothing else
+ * changes.
+ *
+ * Layout: 2×3 grid on tablet/desktop (≥768px), single column on
+ * mobile. The grid is wider than --container-prose intentionally —
+ * comparison reading benefits from more horizontal width.
+ */
+import Kicker from "./Kicker.astro";
+import GalenIcon from "./GalenIcon.astro";
+
+const modules = [
+  {
+    name:  "reception",
+    title: "Reception",
+    desc:  "Answers every incoming call, 24/7, across every major language. Patients hear a calm, attentive voice — never a hold queue, never voicemail.",
+    spec:  "Sub-2s answer time · 35+ languages",
+  },
+  {
+    name:  "scheduling",
+    title: "Scheduling",
+    desc:  "Books, reschedules, and confirms appointments against your real calendar. Two-way sync with the systems your front desk already uses.",
+    spec:  "Real-time calendar sync · No double-bookings",
+  },
+  {
+    name:  "intake",
+    title: "Intake",
+    desc:  "Collects patient information before the visit — demographics, reason for visit, insurance. Ready to push into your EHR.",
+    spec:  "FHIR R4 compatible · EHR-ready",
+  },
+  {
+    name:  "insurance",
+    title: "Insurance",
+    desc:  "Verifies coverage and benefits before booking. The patient knows what they owe before they arrive; you avoid the write-off cycle.",
+    spec:  "Real-time eligibility checks",
+  },
+  {
+    name:  "triage",
+    title: "Triage",
+    desc:  "Routes urgent calls correctly in seconds. Emergencies reach a human or escalate to 911; routine requests stay with the agent.",
+    spec:  "Clinical priority routing · Sub-second decision",
+  },
+  {
+    name:  "followup",
+    title: "Follow-up",
+    desc:  "Confirms appointments. Sends reminders. Handles no-shows by rebooking on the next available slot — automatically.",
+    spec:  "Drops no-show rate · Recovers cancellations",
+  },
+] as const;
+---
+<section id="capabilities" class="gmod" aria-labelledby="gmod-heading">
+  <div class="gmod-inner">
+    <header class="gmod-header">
+      <Kicker>01 · Capabilities</Kicker>
+      <h2 id="gmod-heading" class="gmod-heading">Six modules. One architecture.</h2>
+      <p class="gmod-lede">
+        Each module is a focused agent. Activate what your practice
+        needs today. Add the rest as you grow.
+      </p>
+    </header>
+
+    <div class="gmod-grid">
+      {modules.map((m) => (
+        <article class="gmod-card">
+          <div class="gmod-card-icon">
+            <GalenIcon name={m.name} />
+          </div>
+          <h3 class="gmod-card-name">{m.title}</h3>
+          <p class="gmod-card-desc">{m.desc}</p>
+          <hr class="gmod-card-rule" />
+          <p class="gmod-card-spec">{m.spec}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .gmod {
+    padding-block: var(--space-7);
+    scroll-margin-top: var(--space-5);
+  }
+  @media (min-width: 768px) {
+    .gmod { padding-block: var(--space-8); }
+  }
+  .gmod-inner {
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+
+  .gmod-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    max-width: var(--container-prose);
+  }
+  .gmod-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .gmod-lede {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+    max-width: 540px;
+  }
+
+  .gmod-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  @media (min-width: 768px) {
+    .gmod-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .gmod-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-5);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background: var(--bg);
+    transition: border-color 300ms var(--ease-out);
+  }
+  .gmod-card:hover {
+    border-color: var(--accent);
+  }
+
+  .gmod-card-icon {
+    color: var(--ink);
+    margin-bottom: var(--space-4);
+  }
+
+  .gmod-card-name {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin: 0;
+    margin-bottom: var(--space-2);
+  }
+
+  .gmod-card-desc {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--leading-base);
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .gmod-card-rule {
+    border: 0;
+    border-top: var(--border-hairline);
+    width: 100%;
+    margin: var(--space-3) 0;
+  }
+
+  .gmod-card-spec {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: var(--leading-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent-text);
+    margin: 0;
+  }
+</style>

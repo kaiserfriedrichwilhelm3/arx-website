@@ -1,0 +1,28 @@
+/* Self-hosted variable fonts. No CDN, no FOUT risk from third-party DNS. */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/display/Fraunces-Variable.woff2') format('woff2-variations'),
+       url('/fonts/display/Fraunces-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/body/Inter-Variable.woff2') format('woff2-variations'),
+       url('/fonts/body/Inter-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/mono/JetBrainsMono-Variable.woff2') format('woff2-variations'),
+       url('/fonts/mono/JetBrainsMono-Variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}

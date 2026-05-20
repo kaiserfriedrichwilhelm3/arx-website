@@ -1,0 +1,72 @@
+---
+/*
+ * QuoteCard.astro — testimonial / pull-quote.
+ *
+ * The single place --accent appears as a left rule, echoing the
+ * existing email-template pattern (border-left: 3px solid #C8A35C).
+ * Visual continuity from inbound emails to the marketing site.
+ *
+ * Semantic structure is <figure><blockquote><p></p></blockquote>
+ * <figcaption>…</figcaption></figure> — screen readers announce the
+ * quoted content and its attribution distinctly.
+ */
+interface Props {
+  quote: string;
+  attribution?: string;
+  role?: string;
+}
+const { quote, attribution, role } = Astro.props;
+---
+<figure class="quote">
+  <blockquote class="quote-body">
+    <p>{quote}</p>
+  </blockquote>
+  {attribution && (
+    <figcaption class="quote-attr">
+      <span class="quote-name">{attribution}</span>
+      {role && <span class="quote-role">{role}</span>}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .quote {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .quote-body { margin: 0; }
+  .quote-body p {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    font-style: italic;
+    margin: 0;
+    max-width: 38ch;
+  }
+  .quote-attr {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .quote-name {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .quote-role {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: var(--leading-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+</style>

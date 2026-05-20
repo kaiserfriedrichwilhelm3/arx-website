@@ -1,0 +1,230 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const pillars = (await getCollection('pillars')).sort((a, b) => a.data.order - b.data.order);
+---
+<BaseLayout title="ARX Systems" description="ARX Systems installs The Cespedes Method in independent specialty physician practices. Co-developed with Edgardo M. Cespedes, MD. By application only.">
+  <!-- =================== HERO =================== -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">ARX Systems · Miami · Capacity 3–5 practices this quarter</p>
+      <h1 class="serif hero-h reveal">
+        Operating infrastructure for
+        <em>independent specialty</em>
+        physician practices.
+      </h1>
+      <p class="lede hero-sub reveal">
+        ARX installs <em>The Cespedes Method</em> — a five-pillar engagement co-developed
+        with Edgardo&nbsp;M. Cespedes,&nbsp;MD — into a small number of private practices each quarter.
+        We work alongside the physician, not around them. By application only.
+      </p>
+      <div class="hero-cta reveal">
+        <a href="/apply" class="btn btn-primary">Book an intake call <span class="arr">→</span></a>
+        <a href="/memo" class="inline memo-link">or request the private strategy memo</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =================== § 01  THESIS =================== -->
+  <section id="thesis">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">§ 01 — Thesis</p>
+      </header>
+      <div class="col-body">
+        <h2 class="serif reveal">The bottleneck in private medicine is not clinical care. It is operating infrastructure.</h2>
+        <p class="lede reveal">
+          Specialty practices outside the hospital system carry the same regulatory load
+          as a thirty-thousand-person health network, with three administrative staff and a fax machine.
+          Every market &ldquo;solution&rdquo; built for them so far has been a vendor-driven point tool.
+          None of them know what the others are doing. The practice ends up integrating its own back office
+          on nights and weekends.
+        </p>
+        <p class="reveal">
+          ARX builds the missing layer. One coherent system, configured per practice, installed in eight to twelve weeks,
+          maintained by a small team that answers in business hours. Voice answers the phone.
+          Storefront is the website. Intake is the form. Scribe writes the note. Funnel closes the referral loop.
+          One system. One bill. One person to call.
+        </p>
+        <p class="reveal">
+          Status, honestly: <strong>Pillar I (Voice) is live in the reference deployment.</strong>
+          Pillars II–V are in deployment. The full Method ships at full reference by the end of this quarter.
+          We say so on every page.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =================== § 02  AUTHORSHIP =================== -->
+  <section id="authorship">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">§ 02 — Authorship</p>
+      </header>
+      <div class="col-body">
+        <h2 class="serif reveal">The Method is co-developed with a practicing specialist.</h2>
+        <p class="lede reveal">
+          Edgardo&nbsp;M. Cespedes,&nbsp;MD is a board-certified cardiologist in private practice in Miami.
+          Over three decades of clinical practice. A native of Nicaragua. Bilingual practice, Spanish and English.
+          A pillar of the South Florida specialty community.
+        </p>
+        <p class="reveal">
+          Dr. Cespedes is the clinical author of the Method. His practice is the reference deployment.
+          Every clinical decision the system makes — what counts as an emergency, when a refill is reasonable,
+          what belongs in a SOAP note, what does not — is reviewed by him before it ships.
+          ARX writes the code; the physician writes the clinical contract.
+        </p>
+        <p class="reveal">
+          The arrangement, terms, and clinical-review process are documented in the private memo.
+          <a href="/authorship" class="inline">Read the longer treatment&nbsp;→</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =================== § 03  METHOD =================== -->
+  <section id="method">
+    <div class="wrap">
+      <header class="method-head">
+        <p class="section-marker reveal">§ 03 — The Cespedes Method</p>
+        <h2 class="serif reveal">Five pillars. One system. Installed in order.</h2>
+        <p class="lede reveal">
+          The Method is not a feature list. It is the sequence in which a specialty practice becomes
+          structurally able to operate at twice its current throughput without hiring.
+          Each pillar reads in plain English; each is the visible surface of a piece of medical-grade infrastructure
+          underneath. <a href="/method" class="inline">See the full treatment&nbsp;→</a>
+        </p>
+      </header>
+      <ol class="pillars">
+        {pillars.map(p => (
+          <li class="pillar reveal">
+            <a href={`/method/${p.slug}`} class="pillar-link">
+              <div class="pillar-num mono">§ 0{p.data.order} &nbsp;Pillar {p.data.number}</div>
+              <h3 class="serif pillar-title" style={`view-transition-name: pillar-${p.slug}`}>{p.data.title}</h3>
+              <p class="pillar-sub">{p.data.subtitle}</p>
+              <div class={`status ${p.data.status === 'live' ? 'status-live' : ''}`}>
+                <span class="status-dot"></span>{p.data.statusLabel}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =================== § 04  ENGAGEMENT =================== -->
+  <section id="engagement">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">§ 04 — Engagement</p>
+      </header>
+      <div class="col-body">
+        <h2 class="serif reveal">Eight to twelve weeks, two visits, one bill.</h2>
+        <p class="lede reveal">
+          A Method installation runs eight to twelve weeks. It begins with a private intake call
+          and a written scope of work. It ends with a live system, a runbook the practice manager owns,
+          and a quarterly check-in cadence with the ARX team.
+        </p>
+        <ul class="engagement-list">
+          <li class="reveal"><span class="mono lbl">Weeks 1–2</span><p>Discovery: configuration interviews with the physician and practice manager. EHR and phone audit. Written scope. Pricing fixed.</p></li>
+          <li class="reveal"><span class="mono lbl">Weeks 3–6</span><p>Voice and Storefront stand up against a staging line. Intake question set drafted with the physician. Scribe template built.</p></li>
+          <li class="reveal"><span class="mono lbl">Weeks 7–10</span><p>Cutover. Voice goes live. Storefront publishes. Intake and Scribe enter a two-week supervised window. Funnel dashboard comes online.</p></li>
+          <li class="reveal"><span class="mono lbl">Weeks 11–12</span><p>Runbook hand-off. Practice manager trained. Quarterly cadence set.</p></li>
+        </ul>
+        <p class="reveal"><a href="/engagement" class="inline">Read the full engagement description&nbsp;→</a></p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <!-- =================== § 05  APPLY =================== -->
+  <section id="apply" class="apply">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">§ 05 — Apply</p>
+      </header>
+      <div class="col-body">
+        <h2 class="serif reveal">Three to five practices this quarter.</h2>
+        <p class="lede reveal">
+          ARX takes on three to five practices per quarter. Applications are reviewed weekly.
+          The intake call is forty-five minutes with the founder, by appointment, no preparation needed
+          beyond a willingness to describe how your practice works today.
+        </p>
+        <div class="apply-cta reveal">
+          <a href="/apply" class="btn btn-primary">Book an intake call <span class="arr">→</span></a>
+          <a href="/memo" class="btn btn-ghost">Request the memo <span class="arr">→</span></a>
+        </div>
+        <p class="muted small reveal">
+          For questions that should not wait for a call:
+          <a class="inline" href="mailto:gabrielcespedes777@gmail.com">gabrielcespedes777@gmail.com</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { padding-top: clamp(80px, 12vw, 140px); padding-bottom: clamp(72px, 10vw, 120px); }
+  .hero-h { font-size: var(--t-display); line-height: var(--lh-tight); max-width: 16ch; margin-top: 24px; }
+  .hero-h em { color: var(--forest); }
+  .hero-sub { max-width: 60ch; margin-top: 32px; }
+  .hero-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 36px; }
+  .memo-link { font-size: var(--t-small); }
+
+  .two-col { display: grid; grid-template-columns: 200px 1fr; gap: 80px; align-items: start; }
+  .col-mark { position: sticky; top: 96px; }
+  .col-body > * + * { margin-top: 24px; }
+  .col-body h2 { font-size: var(--t-h2); }
+  @media (max-width: 880px) {
+    .two-col { grid-template-columns: 1fr; gap: 24px; }
+    .col-mark { position: static; }
+  }
+
+  .method-head { max-width: 70ch; }
+  .method-head > * + * { margin-top: 18px; }
+
+  .pillars {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    margin-top: clamp(40px, 6vw, 64px);
+    border-top: 1px solid var(--rule);
+  }
+  .pillar {
+    border-bottom: 1px solid var(--rule);
+  }
+  .pillar:nth-child(odd) { border-right: 1px solid var(--rule); }
+  .pillar-link {
+    display: block; padding: 36px 28px 32px;
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .pillar-link:hover { background: var(--paper-deep); }
+  .pillar-num { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); }
+  .pillar-title { font-size: 32px; margin-top: 12px; letter-spacing: var(--track-tight); }
+  .pillar-sub { font-size: var(--t-base); margin-top: 10px; max-width: 38ch; color: var(--ink-2); }
+  .pillar .status { margin-top: 20px; }
+  @media (max-width: 760px) {
+    .pillars { grid-template-columns: 1fr; }
+    .pillar:nth-child(odd) { border-right: 0; }
+  }
+
+  .engagement-list { display: flex; flex-direction: column; }
+  .engagement-list li { display: grid; grid-template-columns: 120px 1fr; gap: 24px; padding: 20px 0; border-top: 1px solid var(--rule); }
+  .engagement-list li:last-child { border-bottom: 1px solid var(--rule); }
+  .engagement-list .lbl { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--forest); padding-top: 4px; }
+  @media (max-width: 640px) {
+    .engagement-list li { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  .apply-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 12px; }
+  .small { font-size: var(--t-small); }
+  .apply .col-body > * + * { margin-top: 24px; }
+</style>

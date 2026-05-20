@@ -1,16 +1,22 @@
 {
   "name": "arx-website",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
   "engines": {
     "node": ">=20.9.0"
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.21.2",
     "resend": "^4.0.1"
+  },
+  "devDependencies": {
+    "@astrojs/mdx": "^4.0.0",
+    "astro": "^5.0.0"
   }
 }

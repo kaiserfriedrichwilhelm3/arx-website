@@ -1,0 +1,32 @@
+---
+/*
+ * Kicker.astro — small uppercase label.
+ *
+ * Two color variants:
+ *   "accent" (default) — uses --accent-text (5.55:1 vs --bg). Passes
+ *      WCAG AA for body text and large text with headroom. Pairs
+ *      well with an adjacent ink-colored heading per the standard
+ *      kicker→heading pattern. Note: --accent-text is distinct from
+ *      --accent (which is ornament-only and would fail axe);
+ *      see tokens.css for the rationale.
+ *   "muted" — uses --muted (6.5:1). Passes AA. Use when a kicker
+ *      appears in isolation or when the page wants a quieter label.
+ */
+interface Props { color?: "accent" | "muted"; }
+const { color = "accent" } = Astro.props;
+---
+<span class:list={["kicker", `kicker-${color}`]}><slot /></span>
+
+<style>
+  .kicker {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: var(--leading-mono);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+  .kicker-accent { color: var(--accent-text); }
+  .kicker-muted  { color: var(--muted); }
+</style>

@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Cal.com handle is read from an env var at build time; falls back to a placeholder
+// the founder can replace once the booking link is live. The page works either way:
+// the modal opens, the iframe loads (or shows a fallback link), and the user is never
+// stranded if scripts fail.
+const CAL_LINK = (import.meta.env.PUBLIC_CAL_LINK as string | undefined) || 'arxsystems/intake';
+---
+<BaseLayout title="Apply" description="Book a 45-minute intake call with the ARX founder. Three to five practices this quarter.">
+  <section class="head">
+    <div class="wrap two-col">
+      <header class="col-mark">
+        <p class="section-marker">§ 05 — Apply</p>
+      </header>
+      <div class="col-body">
+        <h1 class="serif reveal">Book an intake call.</h1>
+        <p class="lede reveal">
+          Forty-five minutes with the founder. Held by appointment. No preparation needed beyond a willingness
+          to describe how your practice works today. ARX reviews applications weekly; capacity is
+          three to five practices this quarter.
+        </p>
+        <div class="cta-row reveal">
+          <button id="open-modal" class="btn btn-primary" type="button" aria-haspopup="dialog">
+            Open the booking page <span class="arr">→</span>
+          </button>
+        </div>
+        <p class="muted small reveal">
+          The booking page opens in an overlay on this site. If it does not load, you can also email
+          <a class="inline" href="mailto:gabrielcespedes777@gmail.com">gabrielcespedes777@gmail.com</a> directly.
+        </p>
+
+        <hr class="rule" style="margin: 56px 0;" />
+
+        <h2 class="serif reveal">What to expect on the call</h2>
+        <ul class="expect">
+          <li class="reveal"><span class="mono lbl">First 15 min</span><p>You describe the practice — specialty, panel, current call volume, EHR, what is breaking. We listen.</p></li>
+          <li class="reveal"><span class="mono lbl">Middle 20 min</span><p>We walk through the Method against your practice, pillar by pillar. We tell you which parts of it you don't need yet, and which parts will not work in your setup.</p></li>
+          <li class="reveal"><span class="mono lbl">Last 10 min</span><p>If we are the right fit, we send a written discovery proposal within forty-eight hours. If we are not, we tell you what we would do instead. The call is free.</p></li>
+        </ul>
+
+        <p class="muted small reveal" style="margin-top: 40px;">
+          Prefer to read first? <a href="/memo" class="inline">Request the private strategy memo</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <dialog id="booking-modal" class="modal" aria-labelledby="modal-title">
+    <div class="modal-inner">
+      <header class="modal-head">
+        <h2 id="modal-title" class="serif">Book an intake call</h2>
+        <button type="button" id="close-modal" aria-label="Close" class="modal-close">×</button>
+      </header>
+      <div class="modal-body">
+        <iframe
+          id="cal-frame"
+          title="ARX Systems intake booking"
+          src={`https://cal.com/${CAL_LINK}?embed=true`}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <p class="modal-fallback muted small">
+          If the booking page does not load, email
+          <a class="inline" href="mailto:gabrielcespedes777@gmail.com">gabrielcespedes777@gmail.com</a>
+          and we will arrange a time directly.
+        </p>
+      </div>
+    </div>
+  </dialog>
+</BaseLayout>
+<style>
+  .head { padding-top: clamp(80px, 12vw, 120px); padding-bottom: clamp(80px, 10vw, 120px); }
+  .two-col { display: grid; grid-template-columns: 200px 1fr; gap: 80px; align-items: start; }
+  .col-mark { position: sticky; top: 96px; }
+  .col-body > * + * { margin-top: 24px; }
+  .col-body h1 { font-size: var(--t-h1); max-width: 16ch; }
+  .col-body h2 { font-size: var(--t-h2); margin-top: 8px; }
+  .cta-row { margin-top: 24px; }
+  .small { font-size: var(--t-small); }
+  .expect { border-top: 1px solid var(--rule); margin-top: 24px; }
+  .expect li { display: grid; grid-template-columns: 140px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .expect .lbl { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--forest); padding-top: 4px; }
+  .expect p { font-size: var(--t-base); line-height: var(--lh-base); color: var(--ink); }
+
+  .modal {
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    padding: 0;
+    max-width: 980px; width: min(96vw, 980px);
+    max-height: 92vh;
+    border-radius: 4px;
+  }
+  .modal::backdrop { background: rgba(20, 17, 13, 0.42); backdrop-filter: blur(2px); }
+  .modal-inner { display: flex; flex-direction: column; max-height: 92vh; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 24px; border-bottom: 1px solid var(--rule); }
+  .modal-head h2 { font-size: var(--t-h3); }
+  .modal-close { font-size: 28px; line-height: 1; width: 40px; height: 40px; color: var(--ink-2); }
+  .modal-close:hover { color: var(--ink); }
+  .modal-body { flex: 1; min-height: 600px; display: flex; flex-direction: column; }
+  .modal-body iframe { flex: 1; width: 100%; min-height: 580px; border: 0; }
+  .modal-fallback { padding: 14px 24px; border-top: 1px solid var(--rule); }
+
+  @media (max-width: 880px) {
+    .two-col { grid-template-columns: 1fr; gap: 24px; }
+    .col-mark { position: static; }
+    .expect li { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+<script>
+  const setupApply = () => {
+    const open = document.getElementById('open-modal');
+    const close = document.getElementById('close-modal');
+    const modal = document.getElementById('booking-modal') as HTMLDialogElement | null;
+    if (!open || !close || !modal) return;
+    open.addEventListener('click', () => modal.showModal());
+    close.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => {
+      const r = (modal as HTMLDialogElement).getBoundingClientRect();
+      const inside = e.clientY >= r.top && e.clientY <= r.bottom && e.clientX >= r.left && e.clientX <= r.right;
+      if (!inside) modal.close();
+    });
+  };
+  document.addEventListener('astro:page-load', setupApply);
+</script>

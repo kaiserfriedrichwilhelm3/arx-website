@@ -1,0 +1,94 @@
+---
+/*
+ * GalenPilot.astro — factual pilot reference block.
+ *
+ * Visually similar to the QuoteCard primitive (accent left-rule,
+ * display-serif body) but factual rather than a literal quote. Body
+ * is NOT italic — italic implies dialogue/citation, and this block
+ * is a stated fact. Credibility comes from the specificity of the
+ * dated reference and the named practice.
+ *
+ * Honesty constraints (from the Pass 2 brief):
+ *   - No fabricated quotes
+ *   - No manufactured metrics
+ *   - No logo (no asset exists; stretching the name in display type
+ *     would be lying about brand identity)
+ */
+import Kicker from "./Kicker.astro";
+---
+<section class="gpilot" aria-labelledby="gpilot-heading">
+  <div class="gpilot-inner">
+    <header class="gpilot-header">
+      <Kicker>02 · In Practice</Kicker>
+    </header>
+
+    <figure class="gpilot-block">
+      <p id="gpilot-heading" class="gpilot-body">
+        Galen has been answering calls at Cespedes Cardiology in
+        Miami since April 2026 — every line, every hour, every
+        language a patient brings.
+      </p>
+      <figcaption class="gpilot-attr">
+        <span class="gpilot-name">Cespedes Cardiology — Miami, FL</span>
+        <span class="gpilot-role">Pilot · April 2026 — present</span>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .gpilot {
+    padding-block: var(--space-7);
+    scroll-margin-top: var(--space-5);
+  }
+  @media (min-width: 768px) {
+    .gpilot { padding-block: var(--space-8); }
+  }
+  .gpilot-inner {
+    max-width: var(--container-prose);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+  .gpilot-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .gpilot-block {
+    margin: 0;
+    padding-inline-start: var(--space-4);
+    border-inline-start: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .gpilot-body {
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    line-height: var(--leading-snug);
+    color: var(--ink);
+    font-weight: 400;
+    font-style: normal;  /* not italic — this is fact, not quote */
+    margin: 0;
+    max-width: 38ch;
+  }
+  .gpilot-attr {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .gpilot-name {
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    line-height: var(--leading-base);
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .gpilot-role {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    line-height: var(--leading-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent-text);
+  }
+</style>

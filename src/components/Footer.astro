@@ -1,0 +1,38 @@
+---
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="col">
+      <p class="serif name">ARX Systems</p>
+      <p class="mono tag">Miami, Florida · By application only</p>
+    </div>
+    <nav class="col" aria-label="Footer">
+      <ul>
+        <li><a href="/method">The Method</a></li>
+        <li><a href="/authorship">Authorship</a></li>
+        <li><a href="/engagement">Engagement</a></li>
+        <li><a href="/memo">Memo</a></li>
+        <li><a href="/apply">Apply</a></li>
+      </ul>
+    </nav>
+    <div class="col">
+      <p class="muted small">For questions outside the application process: <a class="inline" href="mailto:gabrielcespedes777@gmail.com">gabrielcespedes777@gmail.com</a>.</p>
+      <p class="muted small">&copy; {year} ARX Systems. The Cespedes Method&nbsp;<sup>SM</sup> is co-developed with Edgardo&nbsp;M. Cespedes, MD.</p>
+    </div>
+  </div>
+</footer>
+<style>
+  .footer { border-top: 1px solid var(--rule); padding-block: 56px; margin-top: clamp(64px, 9vw, 120px); }
+  .footer-inner { display: grid; grid-template-columns: 1.1fr 1fr 1.2fr; gap: 48px; align-items: start; }
+  .col ul { display: flex; flex-direction: column; gap: 10px; }
+  .col a { font-size: var(--t-small); color: var(--ink-2); }
+  .col a:hover { color: var(--ink); }
+  .name { font-size: 20px; color: var(--ink); }
+  .tag { font-size: var(--t-micro); letter-spacing: var(--track-mono); text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+  .small { font-size: var(--t-small); line-height: var(--lh-base); margin-top: 6px; }
+  .small + .small { margin-top: 16px; }
+  @media (max-width: 760px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>
