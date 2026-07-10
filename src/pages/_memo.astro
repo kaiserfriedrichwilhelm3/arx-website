@@ -94,11 +94,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         } else {
           const body = await res.json().catch(() => ({}));
           note.className = 'form-note small is-err';
-          note.textContent = body.error || 'Something went wrong. Email gabrielcespedes777@gmail.com directly.';
+          note.textContent = body.error || 'Something went wrong. Email gabriel@arxsystems.co directly.';
         }
       } catch {
         note.className = 'form-note small is-err';
-        note.textContent = 'Network error. Try again, or email gabrielcespedes777@gmail.com directly.';
+        note.textContent = 'Network error. Try again, or email gabriel@arxsystems.co directly.';
       }
     });
   };

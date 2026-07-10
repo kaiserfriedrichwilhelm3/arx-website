@@ -1,8 +1,13 @@
 // POST /api/contact — Galen inquiry + Custom Project inquiry.
 // Ported verbatim from the pre-rebuild server.js. Behavior, validation
-// rules, error messages, and env-var contract are identical to the
-// live endpoint. DO NOT add new validation, rename fields, or "improve"
-// error handling without explicit direction.
+// rules, and env-var contract are identical to the live endpoint.
+// DO NOT add new validation, rename fields, or "improve" error handling
+// without explicit direction.
+//
+// Two founder-directed changes (2026-07): public error copy uses the
+// branded gabriel@arxsystems.co (never the personal gmail), and a failed
+// Resend call logs the full submission so the lead stays recoverable
+// from Railway logs.
 
 const { Resend } = require('resend');
 const { checkRateLimit } = require('../lib/rate-limit');
@@ -81,7 +86,8 @@ async function contactHandler(req, res) {
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('[contact] Resend error:', err);
-    return res.status(500).json({ error: 'Failed to send. Please email gabrielcespedes777@gmail.com directly.' });
+    console.error('[contact] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify(req.body));
+    return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
   }
 }
 

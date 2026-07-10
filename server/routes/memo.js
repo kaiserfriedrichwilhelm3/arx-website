@@ -65,7 +65,7 @@ async function memoHandler(req, res) {
   if (!process.env.RESEND_API_KEY) {
     if (IS_PROD) {
       console.error('[memo] FATAL: RESEND_API_KEY missing in production. Form submission rejected with 503.', { name, practice, email, ip });
-      return res.status(503).json({ error: 'The memo service is temporarily unavailable. Please email gabrielcespedes777@gmail.com directly and we will respond within the day.' });
+      return res.status(503).json({ error: 'The memo service is temporarily unavailable. Please email gabriel@arxsystems.co directly and we will respond within the day.' });
     }
     // Dev stub.
     console.log('[memo:stub]', { name, practice, email, reason: safeReason, ip });
@@ -122,7 +122,8 @@ async function memoHandler(req, res) {
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('[memo] Resend error:', err);
-    return res.status(500).json({ error: 'Failed to send. Please email gabrielcespedes777@gmail.com directly.' });
+    console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason }));
+    return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
   }
 }
 
