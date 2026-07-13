@@ -4,8 +4,8 @@
 // explicit direction.
 //
 // Founder-directed fixes (2026-07):
-//   - Public error copy uses the branded gabriel@arxsystems.co, never the
-//     personal gmail.
+//   - Public error copy never names an email address (founder direction:
+//     no email in any visitor-facing error message).
 //   - Every failed or unsendable submission logs the full payload
 //     (UNDELIVERED SUBMISSION) so the lead stays recoverable from Railway
 //     logs — prompted by a real intake submission lost to an invalid key.
@@ -97,7 +97,7 @@ async function contactHandler(req, res) {
     if (IS_PROD) {
       console.error('[contact] FATAL: RESEND_API_KEY missing in production. Submission rejected with 503.');
       console.error('[contact] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify(body));
-      return res.status(503).json({ error: 'The contact service is temporarily unavailable. Please email gabriel@arxsystems.co directly and we will respond within the day.' });
+      return res.status(503).json({ error: 'The contact service is temporarily unavailable. Please try again later.' });
     }
     // Dev stub.
     console.log(`[contact:${type || 'galen'}] No RESEND_API_KEY — dev stub, logging:`, body);
@@ -117,7 +117,7 @@ async function contactHandler(req, res) {
   } catch (err) {
     console.error('[contact] Resend error:', err);
     console.error('[contact] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify(body));
-    return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
+    return res.status(500).json({ error: 'Failed to send. Please try again later.' });
   }
 }
 

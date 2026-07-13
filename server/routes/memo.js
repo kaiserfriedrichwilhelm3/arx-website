@@ -71,7 +71,7 @@ async function memoHandler(req, res) {
     if (IS_PROD) {
       console.error('[memo] FATAL: RESEND_API_KEY missing in production. Form submission rejected with 503.');
       console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason, ip }));
-      return res.status(503).json({ error: 'The memo service is temporarily unavailable. Please email gabriel@arxsystems.co directly and we will respond within the day.' });
+      return res.status(503).json({ error: 'The memo service is temporarily unavailable. Please try again later.' });
     }
     // Dev stub.
     console.log('[memo:stub]', { name, practice, email, reason: safeReason, ip });
@@ -130,7 +130,7 @@ async function memoHandler(req, res) {
     if (notif.error) {
       console.error('[memo] Founder notification failed:', notif.error);
       console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason }));
-      return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
+      return res.status(500).json({ error: 'Failed to send. Please try again later.' });
     }
     if (confirm.error) {
       // The lead IS captured (founder notified) — only the visitor's
@@ -144,7 +144,7 @@ async function memoHandler(req, res) {
   } catch (err) {
     console.error('[memo] Resend error:', err);
     console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason }));
-    return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
+    return res.status(500).json({ error: 'Failed to send. Please try again later.' });
   }
 }
 
