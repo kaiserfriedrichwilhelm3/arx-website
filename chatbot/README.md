@@ -32,9 +32,12 @@ state machine → Cal.com v2 (slots / booking) → templated reply
 cd chatbot
 npm install
 cp .env.example .env    # fill in ANTHROPIC_API_KEY, CAL_API_KEY, CAL_EVENT_TYPE_ID, CAL_BOOKING_URL
-npm start               # → http://localhost:3100
+npm run dev             # loads .env → http://localhost:3100
 open http://localhost:3100/demo.html
 ```
+
+(`npm start` is the production entrypoint — it reads plain process env vars, which is
+what Railway injects from its Variables panel; only `npm run dev` reads the `.env` file.)
 
 ## Embed on the site
 

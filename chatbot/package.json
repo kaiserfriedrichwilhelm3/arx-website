@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test:booking": "node test-booking.js"
+    "dev": "node --env-file=.env server.js",
+    "test:booking": "node --env-file=.env test-booking.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
