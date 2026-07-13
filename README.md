@@ -132,18 +132,18 @@ See [`DECISIONS.md`](./DECISIONS.md) §1 and §8 and the project brief for the f
 
 | Name | Required | Default | Used by |
 |---|---|---|---|
-| `RESEND_API_KEY` | **Required in production.** Missing in prod = `/api/memo` returns `503` and logs to stderr. Missing in dev = stub mode (logs payload to stdout, returns `200`). | unset | `/api/memo`, `/api/contact` |
+| `RESEND_API_KEY` | **Required in production.** Missing in prod = `/api/memo` **and** `/api/contact` return `503` and log the payload to stderr. Missing in dev = stub mode (logs payload to stdout, returns `200`). | unset | `/api/memo`, `/api/contact` |
 | `MEMO_URL` | No | unset → confirmation email omits the link and says the memo will arrive within one business day | `/api/memo` |
 | `CONTACT_EMAIL` | No | `gabrielcespedes777@gmail.com` | All form endpoints |
 | `PUBLIC_CAL_LINK` | No | `arxsystems/intake` | `/apply` Cal.com iframe |
-| `NODE_ENV` | No | unset (= dev / stub mode) | Strict env checks in `/api/memo` |
+| `NODE_ENV` | No | unset (= dev / stub mode) | Strict env checks in `/api/memo` and `/api/contact` |
 | `PORT` | No | `3000` | Express, set by Railway |
 
 ## Missing-env behavior (not silent)
 
-The memo form is potentially the only channel a cold-pitched physician has into the firm. Silently swallowing submissions when `RESEND_API_KEY` is unconfigured is unacceptable. The hardened behavior, by environment:
+A form submission is potentially the only channel a cold-pitched physician has into the firm. Silently swallowing submissions when `RESEND_API_KEY` is unconfigured is unacceptable. The hardened behavior — applying to **both** `/api/memo` and `/api/contact` — by environment:
 
-- **`NODE_ENV=production` + no `RESEND_API_KEY`** → endpoint returns `503` with an error body pointing the user to `gabrielcespedes777@gmail.com`. The failure is logged to stderr with the request body (sans PII keys), surfaced in Railway logs.
+- **`NODE_ENV=production` + no `RESEND_API_KEY`** → endpoint returns `503` with an error body pointing the user to `gabriel@arxsystems.co`. The failure is logged to stderr with the request body, surfaced in Railway logs (search `UNDELIVERED SUBMISSION`).
 - **`NODE_ENV=production` + key set** → emails sent normally.
 - **Dev (any `NODE_ENV` ≠ `production`) + no key** → stub mode. Payload printed to stdout, `200` returned. Stub mode is announced on boot via a `console.warn` so it cannot be confused for prod.
 - **Dev + key set** → emails sent (useful for testing the real flow).

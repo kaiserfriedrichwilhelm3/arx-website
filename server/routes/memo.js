@@ -13,6 +13,10 @@
 //   - On success: sends a notification email to CONTACT_EMAIL and a confirmation
 //     email to the requester containing the permanent MEMO_URL link (if set).
 //     No signed URLs. No time-limited tokens. The link is normal HTTPS.
+//   - Send results are checked explicitly (resend v4 returns {data,error}
+//     rather than throwing): a failed founder notification is a loud 500 with
+//     the payload logged for recovery; a failed visitor confirmation alone
+//     still returns 200 (the lead is captured) but logs for manual follow-up.
 //
 // Env vars:
 //   RESEND_API_KEY   required in production
@@ -37,10 +41,11 @@ if (!process.env.RESEND_API_KEY && !IS_PROD) {
 }
 
 async function memoHandler(req, res) {
-  const ip =
-    ((req.headers['x-forwarded-for'] || '') + '').split(',')[0].trim() ||
-    req.socket.remoteAddress ||
-    'unknown';
+  // Last X-Forwarded-For hop (appended by the trusted edge), not the first
+  // (client-forgeable) — a spoofed header must not bypass the rate limit.
+  const hops = ((req.headers['x-forwarded-for'] || '') + '')
+    .split(',').map(s => s.trim()).filter(Boolean);
+  const ip = hops[hops.length - 1] || req.socket.remoteAddress || 'unknown';
 
   if (!checkRateLimit(ip)) {
     return res.status(429).json({ error: 'Too many requests. Please try again later.' });
@@ -64,7 +69,8 @@ async function memoHandler(req, res) {
   // Strict missing-env behavior in prod.
   if (!process.env.RESEND_API_KEY) {
     if (IS_PROD) {
-      console.error('[memo] FATAL: RESEND_API_KEY missing in production. Form submission rejected with 503.', { name, practice, email, ip });
+      console.error('[memo] FATAL: RESEND_API_KEY missing in production. Form submission rejected with 503.');
+      console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason, ip }));
       return res.status(503).json({ error: 'The memo service is temporarily unavailable. Please email gabriel@arxsystems.co directly and we will respond within the day.' });
     }
     // Dev stub.
@@ -104,7 +110,7 @@ async function memoHandler(req, res) {
     `;
 
   try {
-    await Promise.all([
+    const [notif, confirm] = await Promise.all([
       resend.emails.send({
         from: 'ARX Systems <onboarding@resend.dev>',
         to: CONTACT_EMAIL,
@@ -119,6 +125,21 @@ async function memoHandler(req, res) {
         html: confirmHtml,
       }),
     ]);
+    // resend v4 RETURNS {data,error} on API failure — it does not throw.
+    // Unchecked, a rejected send would pass through as a silent 200.
+    if (notif.error) {
+      console.error('[memo] Founder notification failed:', notif.error);
+      console.error('[memo] UNDELIVERED SUBMISSION (recover from this log):', JSON.stringify({ name, practice, email, reason: safeReason }));
+      return res.status(500).json({ error: 'Failed to send. Please email gabriel@arxsystems.co directly.' });
+    }
+    if (confirm.error) {
+      // The lead IS captured (founder notified) — only the visitor's
+      // confirmation failed, so return 200 and follow up manually. Note:
+      // the onboarding@resend.dev test sender rejects any recipient other
+      // than the Resend account owner, so this fires on every request
+      // until a sending domain is verified.
+      console.error('[memo] Visitor confirmation failed (lead captured — follow up manually):', confirm.error, JSON.stringify({ email }));
+    }
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('[memo] Resend error:', err);
