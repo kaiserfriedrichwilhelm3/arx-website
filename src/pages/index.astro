@@ -35,10 +35,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ARX Systems — Autonomous Front Office for Private Practice</title>
-<meta name="description" content="ARX Systems engineers autonomous AI infrastructure and high-performance patient funnels for specialty practices. Galen answers, books, and routes every call — around the clock, in English and Spanish.">
+<meta name="description" content="ARX Systems builds the front office for specialty physician practices in Miami. Galen, our AI receptionist, answers, books, and routes every call — day and night, in English and Spanish.">
 <meta name="theme-color" content="#0A0C0D">
 <meta property="og:title" content="ARX Systems — Autonomous Front Office for Private Practice">
-<meta property="og:description" content="Galen answers, books, and routes every call — around the clock, in English and Spanish. Bespoke AI infrastructure for specialty practices.">
+<meta property="og:description" content="Galen answers, books, and routes every call — day and night, in English and Spanish. Front-office infrastructure for specialty practices.">
 <meta property="og:type" content="website">
 <link rel="icon" href="/arx-mark.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.ico" sizes="any">
@@ -249,17 +249,17 @@ p.body{font-size:16.5px;line-height:1.68;color:var(--steel);max-width:62ch}
    button becomes untappable and the menu can only be dismissed with Escape. */
 .nav{position:fixed;top:0;left:0;right:0;z-index:110;transition:background .5s var(--e-soft),border-color .5s var(--e-soft),backdrop-filter .5s}
 .nav::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--rule-d);opacity:0;transition:opacity .5s var(--e-soft)}
-.nav.stuck{background:rgba(10,12,13,.72);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+.nav.stuck{background:rgba(10,12,13,.94);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
 .nav.stuck::after{opacity:1}
 
 /* The nav inverts over bone sections. Without this the .72 obsidian wash over
    a light surface resolves to mid-grey and every label in the bar drops below
    4.5:1 — the glass has to pick a side. */
-.nav.stuck.on-light{background:rgba(242,240,234,.82)}
+.nav.stuck.on-light{background:rgba(242,240,234,.94)}
 .nav.stuck.on-light::after{background:var(--rule-l)}
 .nav.stuck.on-light .brand svg{fill:var(--ink)}
 .nav.stuck.on-light .brand .bn{color:var(--ink)}
-.nav.stuck.on-light .brand .bs{color:var(--ink-3)}
+.nav.stuck.on-light .brand .bs{color:var(--ink-2)}
 .nav.stuck.on-light .nl{color:var(--ink-2)}
 .nav.stuck.on-light .nl:hover,.nav.stuck.on-light .nl.active{color:var(--ink)}
 .nav.stuck.on-light .nl::after{background:var(--clay-ink)}
@@ -372,20 +372,9 @@ body.menu-open .drawer .dfoot{opacity:1}
 .bl-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(40px,6vw,96px);align-items:start;margin-top:clamp(46px,7vh,86px)}
 @media(max-width:940px){.bl-grid{grid-template-columns:1fr;gap:48px}}
 .bl-copy p.body+p.body{margin-top:20px}
-.bl-copy .cut{font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(20px,2.2vw,28px);line-height:1.32;color:var(--bone);margin-top:32px;padding-left:24px;border-left:1px solid var(--clay);max-width:26ch}
+.cut{font-family:var(--serif);font-weight:400;font-style:italic;font-size:clamp(20px,2.2vw,28px);line-height:1.32;color:var(--bone);padding-left:24px;border-left:1px solid var(--clay);max-width:24ch}
 
-.ledger{background:var(--slate);border:1px solid var(--rule-d);position:relative}
-.ledger .lh{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--rule-d)}
-.ledger .lh .mono{color:var(--steel-2)}
-.lrow{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:26px 24px;border-bottom:1px solid var(--rule-d);position:relative;overflow:hidden}
-.lrow:last-of-type{border-bottom:0}
-.lrow::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--clay);transform:scaleY(0);transform-origin:bottom;transition:transform .8s var(--e-mask)}
-.lrow.hot::before{background:#5FBF9B}
-.is-in .lrow::before{transform:scaleY(1);transition-delay:calc(var(--i,0) * 130ms + 300ms)}
-.lrow .lk{font-size:13.5px;color:var(--steel);max-width:24ch;line-height:1.45}
-.lrow .lv{font-family:var(--serif);font-weight:400;font-size:clamp(34px,4.6vw,58px);line-height:.86;letter-spacing:-.035em;color:var(--clay-lift);white-space:nowrap;font-variant-numeric:tabular-nums}
-.lrow.hot .lv{color:#5FBF9B}
-.ledger .lf{padding:16px 24px;border-top:1px solid var(--rule-d);font-family:var(--mono);font-weight:400;font-size:10px;letter-spacing:.06em;color:var(--steel-2);line-height:1.6;text-transform:none}
+.bl-aside{padding-top:4px}
 
 /* ═══════════════════════════════════════════════════════════════════════
    GALEN
@@ -688,7 +677,7 @@ body.menu-open .drawer .dfoot{opacity:1}
       <a class="nl" href="#pricing">Investment</a>
       <a class="nl" href="#faq">Questions</a>
       <span class="mag" data-magnet="0.3">
-        <a href="#contact" class="btn btn-fill nav-cta"><span class="l">Request Strategic Audit</span></a>
+        <a href="#contact" class="btn btn-fill nav-cta"><span class="l">Book an intake call</span></a>
       </span>
       <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><i></i><i></i></button>
     </nav>
@@ -703,7 +692,7 @@ body.menu-open .drawer .dfoot{opacity:1}
     <li><a href="#services"><span class="n">03</span>Acquisition</a></li>
     <li><a href="#pricing"><span class="n">04</span>Investment</a></li>
     <li><a href="#faq"><span class="n">05</span>Questions</a></li>
-    <li><a href="#contact"><span class="n">06</span>Request an Audit</a></li>
+    <li><a href="#contact"><span class="n">06</span>Book an intake call</a></li>
   </ol>
   <div class="dfoot">
     <span class="mono">Miami, FL</span>
@@ -733,16 +722,16 @@ body.menu-open .drawer .dfoot{opacity:1}
     </div>
 
     <h1 class="d1 split">
-      <span class="hl">The future of</span>
-      <span class="hl">private practice</span>
-      <span class="hl">is <i class="ac"><em>autonomous.</em></i></span>
+      <span class="hl">The phone</span>
+      <span class="hl">always gets</span>
+      <span class="hl"><i class="ac"><em>answered.</em></i></span>
     </h1>
 
     <div class="hero-body">
-      <p class="lede rv" data-d="140">Bespoke AI infrastructure and high-performance patient funnels for specialty practices. Our flagship, <strong style="color:var(--bone);font-weight:500">Galen</strong>, answers, books, and routes every call — day and night, in English and Spanish.</p>
+      <p class="lede rv" data-d="140">ARX builds the front office for specialty physician practices. Our AI receptionist, <strong style="color:var(--bone);font-weight:500">Galen</strong>, answers, books, and routes every call — day and night, in English and Spanish.</p>
       <div class="hero-cta rv" data-d="260">
         <span class="mag" data-magnet="0.36">
-          <a href="#contact" class="btn btn-fill"><span class="l">Initiate Modernization</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
+          <a href="#contact" class="btn btn-fill"><span class="l">Book an intake call</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
         </span>
         <span class="mag" data-magnet="0.3">
           <a href="#how" class="btn btn-line"><span class="l">See Galen in Action</span></a>
@@ -764,7 +753,7 @@ body.menu-open .drawer .dfoot{opacity:1}
       <ul class="hero-meta">
         <li class="pulse">Answering now</li>
         <li>English + Español</li>
-        <li>Zero retention · built for HIPAA compliance</li>
+        <li>Founder-operated</li>
         <li><span class="cue"><span class="rail"></span>Scroll</span></li>
       </ul>
     </div>
@@ -783,27 +772,9 @@ body.menu-open .drawer .dfoot{opacity:1}
       <div class="bl-copy">
         <p class="body rv">You deliver world-class clinical care, but your operations are anchored in the past. Right now your practice is bottlenecked by ringing phones, unanswered texts, and manual scheduling errors — friction that never shows up on a P&amp;L, because the revenue it costs you never arrives in the first place.</p>
         <p class="body rv" data-d="110">Your highly paid staff is drowning in administrative work instead of caring for the patients in front of them. And the old fix — throwing another receptionist at the problem — is expensive, fragile, and already obsolete.</p>
-        <p class="cut rv" data-d="200">Every missed call is a patient handed directly to your competitors.</p>
       </div>
-
-      <div class="ledger rv" data-d="90">
-        <div class="lh">
-          <span class="mono">The quiet leak</span>
-          <span class="mono">Per practice / day</span>
-        </div>
-        <div class="lrow" style="--i:0">
-          <span class="lk">Calls a busy front desk misses</span>
-          <span class="lv">18&ndash;30</span>
-        </div>
-        <div class="lrow" style="--i:1">
-          <span class="lk">Callers who will not leave a voicemail</span>
-          <span class="lv">~80%</span>
-        </div>
-        <div class="lrow hot" style="--i:2">
-          <span class="lk">Calls Galen answers</span>
-          <span class="lv">100%</span>
-        </div>
-        <p class="lf">Illustrative industry ranges. Not measured results from a deployment.</p>
+      <div class="bl-aside">
+        <p class="cut rv" data-d="120">Every missed call is a patient handed directly to your competitors.</p>
       </div>
     </div>
   </div>
@@ -856,7 +827,7 @@ body.menu-open .drawer .dfoot{opacity:1}
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
             <div>
               <b>Written to schedule</b>
-              <span class="mono">Confirmation sent · 0 records retained</span>
+              <span class="mono">Confirmation sent</span>
             </div>
           </div>
         </aside>
@@ -878,7 +849,7 @@ body.menu-open .drawer .dfoot{opacity:1}
       <p>Galen: Of course. I have you down for Thursday the 12th at 9:00 with Dr. Cespedes. I can move you to Tuesday at 10:15, or Wednesday at 2:30 — which works better?</p>
       <p>Caller: Tuesday works.</p>
       <p>Galen: Done. Tuesday the 17th at 10:15. I've texted your confirmation and the fasting instructions. Anything else I can take care of?</p>
-      <p>Outcome: appointment written to the schedule, confirmation sent, no records retained.</p>
+      <p>Outcome: appointment written to the schedule, confirmation sent.</p>
     </div>
 
     <!-- Capabilities -->
@@ -897,11 +868,6 @@ body.menu-open .drawer .dfoot{opacity:1}
         <div class="cn">Step 03</div>
         <div class="ct"><span class="tag">Escalation with context</span><h3 class="d4">It routes</h3></div>
         <p class="cd">Clinical questions, emergencies, anything that needs a human — passed to your team with the context already captured. Galen never guesses on something that matters.</p>
-      </article>
-      <article class="cap rv" data-d="240">
-        <div class="cn">Step 04</div>
-        <div class="ct"><span class="tag">Patient reactivation</span><h3 class="d4">It follows up</h3></div>
-        <p class="cd">Dormant patients reached by text for routine follow-ups and overdue check-ups, turning a quiet schedule into a full one — without a single hour of staff time.</p>
       </article>
     </div>
   </div>
@@ -929,7 +895,7 @@ body.menu-open .drawer .dfoot{opacity:1}
         <h2 class="d2 split">Digital architecture that drives <em>patient volume.</em></h2>
       </div>
       <div class="aside">
-        <p class="body rv" data-d="120">In a hyper-competitive market, a template website is a liability. We don't just build sites — we engineer patient funnels: pristine clinical aesthetics wired to aggressive conversion, replacing an outdated footprint with a presence that earns trust on sight and guides new patients straight to Galen.</p>
+        <p class="body rv" data-d="120">A template website is a liability in a market this crowded. We build the practice site itself: fast, clear, and credible, with booking wired straight into Galen so a visitor can become an appointment without picking up the phone.</p>
       </div>
     </div>
 
@@ -937,15 +903,15 @@ body.menu-open .drawer .dfoot{opacity:1}
       <article class="card wide rv">
         <span class="ghost" aria-hidden="true">01</span>
         <div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="7" cy="24" r="2.5"/><path d="M15 15a13 13 0 0 1 0 18"/><path d="M24 9a22 22 0 0 1 0 30"/><path d="M33 3a31 31 0 0 1 0 42"/></svg></div>
-        <span class="tag">The receptionist</span>
+        <span class="tag">AI receptionist</span>
         <h3 class="d3">Galen answers</h3>
-        <p>Every call picked up, booked, rescheduled, and routed — around the clock, in two languages, with zero retention of patient data.</p>
+        <p>Every call picked up, booked, rescheduled, and routed, around the clock, in English and Spanish.</p>
       </article>
 
       <article class="card narrow rv" data-d="90">
         <span class="ghost" aria-hidden="true">02</span>
         <div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="7" width="40" height="34"/><path d="M4 16h40"/><path d="M14 24h20l-7 8v7l-6-3v-4z"/></svg></div>
-        <span class="tag">The storefront</span>
+        <span class="tag">Practice website</span>
         <h3 class="d3">A site that earns trust</h3>
         <p>A fast, credible practice website designed to turn a curious visitor into a booked patient — wired straight into Galen.</p>
       </article>
@@ -953,7 +919,7 @@ body.menu-open .drawer .dfoot{opacity:1}
       <article class="card narrow rv" data-d="60">
         <span class="ghost" aria-hidden="true">03</span>
         <div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 41s11-10.5 11-19a11 11 0 1 0-22 0c0 8.5 11 19 11 19z"/><circle cx="24" cy="21" r="4"/><path d="M6 34a24 24 0 0 0 36 0"/></svg></div>
-        <span class="tag">The signal</span>
+        <span class="tag">Search visibility</span>
         <h3 class="d3">Found where patients look</h3>
         <p>When someone asks an AI assistant or a search engine for a specialist in your city, your practice is the answer that surfaces.</p>
       </article>
@@ -961,7 +927,7 @@ body.menu-open .drawer .dfoot{opacity:1}
       <article class="card wide rv" data-d="150">
         <span class="ghost" aria-hidden="true">04</span>
         <div class="mark"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="5" width="24" height="24"/><rect x="19" y="19" width="24" height="24"/><path d="M19 29h10v-10"/></svg></div>
-        <span class="tag">The identity</span>
+        <span class="tag">Brand system</span>
         <h3 class="d3">One coherent brand</h3>
         <p>A unified look and voice across the phone, the website, and every patient touchpoint — so the practice feels as serious as the care.</p>
       </article>
@@ -974,7 +940,7 @@ body.menu-open .drawer .dfoot{opacity:1}
   <div class="shell">
     <div class="sec-head">
       <div class="eyebrow"><span class="bar"></span><span class="idx">05</span><span>Investment</span></div>
-      <h2 class="d2 split">One setup. One flat monthly. <em>Everything</em> included.</h2>
+      <h2 class="d2 split">One setup. One flat monthly. <em>One operator.</em></h2>
       <p class="lede rv" data-d="100">Not software you log into — a productized service, set up, maintained, and answered for by one operator who knows your practice.</p>
     </div>
 
@@ -994,15 +960,15 @@ body.menu-open .drawer .dfoot{opacity:1}
         </div>
         <div class="prow">
           <span class="pl">Monthly service</span>
-          <span class="pr"><span class="pv">Flat</span><span class="ps">Everything included</span></span>
+          <span class="pr"><span class="pv">Flat</span><span class="ps">No per-seat fees</span></span>
         </div>
         <div class="prow">
           <span class="pl">Call minutes</span>
           <span class="pr"><span class="pv">Included</span><span class="ps">Generous monthly pool</span></span>
         </div>
-        <p class="pnote">Billed every 4 weeks — 13 cycles per year. Built for HIPAA compliance; a BAA is signed before clinical deployment — not an add-on. No per-seat fees. Setup covers the full front office before the first recurring dollar is charged.</p>
+        <p class="pnote">Billed every 4 weeks — 13 cycles per year. A BAA is signed before clinical deployment, not as an add-on. No per-seat fees. Setup covers the full front office before the first recurring dollar is charged.</p>
         <span class="mag" data-magnet="0.22" style="display:block;padding:12px;margin:-12px">
-          <a href="#contact" class="btn btn-fill"><span class="l">Get a quote for your practice</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
+          <a href="#contact" class="btn btn-fill"><span class="l">Book an intake call</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
         </span>
       </div>
 
@@ -1021,7 +987,7 @@ body.menu-open .drawer .dfoot{opacity:1}
           <span class="pl">Included minutes</span>
           <span class="pr"><span class="pv">1,000</span><span class="ps">Per month, then $0.45/min</span></span>
         </div>
-        <p class="pnote">Billed every 4 weeks — 13 cycles per year. Built for HIPAA compliance; BAA signed before clinical deployment. Most single-practice call volume stays inside the included pool. No per-seat fees, no usage surprises.</p>
+        <p class="pnote">Billed every 4 weeks — 13 cycles per year. A BAA is signed before clinical deployment. Most single-practice call volume stays inside the included pool. No per-seat fees, no usage surprises.</p>
         <span class="mag" data-magnet="0.22" style="display:block;padding:12px;margin:-12px">
           <a href="#contact" class="btn btn-fill"><span class="l">Book an intake call</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
         </span>
@@ -1041,7 +1007,7 @@ body.menu-open .drawer .dfoot{opacity:1}
     <div class="faq-wrap" id="faqWrap">
       <div class="qa rv">
         <button type="button" aria-expanded="false"><span class="qt">How do you handle HIPAA and patient data?</span><span class="sig" aria-hidden="true"><i></i><i></i></span></button>
-        <div class="ans"><p>Galen runs in a zero-retention mode built for HIPAA compliance — recordings and transcripts aren't stored, and a Business Associate Agreement is signed before any clinical deployment. Protecting PHI is the default the system is built on, not an upsell.</p></div>
+        <div class="ans"><p>A Business Associate Agreement is signed before any clinical deployment. We are documenting the full data path — every vendor that touches a call, what each one stores, and for how long — and will publish it here. Until it is published, ask and we will answer specifically rather than generally.</p></div>
       </div>
       <div class="qa rv" data-d="50">
         <button type="button" aria-expanded="false"><span class="qt">Do I replace my phone system or EHR?</span><span class="sig" aria-hidden="true"><i></i><i></i></span></button>
@@ -1142,7 +1108,7 @@ body.menu-open .drawer .dfoot{opacity:1}
             <textarea id="message" name="message" rows="3"></textarea>
             <span class="uline"></span>
           </div>
-          <button type="submit" id="intakeBtn" class="btn btn-fill"><span class="l">Request Strategic Audit</span></button>
+          <button type="submit" id="intakeBtn" class="btn btn-fill"><span class="l">Book an intake call</span></button>
           <p class="f-note" id="intakeNote">We reply within 24 hours. No sales script — just a direct conversation about your practice.</p>
         </div>
       </form>
@@ -1173,13 +1139,13 @@ body.menu-open .drawer .dfoot{opacity:1}
         <ul>
           <li><a class="tlink" href="#pricing">Investment</a></li>
           <li><a class="tlink" href="#faq">Questions</a></li>
-          <li><a class="tlink" href="#contact">Request an audit</a></li>
+          <li><a class="tlink" href="#contact">Book an intake call</a></li>
         </ul>
       </div>
     </div>
     <div class="foot-bot">
       <span class="mono">Miami, FL · Founder-operated</span>
-      <span class="mono">Built for HIPAA compliance · Zero retention</span>
+      <span class="mono">ARX Systems LLC</span>
     </div>
   </div>
 </footer>
@@ -1499,7 +1465,7 @@ function bindMagnet(zone){
     { t: 'say', who: 'galen', text: "Done. Tuesday the 17th at 10:15. I've texted your confirmation and the fasting instructions. Anything else I can take care of?" },
     { t: 'rail', k: 'slot', v: 'Tue 17th · 10:15 AM' },
     { t: 'commit' },
-    { t: 'status', v: 'Call complete · 0 retained', cls: '', wait: 4200 }
+    { t: 'status', v: 'Call complete', cls: '', wait: 4200 }
   ];
 
   var run = 0, timer = null, clockTimer = null, elapsed = 0;
@@ -1644,7 +1610,7 @@ function bindMagnet(zone){
     var vals = ['Reschedule', 'Matched · record found', 'Stress test', 'Dr. Cespedes', 'Tue 17th · 10:15 AM'];
     for (var q = 0; q < items.length; q++){ items[q].querySelector('.rv').textContent = vals[q]; items[q].classList.add('set'); }
     commit.classList.add('on');
-    status.textContent = 'Call complete · 0 retained';
+    status.textContent = 'Call complete';
     clock.textContent = '00:41';
     for (var p = 0; p < SCRIPT.length; p++){
       var st = SCRIPT[p];
@@ -1855,7 +1821,7 @@ function syncNavSurface(){
   var form = document.getElementById('intakeForm');
   if (!form) return;
   var EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  var LABEL = 'Request Strategic Audit';
+  var LABEL = 'Book an intake call';
   var FIELDS = ['practice', 'name', 'email', 'phone', 'specialty', 'volume'];
 
   form.addEventListener('submit', async function(e){
