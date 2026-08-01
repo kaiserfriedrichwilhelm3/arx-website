@@ -1,11 +1,25 @@
-/* Self-hosted variable fonts. No CDN, no FOUT risk from third-party DNS. */
+/* Self-hosted variable fonts. No CDN, no FOUT risk from third-party DNS.
+   NOTE: Fraunces' variable default weight is 900 — always set font-weight
+   explicitly wherever the serif is used, or it renders at Black. */
 
 @font-face {
   font-family: 'Fraunces';
   src: url('/fonts/display/Fraunces-Variable.woff2') format('woff2-variations'),
        url('/fonts/display/Fraunces-Variable.woff2') format('woff2');
-  font-weight: 300 900;
+  font-weight: 100 900;
   font-style: normal;
+  font-display: swap;
+}
+
+/* Real italic — latin subset. Fraunces has no `ital` axis, so without this
+   face the browser fakes an oblique by skewing, which wrecks a high-contrast
+   serif. Do not remove. */
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/display/Fraunces-Italic-Variable.woff2') format('woff2-variations'),
+       url('/fonts/display/Fraunces-Italic-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
   font-display: swap;
 }
 
