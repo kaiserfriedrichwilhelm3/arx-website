@@ -103,7 +103,7 @@ Push to `main` → Railway auto-deploys via nixpacks (`astro build`, then `npm p
 
 Copy changes in the following areas carry legal, financial, or strategic weight. Pause and surface the proposed edit before pushing:
 
-1. **Pricing figures** — `$3,500` setup, `$899` per 4-week cycle, `1,000` included minutes then `$0.45/min`, and the "13 cycles per year" note. Changing a number here without aligning the portal (`kaiserfriedrichwilhelm3/arx-portal`, `lib/catalog.ts`) and the spec docs creates a contradiction a prospect's lawyer will catch. The pricing section has two panes (structure / literal figures) — both carry the same protected note.
+1. **Pricing figures** — `$3,500` setup, `$899` per 4-week cycle, `1,000` included minutes then `$0.15/min`, and the "13 cycles per year" note. Changing a number here without aligning the portal (`kaiserfriedrichwilhelm3/arx-portal`, `lib/catalog.ts`) and the spec docs creates a contradiction a prospect's lawyer will catch. The pricing section has two panes (structure / literal figures) — both carry the same protected note.
 2. **BAA / HIPAA copy.** Every BAA reference uses forward-looking *"built for HIPAA compliance"* / *"signed before clinical deployment"* language. Do **not** revert to present-tense fulfillment claims (*"signed with every contract"*, *"executed before a single call routes"*) until a lawyer-drafted BAA template is actually on file.
 3. **Anything asserting compliance, certifications, or operational guarantees** (zero-retention, 24/7 answered, BAA-backed).
 4. **Clinical-pilot / reference-deployment copy** referencing Dr. Edgardo M. Cespedes. The current framing — *"Co-developer & first deployment"* — is deliberate.
