@@ -45,7 +45,7 @@ arx-website/
 One page, anchor-navigated:
 
 ```
-hero → #problem → #how → (reference quote) → #services → #pricing → #faq → #contact
+hero → #problem → #how → (co-developer credit) → #services → #pricing → #faq → #contact
 ```
 
 Nav labels are reframed (`The Bottleneck / Galen / Acquisition / Investment / Questions`) but the anchor IDs are the originals — don't rename them, the footer and any external links depend on them.
@@ -106,6 +106,22 @@ Copy changes in the following areas carry legal, financial, or strategic weight.
 1. **Pricing figures** — `$3,500` setup, `$899` per 4-week cycle, `1,000` included minutes then `$0.15/min`, and the "13 cycles per year" note. Changing a number here without aligning the portal (`kaiserfriedrichwilhelm3/arx-portal`, `lib/catalog.ts`) and the spec docs creates a contradiction a prospect's lawyer will catch. The pricing section has two panes (structure / literal figures) — both carry the same protected note.
 2. **BAA / HIPAA copy.** Every BAA reference uses forward-looking *"built for HIPAA compliance"* / *"signed before clinical deployment"* language. Do **not** revert to present-tense fulfillment claims (*"signed with every contract"*, *"executed before a single call routes"*) until a lawyer-drafted BAA template is actually on file.
 3. **Anything asserting compliance, certifications, or operational guarantees** (zero-retention, 24/7 answered, BAA-backed).
+
+**Do NOT build or publish a `/security` page yet.** As of the last founder-confirmed
+facts block: the relay has not migrated to AWS, and the Vapi, AWS, and first-practice
+BAAs are all unsigned. A security page implies those protections are active. It becomes
+publishable only after, in order: (1) relay migrated to AWS, (2) AWS BAA accepted,
+(3) Vapi HIPAA BAA signed, (4) first-practice BAA signed. Until then the FAQ keeps its
+current posture — a BAA is signed before clinical deployment, and the data path will be
+published before the first live patient call. Do not upgrade that wording.
+
+**Scope of the base engagement** ($3,500 setup + $899 per 4-week cycle): Galen the AI
+phone agent, the practice website, brand and identity, and search discoverability setup.
+Paid advertising is explicitly OUT — separate, at the practice's discretion. Never imply
+ads are included, and never promise a search ranking (discoverability setup only).
+
+**Pricing figures are shown openly.** The show/gate toggle was removed deliberately —
+transparency is the position. Do not reintroduce a gate.
 4. **Clinical-pilot / reference-deployment copy** referencing Dr. Edgardo M. Cespedes. The current framing — *"Co-developer & first deployment"* — is deliberate.
 5. **The banned-phrases list** in `~/Downloads/AIMS_CLAUDE_CODE_PROMPT_v6.md` — project-wide constraints (e.g. *"Cespedes Cardiology as an active partner"*, *"HIPAA-compliant"* as an adjective, *"Deploy"* on any CTA). These apply here even though the file lives elsewhere.
 

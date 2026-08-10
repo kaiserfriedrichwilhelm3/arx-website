@@ -44,6 +44,212 @@
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="preload" as="font" type="font/woff2" href="/fonts/display/Fraunces-Variable.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/body/Inter-Variable.woff2" crossorigin>
+<script type="application/ld+json" is:inline>
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://arxsystems.org/#organization",
+      "name": "ARX Systems",
+      "url": "https://arxsystems.org/",
+      "logo": "https://arxsystems.org/arx-mark.svg",
+      "description": "ARX Systems builds the front office for specialty physician practices: an AI phone agent, the practice website, brand, and search discoverability setup.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Miami",
+        "addressRegion": "FL",
+        "addressCountry": "US"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Miami"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://arxsystems.org/#website",
+      "url": "https://arxsystems.org/",
+      "name": "ARX Systems",
+      "publisher": {
+        "@id": "https://arxsystems.org/#organization"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://arxsystems.org/#engagement",
+      "name": "ARX front-office engagement",
+      "serviceType": "Medical practice front-office automation",
+      "provider": {
+        "@id": "https://arxsystems.org/#organization"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "Miami",
+        "containedInPlace": {
+          "@type": "State",
+          "name": "Florida"
+        }
+      },
+      "description": "One setup and one flat 4-week cycle covering Galen (the AI phone agent), the practice website, brand and identity, and search discoverability setup. Paid advertising is arranged separately and is not included.",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Included in the engagement",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Galen — AI phone agent",
+              "description": "Answers, books, and routes inbound calls for the practice.",
+              "provider": {
+                "@id": "https://arxsystems.org/#organization"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Miami",
+                "containedInPlace": {
+                  "@type": "State",
+                  "name": "Florida"
+                }
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Practice website",
+              "description": "A website for the practice, with booking wired into Galen.",
+              "provider": {
+                "@id": "https://arxsystems.org/#organization"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Miami",
+                "containedInPlace": {
+                  "@type": "State",
+                  "name": "Florida"
+                }
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Brand and identity",
+              "description": "Brand and identity work for the practice.",
+              "provider": {
+                "@id": "https://arxsystems.org/#organization"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Miami",
+                "containedInPlace": {
+                  "@type": "State",
+                  "name": "Florida"
+                }
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Search discoverability setup",
+              "description": "The site and profiles structured so search engines and AI assistants can find and represent the practice clearly.",
+              "provider": {
+                "@id": "https://arxsystems.org/#organization"
+              },
+              "areaServed": {
+                "@type": "City",
+                "name": "Miami",
+                "containedInPlace": {
+                  "@type": "State",
+                  "name": "Florida"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Setup and build (one-time)",
+          "price": "3500",
+          "priceCurrency": "USD",
+          "description": "One-time setup covering Galen, the practice website, brand, and search discoverability setup."
+        },
+        {
+          "@type": "Offer",
+          "name": "Service retainer",
+          "priceCurrency": "USD",
+          "description": "Flat retainer billed every 4 weeks, 13 cycles per year. Includes 1,000 call minutes per cycle; additional minutes are $0.15 each.",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "899",
+            "priceCurrency": "USD",
+            "referenceQuantity": {
+              "@type": "QuantitativeValue",
+              "value": "4",
+              "unitCode": "WEE"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://arxsystems.org/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How do you handle HIPAA and patient data?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A Business Associate Agreement is signed before any clinical deployment. We are documenting the full data path — every vendor that touches a call, what each one stores, and for how long — and will publish it here. Until it is published, ask and we will answer specifically rather than generally."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I replace my phone system or EHR?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Galen layers onto your existing number and works alongside your current setup. Nothing gets ripped out — calls that used to go unanswered simply get answered."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens on a call Galen can't handle?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It routes anything outside its scope — clinical questions, emergencies, anything needing a human — straight to your team, with the context already captured. It never guesses on something that matters."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who actually runs this?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "ARX is founder-operated by design. You get one person who knows your practice and answers directly — not a support tier. The first deployment is a Miami cardiology practice, currently being built out."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long until it's live?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The setup covers the full build — Galen configured, website and brand assembled, findability set up — before your first billing cycle starts. You see the whole front office working before a recurring dollar is charged."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style is:inline>
 /* ═══════════════════════════════════════════════════════════════════════
    FACES
@@ -525,17 +731,15 @@ body.menu-open .drawer .dfoot{opacity:1}
 .invest .eyebrow{justify-content:center}
 .invest .lede{margin-left:auto;margin-right:auto;text-align:center}
 
-.seg{position:relative;display:flex;width:min(380px,100%);margin:clamp(38px,5vh,56px) auto clamp(34px,5vh,50px);border:1px solid var(--rule-l-2);background:var(--white);padding:4px}
-.seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--ink);transition:transform .6s var(--e-mask)}
-.seg.b .thumb{transform:translateX(100%)}
-.seg button{position:relative;z-index:2;flex:1;padding:12px 10px;font-family:var(--mono);font-weight:500;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);transition:color .4s var(--e-soft)}
-.seg button[aria-selected="true"]{color:var(--bone)}
-
+.pincl{margin-top:26px;border-top:1px solid var(--rule-d)}
+.pincl li{display:flex;align-items:baseline;gap:16px;padding:12px 0;border-bottom:1px solid var(--rule-d);font-size:14px;color:var(--steel-3)}
+.pincl li .mono{flex:0 0 62px;font-size:9px;color:var(--clay-lift)}
+.pincl li.opt{color:var(--steel)}
+.pincl li.opt .mono{color:var(--steel-2)}
 .pane-wrap{position:relative;max-width:760px;margin:0 auto}
 .pane{background:var(--obsidian);color:var(--bone);border:1px solid var(--rule-d);padding:clamp(30px,4vw,56px);
   box-shadow:0 60px 120px -60px rgba(11,14,15,.55);position:relative;overflow:hidden}
 .pane::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(110% 60% at 100% 0%,rgba(190,91,51,.1),transparent 62%)}
-.pane[hidden]{display:none}
 .pane>*{position:relative;z-index:2}
 .pane .eyebrow{justify-content:flex-start;color:var(--clay-lift)}
 .pane .eyebrow .bar{transform:scaleX(1)}
@@ -861,8 +1065,8 @@ body.menu-open .drawer .dfoot{opacity:1}
       </article>
       <article class="cap rv" data-d="80">
         <div class="cn">Step 02</div>
-        <div class="ct"><span class="tag">Omnichannel scheduling</span><h3 class="d4">It books</h3></div>
-        <p class="cd">New appointments, reschedules, and cancellations handled over voice or text and written straight to your scheduling system — confirmed with the patient before the call ends.</p>
+        <div class="ct"><span class="tag">Scheduling on the call</span><h3 class="d4">It books</h3></div>
+        <p class="cd">New appointments, reschedules, and cancellations handled on the call and written straight to your scheduling system — confirmed with the patient before the call ends.</p>
       </article>
       <article class="cap rv" data-d="160">
         <div class="cn">Step 03</div>
@@ -890,7 +1094,7 @@ body.menu-open .drawer .dfoot{opacity:1}
         <h2 class="d2 split">Digital architecture that drives <em>patient volume.</em></h2>
       </div>
       <div class="aside">
-        <p class="body rv" data-d="120">A template website is a liability in a market this crowded. We build the practice site itself: fast, clear, and credible, with booking wired straight into Galen so a visitor can become an appointment without picking up the phone.</p>
+        <p class="body rv" data-d="120">A template website is a liability in a market this crowded. We build the practice site itself: fast, clear, and credible, with booking wired straight into Galen so a visitor can become an appointment without picking up the phone. These four are what the engagement covers; paid advertising is separate, and only if you want it.</p>
       </div>
     </div>
 
@@ -939,50 +1143,29 @@ body.menu-open .drawer .dfoot{opacity:1}
       <p class="lede rv" data-d="100">Not software you log into — a productized service, set up, maintained, and answered for by one operator who knows your practice.</p>
     </div>
 
-    <div class="seg rv" role="tablist" aria-label="Pricing detail" data-d="60">
-      <span class="thumb" aria-hidden="true"></span>
-      <button type="button" id="segStructure" role="tab" aria-selected="true" aria-controls="paneStructure">Structure</button>
-      <button type="button" id="segNumbers" role="tab" aria-selected="false" aria-controls="paneNumbers">Show figures</button>
-    </div>
-
     <div class="pane-wrap rv" data-d="120">
-      <!-- STRUCTURE ONLY -->
-      <div class="pane" id="paneStructure" role="tabpanel" aria-labelledby="segStructure">
-        <div class="eyebrow"><span class="bar"></span><span>The engagement</span></div>
-        <div class="prow">
-          <span class="pl">Setup &amp; build</span>
-          <span class="pr"><span class="pv">One-time</span><span class="ps">Galen · website · brand · office</span></span>
-        </div>
-        <div class="prow">
-          <span class="pl">Monthly service</span>
-          <span class="pr"><span class="pv">Flat</span><span class="ps">No per-seat fees</span></span>
-        </div>
-        <div class="prow">
-          <span class="pl">Call minutes</span>
-          <span class="pr"><span class="pv">Included</span><span class="ps">Generous monthly pool</span></span>
-        </div>
-        <p class="pnote">Billed every 4 weeks — 13 cycles per year. A BAA is signed before clinical deployment, not as an add-on. No per-seat fees. Setup covers the full front office before the first recurring dollar is charged.</p>
-        <span class="mag" data-magnet="0.22" style="display:block;padding:12px;margin:-12px">
-          <a href="#contact" class="btn btn-fill"><span class="l">Book an intake call</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
-        </span>
-      </div>
-
-      <!-- LITERAL FIGURES -->
-      <div class="pane" id="paneNumbers" role="tabpanel" aria-labelledby="segNumbers" hidden>
+      <div class="pane" id="paneNumbers">
         <div class="eyebrow"><span class="bar"></span><span>The engagement</span></div>
         <div class="prow">
           <span class="pl">Setup &amp; build</span>
           <span class="pr"><span class="pv">$3,500</span><span class="ps">One-time</span></span>
         </div>
         <div class="prow">
-          <span class="pl">Monthly service</span>
+          <span class="pl">Service retainer</span>
           <span class="pr"><span class="pv">$899</span><span class="ps">Per 4-week cycle</span></span>
         </div>
         <div class="prow">
           <span class="pl">Included minutes</span>
-          <span class="pr"><span class="pv">1,000</span><span class="ps">Per month, then $0.15/min</span></span>
+          <span class="pr"><span class="pv">1,000</span><span class="ps">Per cycle, then $0.15/min</span></span>
         </div>
-        <p class="pnote">Billed every 4 weeks — 13 cycles per year. A BAA is signed before clinical deployment. Most single-practice call volume stays inside the included pool. No per-seat fees, no usage surprises.</p>
+        <ul class="pincl">
+          <li><span class="mono">Included</span>Galen, the AI phone agent</li>
+          <li><span class="mono">Included</span>Your practice website</li>
+          <li><span class="mono">Included</span>Brand and identity</li>
+          <li><span class="mono">Included</span>Search discoverability setup</li>
+          <li class="opt"><span class="mono">Separate</span>Paid advertising, arranged only if you want it</li>
+        </ul>
+        <p class="pnote">Billed every 4 weeks — 13 cycles per year. A BAA is signed before clinical deployment. No per-seat fees, no usage surprises. Paid advertising sits outside this price and is arranged separately, at your discretion.</p>
         <span class="mag" data-magnet="0.22" style="display:block;padding:12px;margin:-12px">
           <a href="#contact" class="btn btn-fill"><span class="l">Book an intake call</span><svg class="arw" viewBox="0 0 14 9" fill="none" aria-hidden="true"><path d="M0 4.5h12M8.5 1l3.5 3.5L8.5 8" stroke="currentColor" stroke-width="1.3"/></svg></a>
         </span>
@@ -1638,37 +1821,6 @@ function bindMagnet(zone){
   } else {
     play();
   }
-})();
-
-/* ═══════════════════════════════════════════════════════════════════════
-   PRICING — structure / figures
-   ═══════════════════════════════════════════════════════════════════════ */
-(function(){
-  var seg  = document.querySelector('.seg');
-  var bS   = document.getElementById('segStructure');
-  var bN   = document.getElementById('segNumbers');
-  var pS   = document.getElementById('paneStructure');
-  var pN   = document.getElementById('paneNumbers');
-  if (!seg || !bS || !bN || !pS || !pN) return;
-
-  function set(mode){
-    var isNum = mode === 'numbers';
-    seg.classList.toggle('b', isNum);
-    bN.setAttribute('aria-selected', String(isNum));
-    bS.setAttribute('aria-selected', String(!isNum));
-    pN.hidden = !isNum;
-    pS.hidden = isNum;
-  }
-
-  bS.addEventListener('click', function(){ set('structure'); });
-  bN.addEventListener('click', function(){ set('numbers'); });
-  seg.addEventListener('keydown', function(e){
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-    e.preventDefault();
-    var toNum = e.key === 'ArrowRight';
-    set(toNum ? 'numbers' : 'structure');
-    (toNum ? bN : bS).focus();
-  });
 })();
 
 /* ═══════════════════════════════════════════════════════════════════════
