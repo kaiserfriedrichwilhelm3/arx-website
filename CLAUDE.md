@@ -69,6 +69,22 @@ No GSAP, no Lenis, no Framer Motion. One `requestAnimationFrame` loop drives ler
 - `.nav` must outrank `.drawer` in z-index. `.nav` creates a stacking context, so the burger's z-index is scoped inside it; if the drawer paints above the bar the close button becomes untappable.
 - Everything is gated on `prefers-reduced-motion`. The Galen terminal renders its *finished* state (full transcript, filled rail, commit badge) rather than nothing.
 
+### FAQ — built to be cited
+
+Each question carries a stable id (`#q-hipaa-and-patient-data`, …), is wrapped in an
+`<h3>`, and is deep-linkable: landing on that URL opens the answer and scrolls to it,
+and opening one rewrites the URL so it can be copied. Two things to preserve:
+
+- **Answers collapse only under `html.js`.** Without JS — which is how most AI crawlers
+  fetch the page — every answer renders in full. Never move `height:0` back onto the
+  bare `.qa .ans` selector; that hides the answers from the systems you want citing you.
+- **On first load the deep link positions instantly, not with a glide.** The browser's
+  own fragment navigation fires a late `scroll` event that the lerp loop reads as
+  external, cancelling a glide partway. `hashchange` on an already-loaded page glides.
+
+The `FAQPage` JSON-LD must stay verbatim-identical to the visible answers, or Google
+drops the rich result. `scratchpad/c2.js` asserts that parity.
+
 ### Contrast
 
 The grey ramp (`--steel`, `--steel-2`, `--steel-3`) and the three accent weights (`--clay` for fills, `--clay-ink` for small text on bone, `--clay-lift` for text on obsidian) are tuned so even the 9px mono micro-labels clear WCAG AA on every surface they appear on. **Darkening any of them needs a re-check.** The nav inverts to a bone bar over `.on-bone` sections for the same reason — a translucent obsidian wash over a light surface resolves to mid-grey and drops every label in the bar below 4.5:1.
@@ -122,6 +138,11 @@ ads are included, and never promise a search ranking (discoverability setup only
 
 **Pricing figures are shown openly.** The show/gate toggle was removed deliberately —
 transparency is the position. Do not reintroduce a gate.
+
+**Galen has no texting features today.** It is a phone voice agent. Do not write SMS,
+text-message, or "omnichannel" copy until that ships. Bilingual (EN + ES), always-on
+answering, first-ring pickup with no phone tree, and escalation-with-context to the
+practice's team are all founder-confirmed and may be stated plainly.
 4. **Clinical-pilot / reference-deployment copy** referencing Dr. Edgardo M. Cespedes. The current framing — *"Co-developer & first deployment"* — is deliberate.
 5. **The banned-phrases list** in `~/Downloads/AIMS_CLAUDE_CODE_PROMPT_v6.md` — project-wide constraints (e.g. *"Cespedes Cardiology as an active partner"*, *"HIPAA-compliant"* as an adjective, *"Deploy"* on any CTA). These apply here even though the file lives elsewhere.
 
